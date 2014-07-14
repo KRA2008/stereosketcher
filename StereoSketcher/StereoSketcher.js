@@ -72,37 +72,25 @@ function mouseMoved(event)
 	}
 }
 
-/*function mouseMoved(event)
-{
-	if(indicatorCircle)
-	{
-		indicatorCircle.remove();
-		indicatorCircle = null;
-	}
-	else
-	{
-		indicatorCircle = s.circle(10,10,10);
-	}
-}*/
-
 function dragThings(event)
 {
-	var dx = 0;
-	var dy = 0;
+	var newX = event.pageX;
+	var newY = event.pageY;
+	var dx = previousDragX-newX;
+	var dy = previousDragY-newY;
 	for(var ii=0;ii<items.length;ii++)
 	{
-		if(items[ii].selected)
+		var item = items[ii];
+		if(item.selected)
 		{
-			dx = previousDragX-event.pageX;
-			dy = previousDragY-event.pageY;
-			items[ii].attr({
-				cx:items[ii].getBBox().cx-dx,
-				cy:items[ii].getBBox().cx-dy					
+			item.attr({
+				cx:item.getBBox().cx-dx,
+				cy:item.getBBox().cy-dy					
 			});
 		}
 	}
-	previousDragX = event.pageX;
-	previousDragY = event.pageY;
+	previousDragX = newX;
+	previousDragY = newY;
 }
 
 function beginSelectangle(clickX,clickY)
@@ -160,6 +148,7 @@ function deletePressed() {
 function snapClick(clickX,clickY) 
 {
 	var dot = s.circle(clickX,clickY,dotWidth);
+	dot.selected = false;
 	dot.hover(
 		function() {
 			highlight(dot);
@@ -169,7 +158,6 @@ function snapClick(clickX,clickY)
 		}
 	);
 	dot.type = "dot";
-	//dot.drag();
 	items.push(dot);
 }
 

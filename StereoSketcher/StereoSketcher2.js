@@ -3,8 +3,6 @@ var svg;
 var mousePressed={};
 var mouseReleased={};
 var dragger={};
-var dots=[];
-var lines=[];
 var selectangle;
 
 window.onload=function() {
@@ -33,11 +31,13 @@ window.onload=function() {
 			}
 			if(event.button==2)
 			{
+				var dots = getDots();
 				for(var il=0;il<dots.length;il++)
 				{
 					var dot=dots[il];
 					dot.deselect();
 				}
+				var lines=getLines();
 				for(var nn=0;nn<lines.length;nn++)
 				{
 					var line=lines[nn];
@@ -53,6 +53,7 @@ window.onload=function() {
 				var minx=parseInt(selectangle.getAttribute("x"));
 				var maxy=parseInt(selectangle.getAttribute("height"))+parseInt(selectangle.getAttribute("y"));
 				var miny=parseInt(selectangle.getAttribute("y"));
+				var dots = getDots();
 				for(var ik=0;ik<dots.length;ik++)
 				{
 					var dot=dots[ik];
@@ -88,11 +89,22 @@ function keyDown(e) {
 		}
 }
 
+function getDots()
+{
+	return svg.getElementsByClassName("dot");
+}
+
+function getLines()
+{
+	return svg.getElementsByClassName("line");
+}
+
 function createLine()
 {
 	var selectedDots=0;
 	var dot1=null;
 	var dot2=null;
+	var dots = getDots();
 	for(var io=0;io<dots.length;io++)
 	{
 		if(dots[io].isSelected())
@@ -121,8 +133,7 @@ function deletePressed()
 {
 	var dot;
 	var line;
-	var tempDots=[];
-	var tempLines=[];
+	var dots = getDots();
 	for(var ij=0;ij<dots.length;ij++)
 	{
 		dot=dots[ij];
@@ -130,11 +141,8 @@ function deletePressed()
 		{
 			removeShape(dot);
 		}
-		else 
-		{
-			tempDots.push(dot);
-		}
 	}
+	var lines=getLines();
 	for(var ip=0;ip<lines.length;ip++)
 	{
 		line=lines[ip];
@@ -142,14 +150,7 @@ function deletePressed()
 		{
 			removeShape(line);
 		}
-		else
-		{
-			tempLines.push(line);
-		}
 	}
-	lines=tempLines;
-	dots=tempDots;
-	svg.querySelector
 }
 
 function removeShape(shape)
@@ -178,7 +179,6 @@ var shapeFactory={
 		line.dot2=dot2;
 		this.attachCommonHandlers(line);
 		svg.appendChild(line);
-		lines.push(line);
 		dot1.deselect();
 		dot2.deselect();
 	},
@@ -203,7 +203,6 @@ var shapeFactory={
 			}
 		};
 		svg.appendChild(dot);
-		dots.push(dot);
 	},
 	attachCommonHandlers:function(shape) {
 		shape.onmouseover = function() {
@@ -276,6 +275,7 @@ function dragDots(event,shape) {
 	var dot;
 	var x=0;
 	var y=0;
+	var dots = getDots();
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot=dots[ii];

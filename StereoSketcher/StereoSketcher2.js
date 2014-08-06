@@ -174,6 +174,7 @@ var shapeFactory={
 		line.setAttribute("y2",dot2.getAttribute("cy"));
 		line.setAttribute("stroke","black");
 		line.setAttribute("stroke-width",2);
+		line.setAttribute("class","");
 		addClassToElement(line,"line");
 		line.dot1=dot1;
 		line.dot2=dot2;
@@ -192,7 +193,10 @@ var shapeFactory={
 		dot.setAttribute("stroke-width",1);
 		dot.setAttribute("fill","yellow");
 		dot.setAttribute("fill-opacity",0);
-		addClassToElement(dot,"dot selected highlit");
+		dot.setAttribute("class","");
+		addClassToElement(dot,"dot");
+		addClassToElement(dot,"selected");
+		addClassToElement(dot,"highlit");
 		this.attachCommonHandlers(dot);
 		dot.onmousemove = function(event) {
 			if(mousePressed.is && mousePressed.shape && mousePressed.shape.isSelected())
@@ -264,19 +268,34 @@ var shapeFactory={
 
 function addClassToElement(element,className)
 {
-	element.className+=className;
+	var old = element.getAttribute("class");
+	if(old == null || old == "" || !doesElementHaveClass(element,className))
+	{
+		element.setAttribute("class",old+" "+className);
+	}
 }
 
 function removeClassFromElement(element,className)
 {
 	var re = new RegExp("(?:^|\s)"+className+"(?!\S)","g");
-	element.className =  element.className.replace(re,'');
+	element.setAttribute("class",element.getAttribute("class").replace(re,''));
 }
 
 function doesElementHaveClass(element,className)
 {
 	var re = new RegExp("(?:^|\s)"+className+"(?!\S)","");
-	return element.className.match(re);
+	var currentClass = element.getAttribute("class");
+	if(currentClass == null || currentClass == "")
+	{
+		return false;
+	}
+	var matched = element.getAttribute("class").match(re);
+	if(matched == null)
+	{
+		return false;
+	} else {
+		return true;
+	}
 }
 
 function dragDots(event,shape) {

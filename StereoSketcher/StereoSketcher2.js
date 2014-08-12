@@ -126,6 +126,10 @@ function createLine()
 			}
 		}
 	}
+	if(selectedDots==0)
+	{
+		return;
+	}
 	shapeFactory.createLine(dot1,dot2);
 }
 
@@ -134,19 +138,19 @@ function deletePressed()
 	var dot;
 	var line;
 	var dots = getDots();
-	for(var ij=0;ij<dots.length;ij++)
+	for(var ii=dots.length-1;ii>=0;ii--)
 	{
-		dot=dots[ij];
+		dot=dots[ii];
 		if(dot.isSelected())
 		{
 			removeShape(dot);
 		}
 	}
 	var lines=getLines();
-	for(var ip=0;ip<lines.length;ip++)
+	for(var ii=lines.length-1;ii>=0;ii--)
 	{
-		line=lines[ip];
-		if(line.isSelected())
+		line=lines[ii];
+		if(line.isSelected() || line.dot1 == null || line.dot2 == null)
 		{
 			removeShape(line);
 		}
@@ -155,7 +159,6 @@ function deletePressed()
 
 function removeShape(shape)
 {
-	shape.deselect();
 	svg.removeChild(shape);
 }
 
@@ -195,7 +198,6 @@ var shapeFactory={
 		dot.setAttribute("fill-opacity",0);
 		dot.setAttribute("class","");
 		addClassToElement(dot,"dot");
-		addClassToElement(dot,"selected");
 		addClassToElement(dot,"highlit");
 		this.attachCommonHandlers(dot);
 		dot.onmousemove = function(event) {
@@ -239,8 +241,7 @@ var shapeFactory={
 			return doesElementHaveClass(this,"selected");
 		};
 		shape.toggleSelect = function() {
-			var selected = this.isSelected();
-			if(selected==="true") 
+			if(this.isSelected()) 
 			{
 				this.deselect();
 			}
@@ -277,13 +278,13 @@ function addClassToElement(element,className)
 
 function removeClassFromElement(element,className)
 {
-	var re = new RegExp("(?:^|\s)"+className+"(?!\S)","g");
+	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","g");
 	element.setAttribute("class",element.getAttribute("class").replace(re,''));
 }
 
 function doesElementHaveClass(element,className)
 {
-	var re = new RegExp("(?:^|\s)"+className+"(?!\S)","");
+	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","");
 	var currentClass = element.getAttribute("class");
 	if(currentClass == null || currentClass == "")
 	{

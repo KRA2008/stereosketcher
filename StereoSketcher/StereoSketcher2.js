@@ -4,6 +4,8 @@ var mousePressed={};
 var mouseReleased={};
 var dragger={};
 var selectangle;
+var IPD=400; //230
+var dotsVisible=true;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
@@ -86,7 +88,32 @@ function keyDown(e) {
 			case 65:
 				createLine();
 				break;
+			case 32:
+				toggleDotsVisible();
+				break;
 		}
+}
+
+function toggleDotsVisible()
+{
+	var dots = getDots();
+	var dot=null;
+	if(dotsVisible)
+	{
+		for(var ii=0;ii<dots.length;ii++)
+		{
+			dot = dots[ii];
+			dot.setAttribute("visibility","hidden");
+		}
+		dotsVisible = false;
+	} else {
+		for(var ii=0;ii<dots.length;ii++)
+		{
+			dot = dots[ii];
+			dot.setAttribute("visibility","visible");
+		}
+		dotsVisible = true;
+	}
 }
 
 function getDots()
@@ -152,6 +179,7 @@ function deletePressed()
 		line=lines[ii];
 		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected())
 		{
+			removeShape(line.clone);
 			removeShape(line);
 		}
 	}
@@ -185,6 +213,7 @@ var shapeFactory={
 		svg.appendChild(line);
 		dot1.deselect();
 		dot2.deselect();
+		this.createCloneLine(line);
 	},
 	createCircle:function(event) 
 	{
@@ -264,6 +293,20 @@ var shapeFactory={
 				selectangle=null;
 			}
 		};
+	},
+	createCloneLine:function(line)
+	{
+		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
+		line.clone=clone;
+		clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD);
+		clone.setAttribute("y1",line.dot1.getAttribute("cy"));
+		clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD);
+		clone.setAttribute("y2",line.dot2.getAttribute("cy"));
+		clone.setAttribute("stroke","black");
+		clone.setAttribute("stroke-width",2);
+		clone.setAttribute("class","");
+		addClassToElement(clone,"clone");
+		svg.appendChild(clone);
 	}
 }
 
@@ -325,11 +368,15 @@ function dragDots(event,shape) {
 				{
 					line.setAttribute("x1",line.dot1.getAttribute("cx"));
 					line.setAttribute("y1",line.dot1.getAttribute("cy"));
+					line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD);
+					line.clone.setAttribute("y1",line.dot1.getAttribute("cy"));
 				}
 				if(line.dot2 == dot)
 				{
 					line.setAttribute("x2",line.dot2.getAttribute("cx"));
 					line.setAttribute("y2",line.dot2.getAttribute("cy"));
+					line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD);
+					line.clone.setAttribute("y2",line.dot2.getAttribute("cy"));
 				}
 			}
 		}

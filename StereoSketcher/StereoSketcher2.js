@@ -150,7 +150,7 @@ function deletePressed()
 	for(var ii=lines.length-1;ii>=0;ii--)
 	{
 		line=lines[ii];
-		if(line.isSelected() || line.dot1 == null || line.dot2 == null)
+		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected())
 		{
 			removeShape(line);
 		}
@@ -304,9 +304,11 @@ function dragDots(event,shape) {
 	var dx=event.clientX-dragger.x;
 	var dy=event.clientY-dragger.y;
 	var dot;
+	var line;
 	var x=0;
 	var y=0;
 	var dots = getDots();
+	var lines = getLines();
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot=dots[ii];
@@ -314,10 +316,22 @@ function dragDots(event,shape) {
 		{
 			x=parseInt(dot.getAttribute("cx"));
 			y=parseInt(dot.getAttribute("cy"));
-			var tempx=x+dx;
-			var tempy=y+dy;
-			dot.setAttribute("cx",tempx);
-			dot.setAttribute("cy",tempy);
+			dot.setAttribute("cx",x+dx);
+			dot.setAttribute("cy",y+dy);
+			for(var ij=0;ij<lines.length;ij++)
+			{
+				line = lines[ij];
+				if(line.dot1 == dot)
+				{
+					line.setAttribute("x1",line.dot1.getAttribute("cx"));
+					line.setAttribute("y1",line.dot1.getAttribute("cy"));
+				}
+				if(line.dot2 == dot)
+				{
+					line.setAttribute("x2",line.dot2.getAttribute("cx"));
+					line.setAttribute("y2",line.dot2.getAttribute("cy"));
+				}
+			}
 		}
 	}
 	dragger.x=event.clientX;

@@ -1,11 +1,17 @@
-var id=0;
 var svg;
 var mousePressed={};
 var mouseReleased={};
 var dragger={};
 var selectangle;
-var IPD=400; //230
 var dotsVisible=true;
+
+//constants
+var IPD=400; //230
+var lineThickness = 2;
+var dotRadius = 10;
+var shiftDist = 2;
+var labelX = 20;
+var labelY = 10;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
@@ -82,16 +88,71 @@ document.addEventListener("keydown", keyDown, false);
 function keyDown(e) {
 		var keyCode = e.keyCode;
 		switch (keyCode) {
-			case 46:
+			case 46: //delete
 				deletePressed();
 				break;
-			case 65:
-				createLine();
+			case 65: //a
+				createLinePressed();
 				break;
-			case 32:
+			case 32: //spacebar
 				toggleDotsVisible();
 				break;
+			case 83: //s
+				shiftIn();
+				break;
+			case 68: //d
+				shiftOut();
+				break;
 		}
+}
+
+function shiftIn()
+{
+	var dots = getDots();
+	var dot = null;
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		if(dot.isSelected())
+		{
+			dot.shift+=shiftDist;
+			applyShift(dot);
+		}
+	}
+}
+
+function shiftOut()
+{
+	var dots = getDots();
+	var dot = null;
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		if(dot.isSelected())
+		{
+			dot.shift-=shiftDist;
+			applyShift(dot);
+		}
+	}
+}
+
+function applyShift(dot)
+{
+	var lines = dot.lines;
+	var line = null;
+	for(var ii=0;ii<lines.length;ii++)
+	{
+		line = lines[ii];
+		if(line.dot1 == dot)
+		{
+			line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+dot.shift);
+		}
+		else if (line.dot2 == dot) 
+		{
+			line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+dot.shift);
+		}
+	}
+	dot.label.textContent = dot.shift/shiftDist;
 }
 
 function toggleDotsVisible()
@@ -104,6 +165,7 @@ function toggleDotsVisible()
 		{
 			dot = dots[ii];
 			dot.setAttribute("visibility","hidden");
+			dot.label.setAttribute("visibility","hidden");
 		}
 		dotsVisible = false;
 	} else {
@@ -111,6 +173,7 @@ function toggleDotsVisible()
 		{
 			dot = dots[ii];
 			dot.setAttribute("visibility","visible");
+			dot.label.setAttribute("visibility","visible");
 		}
 		dotsVisible = true;
 	}
@@ -126,7 +189,7 @@ function getLines()
 	return svg.getElementsByClassName("line");
 }
 
-function createLine()
+function createLinePressed()
 {
 	var selectedDots=0;
 	var dot1=null;
@@ -153,7 +216,7 @@ function createLine()
 			}
 		}
 	}
-	if(selectedDots==0)
+	if(selectedDots!=2)
 	{
 		return;
 	}
@@ -170,6 +233,7 @@ function deletePressed()
 		dot=dots[ii];
 		if(dot.isSelected())
 		{
+			removeShape(dot.label);
 			removeShape(dot);
 		}
 	}
@@ -204,11 +268,13 @@ var shapeFactory={
 		line.setAttribute("x2",dot2.getAttribute("cx"));
 		line.setAttribute("y2",dot2.getAttribute("cy"));
 		line.setAttribute("stroke","black");
-		line.setAttribute("stroke-width",2);
+		line.setAttribute("stroke-width",lineThickness);
 		line.setAttribute("class","");
 		addClassToElement(line,"line");
 		line.dot1=dot1;
 		line.dot2=dot2;
+		dot1.lines.push(line);
+		dot2.lines.push(line);
 		this.attachCommonHandlers(line);
 		svg.appendChild(line);
 		dot1.deselect();
@@ -220,7 +286,7 @@ var shapeFactory={
 		var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 		dot.setAttribute("cx",event.clientX);
 		dot.setAttribute("cy",event.clientY);
-		dot.setAttribute("r",10);
+		dot.setAttribute("r",dotRadius);
 		dot.setAttribute("stroke","black");
 		dot.setAttribute("stroke-width",1);
 		dot.setAttribute("fill","yellow");
@@ -236,6 +302,15 @@ var shapeFactory={
 			}
 		};
 		svg.appendChild(dot);
+		dot.lines = [];
+		dot.shift = 0;
+		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+		label.setAttribute("x",dot.getAttribute("cx")-labelX);
+		label.setAttribute("y",dot.getAttribute("cy")-labelY);
+		label.setAttribute("fill","black");
+		label.textContent = "0";
+		svg.appendChild(label);
+		dot.label = label;
 	},
 	attachCommonHandlers:function(shape) {
 		shape.onmouseover = function() {
@@ -298,12 +373,12 @@ var shapeFactory={
 	{
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.clone=clone;
-		clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD);
+		clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+line.dot1.shift);
 		clone.setAttribute("y1",line.dot1.getAttribute("cy"));
-		clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD);
+		clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+line.dot2.shift);
 		clone.setAttribute("y2",line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke","black");
-		clone.setAttribute("stroke-width",2);
+		clone.setAttribute("stroke-width",lineThickness);
 		clone.setAttribute("class","");
 		addClassToElement(clone,"clone");
 		svg.appendChild(clone);
@@ -351,7 +426,7 @@ function dragDots(event,shape) {
 	var x=0;
 	var y=0;
 	var dots = getDots();
-	var lines = getLines();
+	var lines = [];
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot=dots[ii];
@@ -361,6 +436,7 @@ function dragDots(event,shape) {
 			y=parseInt(dot.getAttribute("cy"));
 			dot.setAttribute("cx",x+dx);
 			dot.setAttribute("cy",y+dy);
+			lines=dot.lines;
 			for(var ij=0;ij<lines.length;ij++)
 			{
 				line = lines[ij];
@@ -368,17 +444,19 @@ function dragDots(event,shape) {
 				{
 					line.setAttribute("x1",line.dot1.getAttribute("cx"));
 					line.setAttribute("y1",line.dot1.getAttribute("cy"));
-					line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD);
+					line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+dot.shift);
 					line.clone.setAttribute("y1",line.dot1.getAttribute("cy"));
 				}
-				if(line.dot2 == dot)
+				else if(line.dot2 == dot)
 				{
 					line.setAttribute("x2",line.dot2.getAttribute("cx"));
 					line.setAttribute("y2",line.dot2.getAttribute("cy"));
-					line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD);
+					line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+dot.shift);
 					line.clone.setAttribute("y2",line.dot2.getAttribute("cy"));
 				}
 			}
+			dot.label.setAttribute("x",dot.getAttribute("cx")-labelX);
+			dot.label.setAttribute("y",dot.getAttribute("cy")-labelY);
 		}
 	}
 	dragger.x=event.clientX;

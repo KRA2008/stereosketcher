@@ -39,18 +39,7 @@ window.onload=function() {
 			}
 			if(event.button==2)
 			{
-				var dots = getDots();
-				for(var il=0;il<dots.length;il++)
-				{
-					var dot=dots[il];
-					dot.deselect();
-				}
-				var lines=getLines();
-				for(var nn=0;nn<lines.length;nn++)
-				{
-					var line=lines[nn];
-					line.deselect();
-				}
+				deselectAll();
 			}
 		}
 		if(event.button==0)
@@ -104,6 +93,22 @@ function keyDown(e) {
 				shiftOut();
 				break;
 		}
+}
+
+function deselectAll()
+{
+	var dots = getDots();
+	for(var il=0;il<dots.length;il++)
+	{
+		var dot=dots[il];
+		dot.deselect();
+	}
+	var lines=getLines();
+	for(var nn=0;nn<lines.length;nn++)
+	{
+		var line=lines[nn];
+		line.deselect();
+	}
 }
 
 function shiftIn()
@@ -220,6 +225,16 @@ function createLinePressed()
 	{
 		return;
 	}
+	var lines = getLines();
+	var line = null;
+	for(var ii=0;ii<lines.length;ii++)
+	{
+		line = lines[ii];
+		if((line.dot1 == dot1 || line.dot2 == dot1) && (line.dot1 == dot2 || line.dot2 == dot2))
+		{
+			return;
+		}
+	}
 	shapeFactory.createLine(dot1,dot2);
 }
 
@@ -238,11 +253,16 @@ function deletePressed()
 		}
 	}
 	var lines=getLines();
+	var dotLines = [];
 	for(var ii=lines.length-1;ii>=0;ii--)
 	{
 		line=lines[ii];
 		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected())
 		{
+			dotLines = line.dot1.lines;
+			dotLines.splice(dotLines.indexOf(line),1);
+			dotLines = line.dot2.lines;
+			dotLines.splice(dotLines.indexOf(line),1);
 			removeShape(line.clone);
 			removeShape(line);
 		}
@@ -300,6 +320,10 @@ var shapeFactory={
 			{
 				dragDots(event,this);
 			}
+		};
+		dot.ondblclick = function()
+		{
+			selectAllContiguous(dot);
 		};
 		svg.appendChild(dot);
 		dot.lines = [];
@@ -382,6 +406,37 @@ var shapeFactory={
 		clone.setAttribute("class","");
 		addClassToElement(clone,"clone");
 		svg.appendChild(clone);
+	}
+}
+
+function selectAllContiguous(dot)
+{
+	deselectAll();
+	dot.select();
+	recursiveSelectDots(dot);
+}
+
+function recursiveSelectDots(dot)
+{
+	var lines = dot.lines;
+	var line = null;
+	for(var ii=0;ii<lines.length;ii++)
+	{
+		line = lines[ii];
+		if(line.dot1.isSelected() && line.dot2.isSelected())
+		{
+			continue;
+		}
+		if(line.dot1 == dot)
+		{
+			line.dot2.select();
+			recursiveSelectDots(line.dot2);
+		} 
+		else if (line.dot2 == dot)
+		{
+			line.dot1.select();
+			recursiveSelectDots(line.dot1);
+		}
 	}
 }
 

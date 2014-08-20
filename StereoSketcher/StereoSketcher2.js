@@ -6,7 +6,7 @@ var selectangle;
 var dotsVisible=true;
 
 //constants
-var IPD=400; //230
+var IPD=230;
 var lineThickness = 2;
 var dotRadius = 10;
 var shiftDist = 2;
@@ -92,78 +92,43 @@ function keyDown(e) {
 			case 68: //d
 				shiftOut();
 				break;
+			case 70: //f
+				createFacePressed();
+				break;
 		}
 }
 
 function deselectAll()
 {
+	var dot;
 	var dots = getDots();
 	for(var il=0;il<dots.length;il++)
 	{
-		var dot=dots[il];
+		dot=dots[il];
 		dot.deselect();
 	}
+	var line;
 	var lines=getLines();
 	for(var nn=0;nn<lines.length;nn++)
 	{
-		var line=lines[nn];
+		line=lines[nn];
 		line.deselect();
 	}
-}
-
-function shiftIn()
-{
-	var dots = getDots();
-	var dot = null;
-	for(var ii=0;ii<dots.length;ii++)
+	var face;
+	var faces=getFaces();
+	for(var ii=0;ii<faces.length;ii++)
 	{
-		dot = dots[ii];
-		if(dot.isSelected())
-		{
-			dot.shift+=shiftDist;
-			applyShift(dot);
-		}
+		face=faces[ii];
+		face.deselect();
 	}
 }
 
-function shiftOut()
-{
-	var dots = getDots();
-	var dot = null;
-	for(var ii=0;ii<dots.length;ii++)
-	{
-		dot = dots[ii];
-		if(dot.isSelected())
-		{
-			dot.shift-=shiftDist;
-			applyShift(dot);
-		}
-	}
-}
 
-function applyShift(dot)
-{
-	var lines = dot.lines;
-	var line = null;
-	for(var ii=0;ii<lines.length;ii++)
-	{
-		line = lines[ii];
-		if(line.dot1 == dot)
-		{
-			line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+dot.shift);
-		}
-		else if (line.dot2 == dot) 
-		{
-			line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+dot.shift);
-		}
-	}
-	dot.label.textContent = dot.shift/shiftDist;
-}
 
 function toggleDotsVisible()
 {
 	var dots = getDots();
-	var dot=null;
+	var dot;
 	if(dotsVisible)
 	{
 		for(var ii=0;ii<dots.length;ii++)
@@ -194,11 +159,16 @@ function getLines()
 	return svg.getElementsByClassName("line");
 }
 
+function getFaces()
+{
+	return svg.getElementsByClassName("face");
+}
+
 function createLinePressed()
 {
 	var selectedDots=0;
-	var dot1=null;
-	var dot2=null;
+	var dot1;
+	var dot2;
 	var dots = getDots();
 	for(var io=0;io<dots.length;io++)
 	{
@@ -226,7 +196,7 @@ function createLinePressed()
 		return;
 	}
 	var lines = getLines();
-	var line = null;
+	var line;
 	for(var ii=0;ii<lines.length;ii++)
 	{
 		line = lines[ii];
@@ -238,10 +208,61 @@ function createLinePressed()
 	shapeFactory.createLine(dot1,dot2);
 }
 
+function createFacePressed()
+{
+	var selectedDots=0;
+	var dot1;
+	var dot2;
+	var dot3;
+	var dots = getDots();
+	for(var io=0;io<dots.length;io++)
+	{
+		if(dots[io].isSelected())
+		{
+			selectedDots++;
+			if(dot1==null)
+			{
+				dot1=dots[io];
+				continue;
+			}
+			if(dot2==null)
+			{
+				dot2=dots[io];
+				continue;
+			}
+			if(dot3==null)
+			{
+				dot3=dots[io];
+				continue;
+			}
+			if(selectedDots==4)
+			{
+				return;
+			}
+		}
+	}
+	if(selectedDots!=3)
+	{
+		return;
+	}
+	var faces = getFaces();
+	var face;
+	for(var ii=0;ii<faces.length;ii++)
+	{
+		face = faces[ii];
+		if((dot1 == face.dot1 || dot1 == face.dot2 || dot1 == face.dot3) && 
+		(dot2 == face.dot1 || dot2 == face.dot2 || dot2 == face.dot3) && 
+		(dot3 == face.dot1 || dot3 == face.dot2 || dot3 == face.dot3))
+		{
+			return;
+		}
+	}
+	shapeFactory.createFace(dot1,dot2,dot3);
+}
+
 function deletePressed()
 {
 	var dot;
-	var line;
 	var dots = getDots();
 	for(var ii=dots.length-1;ii>=0;ii--)
 	{
@@ -252,6 +273,7 @@ function deletePressed()
 			removeShape(dot);
 		}
 	}
+	var line;
 	var lines=getLines();
 	var dotLines = [];
 	for(var ii=lines.length-1;ii>=0;ii--)
@@ -267,6 +289,24 @@ function deletePressed()
 			removeShape(line);
 		}
 	}
+	var face;
+	var faces = getFaces();
+	var dotFaces = [];
+	for (var ii=faces.length-1;ii>=0;ii--)
+	{
+		face=faces[ii];
+		if(face.isSelected() || face.dot1.isSelected() || face.dot2.isSelected() || face.dot3.isSelected())
+		{
+			dotFaces = face.dot1.faces;
+			dotFaces.splice(dotFaces.indexOf(face),1);
+			dotFaces = face.dot2.faces;
+			dotFaces.splice(dotFaces.indexOf(face),1);
+			dotFaces = face.dot3.faces;
+			dotFaces.splice(dotFaces.indexOf(face),1);
+			removeShape(face.clone);
+			removeShape(face);
+		}
+	}
 }
 
 function removeShape(shape)
@@ -279,135 +319,7 @@ function preventDefault(event)
 	event.preventDefault ? event.preventDefault() : event.returnValue=false;
 }
 
-var shapeFactory={
-	createLine:function(dot1,dot2)
-	{
-		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		line.setAttribute("x1",dot1.getAttribute("cx"));
-		line.setAttribute("y1",dot1.getAttribute("cy"));
-		line.setAttribute("x2",dot2.getAttribute("cx"));
-		line.setAttribute("y2",dot2.getAttribute("cy"));
-		line.setAttribute("stroke","black");
-		line.setAttribute("stroke-width",lineThickness);
-		line.setAttribute("class","");
-		addClassToElement(line,"line");
-		line.dot1=dot1;
-		line.dot2=dot2;
-		dot1.lines.push(line);
-		dot2.lines.push(line);
-		this.attachCommonHandlers(line);
-		svg.appendChild(line);
-		dot1.deselect();
-		dot2.deselect();
-		this.createCloneLine(line);
-	},
-	createCircle:function(event) 
-	{
-		var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-		dot.setAttribute("cx",event.clientX);
-		dot.setAttribute("cy",event.clientY);
-		dot.setAttribute("r",dotRadius);
-		dot.setAttribute("stroke","black");
-		dot.setAttribute("stroke-width",1);
-		dot.setAttribute("fill","yellow");
-		dot.setAttribute("fill-opacity",0);
-		dot.setAttribute("class","");
-		addClassToElement(dot,"dot");
-		addClassToElement(dot,"highlit");
-		this.attachCommonHandlers(dot);
-		dot.onmousemove = function(event) {
-			if(mousePressed.is && mousePressed.shape && mousePressed.shape.isSelected())
-			{
-				dragDots(event,this);
-			}
-		};
-		dot.ondblclick = function()
-		{
-			selectAllContiguous(dot);
-		};
-		svg.appendChild(dot);
-		dot.lines = [];
-		dot.shift = 0;
-		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-		label.setAttribute("x",dot.getAttribute("cx")-labelX);
-		label.setAttribute("y",dot.getAttribute("cy")-labelY);
-		label.setAttribute("fill","black");
-		label.textContent = "0";
-		svg.appendChild(label);
-		dot.label = label;
-	},
-	attachCommonHandlers:function(shape) {
-		shape.onmouseover = function() {
-			highlight(this);
-		};
-		shape.onmouseout = function() {
-			lowlight(this);
-		};
-		shape.select = function() {
-			if(doesElementHaveClass(this,"dot"))
-			{
-				this.setAttribute("fill-opacity",0.5);
-			}
-			else if(doesElementHaveClass(this,"line"))
-			{
-				this.setAttribute("stroke","yellow");
-			}
-			addClassToElement(this,"selected");
-		};
-		shape.deselect = function() {
-			if(doesElementHaveClass(this,"dot"))
-			{
-				this.setAttribute("fill-opacity",0);
-			}
-			else if(doesElementHaveClass(this,"line"))
-			{
-				this.setAttribute("stroke","black");
-			}
-			removeClassFromElement(this,"selected");
-		};
-		shape.isSelected = function() {
-			return doesElementHaveClass(this,"selected");
-		};
-		shape.toggleSelect = function() {
-			if(this.isSelected()) 
-			{
-				this.deselect();
-			}
-			else
-			{
-				this.select();
-			}
-		};
-		shape.onmousedown = function(event) {
-			if(event.button==0)
-			{
-				preventDefault(event);
-				mousePressedOnShape(event,this);
-			}
-		};
-		shape.onmouseup = function(event) {
-			if(event.button==0)
-			{
-				mouseReleasedOnShape(event,this);
-				selectangle=null;
-			}
-		};
-	},
-	createCloneLine:function(line)
-	{
-		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		line.clone=clone;
-		clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+line.dot1.shift);
-		clone.setAttribute("y1",line.dot1.getAttribute("cy"));
-		clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+line.dot2.shift);
-		clone.setAttribute("y2",line.dot2.getAttribute("cy"));
-		clone.setAttribute("stroke","black");
-		clone.setAttribute("stroke-width",lineThickness);
-		clone.setAttribute("class","");
-		addClassToElement(clone,"clone");
-		svg.appendChild(clone);
-	}
-}
+
 
 function selectAllContiguous(dot)
 {
@@ -419,7 +331,7 @@ function selectAllContiguous(dot)
 function recursiveSelectDots(dot)
 {
 	var lines = dot.lines;
-	var line = null;
+	var line;
 	for(var ii=0;ii<lines.length;ii++)
 	{
 		line = lines[ii];
@@ -440,83 +352,7 @@ function recursiveSelectDots(dot)
 	}
 }
 
-function addClassToElement(element,className)
-{
-	var old = element.getAttribute("class");
-	if(old == null || old == "" || !doesElementHaveClass(element,className))
-	{
-		element.setAttribute("class",old+" "+className);
-	}
-}
 
-function removeClassFromElement(element,className)
-{
-	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","g");
-	element.setAttribute("class",element.getAttribute("class").replace(re,''));
-}
-
-function doesElementHaveClass(element,className)
-{
-	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","");
-	var currentClass = element.getAttribute("class");
-	if(currentClass == null || currentClass == "")
-	{
-		return false;
-	}
-	var matched = element.getAttribute("class").match(re);
-	if(matched == null)
-	{
-		return false;
-	} else {
-		return true;
-	}
-}
-
-function dragDots(event,shape) {
-	event.stopPropagation();
-	var dx=event.clientX-dragger.x;
-	var dy=event.clientY-dragger.y;
-	var dot;
-	var line;
-	var x=0;
-	var y=0;
-	var dots = getDots();
-	var lines = [];
-	for(var ii=0;ii<dots.length;ii++)
-	{
-		dot=dots[ii];
-		if(dot.isSelected())
-		{
-			x=parseInt(dot.getAttribute("cx"));
-			y=parseInt(dot.getAttribute("cy"));
-			dot.setAttribute("cx",x+dx);
-			dot.setAttribute("cy",y+dy);
-			lines=dot.lines;
-			for(var ij=0;ij<lines.length;ij++)
-			{
-				line = lines[ij];
-				if(line.dot1 == dot)
-				{
-					line.setAttribute("x1",line.dot1.getAttribute("cx"));
-					line.setAttribute("y1",line.dot1.getAttribute("cy"));
-					line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+dot.shift);
-					line.clone.setAttribute("y1",line.dot1.getAttribute("cy"));
-				}
-				else if(line.dot2 == dot)
-				{
-					line.setAttribute("x2",line.dot2.getAttribute("cx"));
-					line.setAttribute("y2",line.dot2.getAttribute("cy"));
-					line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+dot.shift);
-					line.clone.setAttribute("y2",line.dot2.getAttribute("cy"));
-				}
-			}
-			dot.label.setAttribute("x",dot.getAttribute("cx")-labelX);
-			dot.label.setAttribute("y",dot.getAttribute("cy")-labelY);
-		}
-	}
-	dragger.x=event.clientX;
-	dragger.y=event.clientY;
-}
 
 function changeSelectangle(event) {
 	event.stopPropagation();
@@ -618,8 +454,17 @@ function lowlight(shape)
 	if(doesElementHaveClass(shape,"dot"))
 	{
 		shape.setAttribute("stroke","black");
-	} 
+	}
 	else if(doesElementHaveClass(shape,"line"))
+	{
+		if(shape.isSelected())
+		{
+			shape.setAttribute("stroke","yellow");
+		} else {
+			shape.setAttribute("stroke","black");
+		}
+	}
+	else if(doesElementHaveClass(shape,"face"))
 	{
 		if(shape.isSelected())
 		{

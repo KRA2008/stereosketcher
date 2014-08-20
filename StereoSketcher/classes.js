@@ -1,0 +1,31 @@
+function addClassToElement(element,className)
+{
+	var old = element.getAttribute("class");
+	if(old == null || old == "" || !doesElementHaveClass(element,className))
+	{
+		element.setAttribute("class",old+" "+className);
+	}
+}
+
+function removeClassFromElement(element,className)
+{
+	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","g");
+	element.setAttribute("class",element.getAttribute("class").replace(re,''));
+}
+
+function doesElementHaveClass(element,className)
+{
+	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","");
+	var currentClass = element.getAttribute("class");
+	if(currentClass == null || currentClass == "")
+	{
+		return false;
+	}
+	var matched = element.getAttribute("class").match(re);
+	if(matched == null)
+	{
+		return false;
+	} else {
+		return true;
+	}
+}

@@ -446,6 +446,10 @@ function mouseReleasedOnShape(event,shape)
 function highlight(shape) 
 {
 	shape.setAttribute("stroke","green");
+	if(doesElementHaveClass(shape,"face"))
+	{
+		shape.setAttribute("stroke-width",1);
+	}
 	addClassToElement(shape,"highlit");
 }
 
@@ -470,7 +474,7 @@ function lowlight(shape)
 		{
 			shape.setAttribute("stroke","yellow");
 		} else {
-			shape.setAttribute("stroke","black");
+			shape.setAttribute("stroke-width",0);
 		}
 	}
 	removeClassFromElement(shape,"highlit");

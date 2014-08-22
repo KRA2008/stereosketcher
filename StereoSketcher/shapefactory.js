@@ -74,6 +74,7 @@ var shapeFactory={
 			}
 			else if(doesElementHaveClass(this,"face"))
 			{
+				this.setAttribute("stroke-width",1);
 				this.setAttribute("stroke","yellow");
 			}
 			addClassToElement(this,"selected");
@@ -89,9 +90,13 @@ var shapeFactory={
 			}
 			else if(doesElementHaveClass(this,"face"))
 			{
-				this.setAttribute("stroke","black");
+				this.setAttribute("stroke-width",0);
 			}
 			removeClassFromElement(this,"selected");
+			if(doesElementHaveClass(this,"highlit"))
+			{
+				highlight(this);
+			}
 		};
 		shape.isSelected = function() {
 			return doesElementHaveClass(this,"selected");
@@ -153,7 +158,7 @@ var shapeFactory={
 		face.dot3=dot3;
 		face.setAttribute("points",coords);
 		face.setAttribute("class","");
-		face.setAttribute("stroke-width",2);
+		face.setAttribute("stroke-width",0);
 		face.setAttribute("fill-opacity",0.5);
 		face.setAttribute("stroke","black");
 		addClassToElement(face,"face");
@@ -173,7 +178,7 @@ var shapeFactory={
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneFace");
 		clone.setAttribute("fill-opacity",0.5);
-		clone.setAttribute("stroke-width",2);
+		clone.setAttribute("stroke-width",0);
 		clone.setAttribute("stroke","black");
 		svg.appendChild(clone);
 	}

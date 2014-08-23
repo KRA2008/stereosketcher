@@ -15,10 +15,14 @@ var shapeFactory={
 		dot1.lines.push(line);
 		dot2.lines.push(line);
 		this.attachCommonHandlers(line);
-		svg.appendChild(line);
+		this.addElement(line);
 		dot1.deselect();
 		dot2.deselect();
 		this.createCloneLine(line);
+		line.ondblclick = function()
+		{
+			selectDotsOfLine(this);
+		};
 	},
 	createCircle:function(event) 
 	{
@@ -42,22 +46,24 @@ var shapeFactory={
 		};
 		dot.ondblclick = function()
 		{
-			selectAllContiguous(dot);
+			selectAllContiguous(this);
 		};
-		svg.appendChild(dot);
+		this.addElement(dot);
 		dot.lines = [];
 		dot.shift = 0;
 		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
 		label.setAttribute("x",dot.getAttribute("cx")-labelX);
 		label.setAttribute("y",dot.getAttribute("cy")-labelY);
 		label.setAttribute("fill","black");
+		label.setAttribute("class","");
+		addClassToElement(label,"label");
 		label.textContent = "0";
-		svg.appendChild(label);
+		this.addElement(label);
 		dot.label = label;
 		dot.faces = [];
 	},
 	attachCommonHandlers:function(shape) {
-		shape.onmouseover = function() {
+		shape.onmouseenter = function() {
 			highlight(this);
 		};
 		shape.onmouseout = function() {
@@ -138,7 +144,7 @@ var shapeFactory={
 		clone.setAttribute("stroke-width",lineThickness);
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneLine");
-		svg.appendChild(clone);
+		this.addElement(clone);
 	},
 	createFace:function(dot1,dot2,dot3)
 	{
@@ -159,12 +165,15 @@ var shapeFactory={
 		face.setAttribute("points",coords);
 		face.setAttribute("class","");
 		face.setAttribute("stroke-width",0);
-		face.setAttribute("fill-opacity",0.5);
-		face.setAttribute("stroke","black");
+		face.setAttribute("fill-opacity",1);
+		face.setAttribute("fill","gray");
 		addClassToElement(face,"face");
 		this.attachCommonHandlers(face);
-		svg.appendChild(face);
+		face.ondblclick = function() {
+			selectDotsOfFace(this);
+		}
 		this.createCloneFace(face);
+		this.addElement(face);
 	},
 	createCloneFace:function(face)
 	{
@@ -177,9 +186,21 @@ var shapeFactory={
 		clone.setAttribute("points",coords);
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneFace");
-		clone.setAttribute("fill-opacity",0.5);
+		clone.setAttribute("fill-opacity",1);
 		clone.setAttribute("stroke-width",0);
-		clone.setAttribute("stroke","black");
-		svg.appendChild(clone);
+		clone.setAttribute("fill","gray");
+		this.addElement(clone);
+	},
+	addElement:function(element)
+	{
+		var dots = getDots();
+		if(doesElementHaveClass(element,"dot") || doesElementHaveClass(element,"label"))
+		{
+			svg.appendChild(element);
+		} 
+		else 
+		{
+			svg.insertBefore(element,dots[0]);
+		}
 	}
 }

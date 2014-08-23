@@ -2,11 +2,10 @@ var svg;
 var mousePressed={};
 var mouseReleased={};
 var dragger={};
-var selectangle;
 var dotsVisible=true;
 
 //constants
-var IPD=230;
+var IPD=250;
 var lineThickness = 2;
 var dotRadius = 10;
 var shiftDist = 2;
@@ -70,6 +69,7 @@ window.onload=function() {
 			selectangle = null;
 		}
 	};
+	addPalette();
 };
 
 document.addEventListener("keydown", keyDown, false);
@@ -94,6 +94,12 @@ function keyDown(e) {
 				break;
 			case 70: //f
 				createFacePressed();
+				break;
+			case 86: //v
+				moveSelectedToBack();
+				break;
+			case 84: //t
+				moveSelectedToFront();
 				break;
 		}
 }
@@ -162,6 +168,11 @@ function getLines()
 function getFaces()
 {
 	return svg.getElementsByClassName("face");
+}
+
+function getSelected()
+{
+	return svg.getElementsByClassName("selected");
 }
 
 function createLinePressed()
@@ -328,6 +339,21 @@ function selectAllContiguous(dot)
 	recursiveSelectDots(dot);
 }
 
+function selectDotsOfLine(line)
+{
+	deselectAll();
+	line.dot1.select();
+	line.dot2.select();
+}
+
+function selectDotsOfFace(face)
+{
+	deselectAll();
+	face.dot1.select();
+	face.dot2.select();
+	face.dot3.select();
+}
+
 function recursiveSelectDots(dot)
 {
 	var lines = dot.lines;
@@ -350,61 +376,55 @@ function recursiveSelectDots(dot)
 			recursiveSelectDots(line.dot1);
 		}
 	}
-}
-
-
-
-function changeSelectangle(event) {
-	event.stopPropagation();
-	if(selectangle!=null)
+	var faces = dot.faces;
+	var face;
+	for(var ii=0;ii<faces.length;ii++)
 	{
-		var x=parseInt(selectangle.getAttribute("x"));
-		var y=parseInt(selectangle.getAttribute("y"));
-		var width=parseInt(selectangle.getAttribute("width"));
-		var height=parseInt(selectangle.getAttribute("height"));
-		var ex=event.clientX;
-		var ey=event.clientY;
-		if(selectangle.originalX<ex)
+		face = faces[ii];
+		if(face.dot1.isSelected() && face.dot2.isSelected() && face.dot3.isSelected())
 		{
-			selectangle.setAttribute("width",ex-x);
-			selectangle.setAttribute("x",selectangle.originalX);
+			continue;
 		}
-		else
+		if(face.dot1 == dot)
 		{
-			selectangle.setAttribute("width",selectangle.originalX-ex);
-			selectangle.setAttribute("x",ex);
+			if(!face.dot2.isSelected())
+			{
+				face.dot2.select();
+				recursiveSelectDots(face.dot2);
+			}
+			if(!face.dot3.isSelected())
+			{
+				face.dot3.select();
+				recursiveSelectDots(face.dot3);
+			}
 		}
-		if(selectangle.originalY<ey)
+		if(face.dot2 == dot)
 		{
-			selectangle.setAttribute("height",ey-y);
-			selectangle.setAttribute("y",selectangle.originalY);
+			if(!face.dot1.isSelected())
+			{
+				face.dot1.select();
+				recursiveSelectDots(face.dot1);
+			}
+			if(!face.dot3.isSelected())
+			{
+				face.dot3.select();
+				recursiveSelectDots(face.dot3);
+			}
 		}
-		else
+		if(face.dot3 == dot)
 		{
-			selectangle.setAttribute("height",selectangle.originalY-ey);
-			selectangle.setAttribute("y",ey);
+			if(!face.dot2.isSelected())
+			{
+				face.dot2.select();
+				recursiveSelectDots(face.dot2);
+			}
+			if(!face.dot1.isSelected())
+			{
+				face.dot1.select();
+				recursiveSelectDots(face.dot1);
+			}
 		}
 	}
-	else
-	{
-		createSelectangle(event);
-	}
-}
-
-function createSelectangle(event)
-{
-	selectangle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-	selectangle.setAttribute("x",event.clientX);
-	selectangle.setAttribute("y",event.clientY);
-	selectangle.setAttribute("fill-opacity",0);
-	selectangle.setAttribute("stroke","black");
-	selectangle.setAttribute("stroke-width",2);
-	selectangle.setAttribute("stroke-opacity",1);
-	selectangle.setAttribute("height",0);
-	selectangle.setAttribute("width",0);
-	selectangle.originalX=event.clientX;
-	selectangle.originalY=event.clientY;
-	svg.appendChild(selectangle);
 }
 
 function mousePressedOnShape(event,shape) 
@@ -478,4 +498,52 @@ function lowlight(shape)
 		}
 	}
 	removeClassFromElement(shape,"highlit");
+}
+
+function deselectAllDots()
+{
+	var dots = getDots();
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dots[ii].deselect();
+	}
+}
+
+function moveSelectedToBack()
+{
+	deselectAllDots();
+	moveSelectedToBackRecursive();
+}
+
+function moveSelectedToBackRecursive()
+{
+	var selected = getSelected();
+	var element = selected[0];
+	if(element == null) return;
+	element.deselect();
+	svg.removeChild(element);
+	svg.insertBefore(element, svg.firstChild);
+	svg.removeChild(element.clone);
+	svg.insertBefore(element.clone, svg.firstChild);
+	moveSelectedToBackRecursive();
+}
+
+function moveSelectedToFront()
+{
+	deselectAllDots();
+	moveSelectedToFrontRecursive();
+}
+
+function moveSelectedToFrontRecursive()
+{
+	var dots = getDots();
+	var selected = getSelected();
+	var element = selected[0];
+	if(element == null) return;
+	element.deselect();
+	svg.removeChild(element);
+	svg.insertBefore(element,dots[0]);
+	svg.removeChild(element.clone);
+	svg.insertBefore(element.clone,dots[0]);
+	moveSelectedToFrontRecursive();
 }

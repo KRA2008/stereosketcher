@@ -589,8 +589,8 @@ function moveSelectedToFrontRecursive()
 	if(element == null) return;
 	element.deselect();
 	svg.removeChild(element);
-	svg.insertBefore(element,dots[0].label);
 	svg.removeChild(element.clone);
-	svg.insertBefore(element.clone,dots[0].label);
+	shapeFactory.addElement(element);
+	shapeFactory.addElement(element.clone);
 	moveSelectedToFrontRecursive();
 }

@@ -3,7 +3,7 @@ var hoverWidth = 30;
 
 function addPalette()
 {
-	var colors = ["red","orange","yellow","green","blue","violet"];
+	var colors = ["red","orange","yellow","green","blue","violet","black","white"];
 	var bbox = svg.getBoundingClientRect();
 	for(var ii = 0;ii<colors.length;ii++)
 	{
@@ -13,6 +13,11 @@ function addPalette()
 		box.setAttribute("height",plainWidth);
 		box.setAttribute("width",plainWidth);
 		box.setAttribute("fill",colors[ii]);
+		if(colors[ii]=="white")
+		{
+			box.setAttribute("stroke","black");
+			box.setAttribute("stroke-width","2");
+		}
 		box.setAttribute("class","");
 		addClassToElement(box,"paletteBox");
 		box.onmouseenter = function() 

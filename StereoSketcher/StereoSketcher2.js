@@ -489,6 +489,7 @@ function mousePressedOnShape(event,shape)
 function mouseReleasedOnShape(event,shape) 
 {
 	event.stopPropagation();
+	var wasSelected = false;
 	if(mousePressed.x==event.clientX && mousePressed.y==event.clientY)
 	{
 		if(event.shiftKey)
@@ -497,8 +498,19 @@ function mouseReleasedOnShape(event,shape)
 		}
 		else
 		{
+			if(shape.isSelected())
+			{
+				wasSelected=true;
+			}
 			deselectAll();
-			shape.select();
+			if(wasSelected)
+			{
+				shape.deselect();
+			} 
+			else 
+			{
+				shape.select();
+			}
 		}
 	}
 	mousePressed.is=false;

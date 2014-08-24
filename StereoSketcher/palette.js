@@ -54,6 +54,7 @@ function addPalette()
 		}
 		box.onmousedown = function(event)
 		{
+			preventDefault(event);
 			event.stopPropagation();
 		}
 		svg.appendChild(box);

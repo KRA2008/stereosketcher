@@ -41,11 +41,22 @@ function addPalette()
 				if(face.isSelected())
 				{
 					face.setAttribute("fill",color);
-					face.setAttribute("stroke",color);
 					face.clone.setAttribute("fill",color);
-					face.clone.setAttribute("stroke",color);
 				}
 				face.deselect();
+			}
+			var lines = getLines();
+			var line;
+			for(var ii=0;ii<lines.length;ii++)
+			{
+				line = lines[ii];
+				if(line.isSelected())
+				{
+					line.color=color;
+					line.setAttribute("stroke",color);
+					line.clone.setAttribute("stroke",color);
+				}
+				line.deselect();
 			}
 		}
 		box.onmouseup = function(event)

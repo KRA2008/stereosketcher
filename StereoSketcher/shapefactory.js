@@ -6,6 +6,7 @@ var shapeFactory={
 		line.setAttribute("y1",dot1.getAttribute("cy"));
 		line.setAttribute("x2",dot2.getAttribute("cx"));
 		line.setAttribute("y2",dot2.getAttribute("cy"));
+		line.color="black";
 		line.setAttribute("stroke","black");
 		line.setAttribute("stroke-width",lineThickness);
 		line.setAttribute("class","");
@@ -95,7 +96,7 @@ var shapeFactory={
 			}
 			else if(doesElementHaveClass(this,"line"))
 			{
-				this.setAttribute("stroke","black");
+				this.setAttribute("stroke",this.color);
 			}
 			else if(doesElementHaveClass(this,"face"))
 			{

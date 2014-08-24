@@ -547,7 +547,7 @@ function lowlight(shape)
 		{
 			shape.setAttribute("stroke","yellow");
 		} else {
-			shape.setAttribute("stroke","black");
+			shape.setAttribute("stroke",shape.color);
 		}
 	}
 	else if(doesElementHaveClass(shape,"face"))

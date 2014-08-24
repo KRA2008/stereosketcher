@@ -466,7 +466,10 @@ function recursiveSelectDots(dot)
 
 function mousePressedOnShape(event,shape) 
 {
-	event.stopPropagation();
+	if(doesElementHaveClass(shape,"dot"))
+	{
+		event.stopPropagation();
+	}
 	mousePressed.is=true;
 	mousePressed.x=event.clientX;
 	mousePressed.y=event.clientY;

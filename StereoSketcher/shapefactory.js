@@ -19,9 +19,9 @@ var shapeFactory={
 		dot1.deselect();
 		dot2.deselect();
 		this.createCloneLine(line);
-		line.ondblclick = function()
+		line.ondblclick = function(event)
 		{
-			selectDotsOfLine(this);
+			selectDotsOfLine(this,event);
 		};
 	},
 	createCircle:function(event) 
@@ -44,23 +44,26 @@ var shapeFactory={
 				dragDots(event,this);
 			}
 		};
-		dot.ondblclick = function()
+		dot.ondblclick = function(event)
 		{
-			selectAllContiguous(this);
+			if(event.clientX == mousePressed.x && event.clientY == mousePressed.y)
+			{
+				selectAllContiguous(this,event);
+			}
 		};
-		this.addElement(dot);
 		dot.lines = [];
 		dot.shift = 0;
 		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-		label.setAttribute("x",dot.getAttribute("cx")-labelX);
-		label.setAttribute("y",dot.getAttribute("cy")-labelY);
+		label.setAttribute("x",parseInt(dot.getAttribute("cx"))+labelX);
+		label.setAttribute("y",parseInt(dot.getAttribute("cy"))+labelY);
 		label.setAttribute("fill","black");
 		label.setAttribute("class","");
 		addClassToElement(label,"label");
 		label.textContent = "0";
-		this.addElement(label);
 		dot.label = label;
 		dot.faces = [];
+		this.addElement(label);
+		this.addElement(dot);
 	},
 	attachCommonHandlers:function(shape) {
 		shape.onmouseenter = function() {
@@ -169,8 +172,8 @@ var shapeFactory={
 		face.setAttribute("fill","gray");
 		addClassToElement(face,"face");
 		this.attachCommonHandlers(face);
-		face.ondblclick = function() {
-			selectDotsOfFace(this);
+		face.ondblclick = function(event) {
+			selectDotsOfFace(this,event);
 		}
 		this.createCloneFace(face);
 		this.addElement(face);
@@ -194,13 +197,18 @@ var shapeFactory={
 	addElement:function(element)
 	{
 		var dots = getDots();
-		if(doesElementHaveClass(element,"dot") || doesElementHaveClass(element,"label"))
+		var labels = getLabels();
+		if(doesElementHaveClass(element,"dot"))
 		{
 			svg.appendChild(element);
-		} 
-		else 
+		}
+		else if (doesElementHaveClass(element,"label"))
 		{
 			svg.insertBefore(element,dots[0]);
+		}
+		else
+		{
+			svg.insertBefore(element,labels[0]);
 		}
 	}
 }

@@ -90,8 +90,8 @@ function dragDots(event,shape) {
 					face.clone.setAttribute("points",cloneCoord);
 				}
 			}
-			dot.label.setAttribute("x",dot.getAttribute("cx")-labelX);
-			dot.label.setAttribute("y",dot.getAttribute("cy")-labelY);
+			dot.label.setAttribute("x",parseInt(dot.getAttribute("cx"))+labelX);
+			dot.label.setAttribute("y",parseInt(dot.getAttribute("cy"))+labelY);
 		}
 	}
 	dragger.x=event.clientX;

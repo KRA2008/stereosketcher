@@ -7,10 +7,10 @@ var dotsVisible=true;
 //constants
 var IPD=250;
 var lineThickness = 2;
-var dotRadius = 10;
+var dotRadius = 7;
 var shiftDist = 2;
-var labelX = 20;
-var labelY = 10;
+var labelX = -15;
+var labelY = -8;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
@@ -50,6 +50,10 @@ window.onload=function() {
 				var maxy=parseInt(selectangle.getAttribute("height"))+parseInt(selectangle.getAttribute("y"));
 				var miny=parseInt(selectangle.getAttribute("y"));
 				var dots = getDots();
+				if(!event.shiftKey)
+				{
+					deselectAll();
+				}
 				for(var ik=0;ik<dots.length;ik++)
 				{
 					var dot=dots[ik];
@@ -173,6 +177,11 @@ function getFaces()
 function getSelected()
 {
 	return svg.getElementsByClassName("selected");
+}
+
+function getLabels()
+{
+	return svg.getElementsByClassName("label");
 }
 
 function createLinePressed()
@@ -332,23 +341,51 @@ function preventDefault(event)
 
 
 
-function selectAllContiguous(dot)
+function selectAllContiguous(sourceDot,event)
 {
-	deselectAll();
-	dot.select();
-	recursiveSelectDots(dot);
+	var dots = getDots();
+	var dot;
+	if(!event.shiftKey) {
+		deselectAll();
+	} else {
+		for(var ii=0;ii<dots.length;ii++)
+		{
+			dot = dots[ii];
+			if(dot.isSelected())
+			{
+				dot.deselect();
+				addClassToElement(dot,"tempSelect");
+			}
+		}
+	}
+	sourceDot.select();
+	recursiveSelectDots(sourceDot);
+	dots = getDots();
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		if(doesElementHaveClass(dot,"tempSelect"))
+		{
+			dot.select();
+			removeClassFromElement(dot,"tempSelect");
+		}
+	}
 }
 
-function selectDotsOfLine(line)
+function selectDotsOfLine(line,event)
 {
-	deselectAll();
+	if(!event.shiftKey) {
+		deselectAll();
+	}
 	line.dot1.select();
 	line.dot2.select();
 }
 
-function selectDotsOfFace(face)
+function selectDotsOfFace(face,event)
 {
-	deselectAll();
+	if(!event.shiftKey) {
+		deselectAll();
+	}
 	face.dot1.select();
 	face.dot2.select();
 	face.dot3.select();
@@ -454,18 +491,27 @@ function mouseReleasedOnShape(event,shape)
 	event.stopPropagation();
 	if(mousePressed.x==event.clientX && mousePressed.y==event.clientY)
 	{
-		shape.toggleSelect();
+		if(event.shiftKey)
+		{
+			shape.toggleSelect();
+		}
+		else
+		{
+			deselectAll();
+			shape.select();
+		}
 	}
-	mousePressed.x=null;
-	mousePressed.y=null;
 	mousePressed.is=false;
-	mousePressed.shape=null;
 	svg.onmousemove = null;
 }
 
 function highlight(shape) 
 {
 	shape.setAttribute("stroke","green");
+	if(doesElementHaveClass(shape,"dot"))
+	{
+		shape.label.setAttribute("fill","green");
+	}
 	if(doesElementHaveClass(shape,"face"))
 	{
 		shape.setAttribute("stroke-width",1);
@@ -478,6 +524,7 @@ function lowlight(shape)
 	if(doesElementHaveClass(shape,"dot"))
 	{
 		shape.setAttribute("stroke","black");
+		shape.label.setAttribute("fill","black");
 	}
 	else if(doesElementHaveClass(shape,"line"))
 	{
@@ -542,8 +589,8 @@ function moveSelectedToFrontRecursive()
 	if(element == null) return;
 	element.deselect();
 	svg.removeChild(element);
-	svg.insertBefore(element,dots[0]);
+	svg.insertBefore(element,dots[0].label);
 	svg.removeChild(element.clone);
-	svg.insertBefore(element.clone,dots[0]);
+	svg.insertBefore(element.clone,dots[0].label);
 	moveSelectedToFrontRecursive();
 }

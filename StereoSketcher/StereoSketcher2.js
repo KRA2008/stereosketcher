@@ -11,6 +11,7 @@ var dotRadius = 7;
 var shiftDist = 2;
 var labelX = -15;
 var labelY = -8;
+var mode=0;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
@@ -74,6 +75,7 @@ window.onload=function() {
 		}
 	};
 	addPalette();
+	addModeLabel();
 };
 
 document.addEventListener("keydown", keyDown, false);
@@ -105,6 +107,15 @@ function keyDown(e) {
 			case 84: //t
 				moveSelectedToFront();
 				break;
+			case 87: //w
+				changeIPD("left");
+				break;
+			case 69: //e
+				changeIPD("right");
+				break;
+			case 81: //q
+				toggleViewMode();
+				break;
 		}
 }
 
@@ -133,7 +144,47 @@ function deselectAll()
 	}
 }
 
+function toggleViewMode()
+{
+	IPD*=-1;
+	var dots = getDots();
+	var dot;
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		dot.shift*=-1;
+		applyShift(dot);
+	}
+	if(mode==0)
+	{
+		mode=1;
+		var label=document.getElementById("modeLabel");
+		label.setAttribute("textContent","what");
+	} else {
+		mode=0;
+		var label=document.getElementById("modeLabel");
+		label.setAttribute("textContent","what");
+	}
+}
 
+function changeIPD(direction)
+{
+	if(direction=="right") 
+	{
+		IPD++;
+	}
+	else
+	{
+		IPD--;
+	}
+	var dots = getDots();
+	var dot;
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		applyShift(dot);
+	}
+}
 
 function toggleDotsVisible()
 {
@@ -608,4 +659,15 @@ function moveSelectedToFrontRecursive()
 	shapeFactory.addElement(element);
 	shapeFactory.addElement(element.clone);
 	moveSelectedToFrontRecursive();
+}
+
+function addModeLabel()
+{
+	var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	label.setAttribute("x",plainWidth);
+	label.setAttribute("y",plainWidth*3);
+	label.setAttribute("fill","black");
+	label.textContent = "cross-eye";
+	label.setAttribute("id","modeLabel");
+	svg.appendChild(label);
 }

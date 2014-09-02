@@ -24,6 +24,7 @@ var shapeFactory={
 		{
 			selectDotsOfLine(this,event);
 		};
+		line.setAttribute("stroke-linecap","round");
 	},
 	createCircle:function(event) 
 	{
@@ -149,6 +150,7 @@ var shapeFactory={
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneLine");
 		this.addElement(clone);
+		clone.setAttribute("stroke-linecap","round");
 	},
 	createFace:function(dot1,dot2,dot3)
 	{

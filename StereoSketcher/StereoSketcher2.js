@@ -8,7 +8,7 @@ var dotsVisible=true;
 var IPD=250;
 var lineThickness = 2;
 var dotRadius = 7;
-var shiftDist = 2;
+var shiftDist = 1;
 var labelX = -15;
 var labelY = -8;
 var mode=0;
@@ -152,18 +152,17 @@ function toggleViewMode()
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot = dots[ii];
-		dot.shift*=-1;
 		applyShift(dot);
 	}
 	if(mode==0)
 	{
 		mode=1;
 		var label=document.getElementById("modeLabel");
-		label.setAttribute("textContent","what");
+		label.textContent = "magic eye";
 	} else {
 		mode=0;
 		var label=document.getElementById("modeLabel");
-		label.setAttribute("textContent","what");
+		label.textContent = "cross eye";
 	}
 }
 
@@ -177,6 +176,11 @@ function changeIPD(direction)
 	{
 		IPD--;
 	}
+	redrawAllDots();
+}
+
+function redrawAllDots()
+{
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++)
@@ -667,7 +671,7 @@ function addModeLabel()
 	label.setAttribute("x",plainWidth);
 	label.setAttribute("y",plainWidth*3);
 	label.setAttribute("fill","black");
-	label.textContent = "cross-eye";
+	label.textContent = "cross eye";
 	label.setAttribute("id","modeLabel");
 	svg.appendChild(label);
 }

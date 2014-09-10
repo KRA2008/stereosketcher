@@ -3,7 +3,7 @@ var hoverWidth = 30;
 
 function addPalette()
 {
-	var colors = ["red","orange","yellow","green","blue","violet","black","white"];
+	var colors = ["red","orange","yellow","green","blue","violet","black","white","cyan"];
 	var bbox = svg.getBoundingClientRect();
 	for(var ii = 0;ii<colors.length;ii++)
 	{

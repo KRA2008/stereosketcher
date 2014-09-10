@@ -5,7 +5,8 @@ var dragger={};
 var dotsVisible=true;
 
 //constants
-var IPD=250;
+var originalIPD=250;
+var IPD=originalIPD;
 var lineThickness = 2;
 var dotRadius = 7;
 var shiftDist = 1;
@@ -146,23 +147,39 @@ function deselectAll()
 
 function toggleViewMode()
 {
-	IPD*=-1;
+	if(mode==0)
+	{
+		mode=1;
+		var label=document.getElementById("modeLabel");
+		label.textContent = "magic eye";
+		IPD=originalIPD*-1;
+	} else if(mode==1) {
+		mode=2;
+		var label=document.getElementById("modeLabel");
+		label.textContent = "red/cyan";
+		IPD=0;
+		var lines = getLines();
+		var line;
+		for(var ii=0;ii<lines.length;ii++)
+		{
+			line = lines[ii];
+			line.setAttribute("stroke","red");
+			line.setAttribute("stroke-opacity",1);
+			line.clone.setAttribute("stroke","cyan");
+			line.clone.setAttribute("stroke-opacity",1);
+		}
+	} else if(mode==2) {
+		mode=0;
+		var label=document.getElementById("modeLabel");
+		label.textContent = "cross eye";
+		IPD=originalIPD;
+	}
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot = dots[ii];
 		applyShift(dot);
-	}
-	if(mode==0)
-	{
-		mode=1;
-		var label=document.getElementById("modeLabel");
-		label.textContent = "magic eye";
-	} else {
-		mode=0;
-		var label=document.getElementById("modeLabel");
-		label.textContent = "cross eye";
 	}
 }
 

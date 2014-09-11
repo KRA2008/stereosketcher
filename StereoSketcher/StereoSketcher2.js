@@ -592,48 +592,6 @@ function mouseReleasedOnShape(event,shape)
 	svg.onmousemove = null;
 }
 
-function highlight(shape) 
-{
-	shape.setAttribute("stroke","green");
-	if(doesElementHaveClass(shape,"dot"))
-	{
-		shape.label.setAttribute("fill","green");
-	}
-	if(doesElementHaveClass(shape,"face"))
-	{
-		shape.setAttribute("stroke-width",1);
-	}
-	addClassToElement(shape,"highlit");
-}
-
-function lowlight(shape) 
-{
-	if(doesElementHaveClass(shape,"dot"))
-	{
-		shape.setAttribute("stroke","black");
-		shape.label.setAttribute("fill","black");
-	}
-	else if(doesElementHaveClass(shape,"line"))
-	{
-		if(shape.isSelected())
-		{
-			shape.setAttribute("stroke","yellow");
-		} else {
-			shape.setAttribute("stroke",shape.color);
-		}
-	}
-	else if(doesElementHaveClass(shape,"face"))
-	{
-		if(shape.isSelected())
-		{
-			shape.setAttribute("stroke","yellow");
-		} else {
-			shape.setAttribute("stroke-width",0);
-		}
-	}
-	removeClassFromElement(shape,"highlit");
-}
-
 function deselectAllDots()
 {
 	var dots = getDots();

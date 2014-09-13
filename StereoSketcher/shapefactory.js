@@ -235,6 +235,7 @@ var shapeFactory={
 		clone.setAttribute("fill-opacity",1);
 		clone.setAttribute("stroke-width",0);
 		clone.setAttribute("fill","gray");
+		clone.setAttribute("style","filter: url(#blurFilter2);");
 		this.addElement(clone);
 	},
 	addElement:function(element)

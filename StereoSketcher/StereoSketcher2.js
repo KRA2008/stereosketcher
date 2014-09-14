@@ -153,26 +153,18 @@ function toggleViewMode()
 		var label=document.getElementById("modeLabel");
 		label.textContent = "magic eye";
 		IPD=originalIPD*-1;
+		setFilters(false)
 	} else if(mode==1) {
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
-		IPD=0;
-		var lines = getLines();
-		var line;
-		for(var ii=0;ii<lines.length;ii++)
-		{
-			line = lines[ii];
-			line.setAttribute("stroke","red");
-			line.setAttribute("stroke-opacity",1);
-			line.clone.setAttribute("stroke","cyan");
-			line.clone.setAttribute("stroke-opacity",1);
-		}
+		setFilters(true);
 	} else if(mode==2) {
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross eye";
 		IPD=originalIPD;
+		setFilters(false);
 	}
 	var dots = getDots();
 	var dot;
@@ -180,6 +172,42 @@ function toggleViewMode()
 	{
 		dot = dots[ii];
 		applyShift(dot);
+	}
+}
+
+function setFilters(on)
+{
+	var lines = getLines();
+	var line;
+	for(var ii=0;ii<lines.length;ii++)
+	{
+		line = lines[ii];
+		if(line!=null && on)
+		{
+			setRegularFilter(line);
+			setCloneFilter(line.clone);
+		}
+		else
+		{
+			dropFilters(line);
+			dropFilters(line.Clone);
+		}
+	}
+	var faces = getFaces();
+	var face;
+	for(var ii=0;ii<faces.length;ii++)
+	{
+		face = faces[ii];
+		if(face!=null && on)
+		{
+			setRegularFilter(face);
+			setCloneFilter(face.clone);
+		}
+		else
+		{
+			dropFilters(face);
+			dropFilters(face.clone);
+		}
 	}
 }
 

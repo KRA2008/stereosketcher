@@ -25,25 +25,31 @@
 		<svg id="svg" xmlns="http://www.w3.org/2000/svg">
 
 <defs>
-    <filter id="blurFilter2" y="-10" height="40" x="-10" width="150">
-        <feOffset in="SourceGraphic" dx="10" dy="10" result="offset2" />
-        <!--<feGaussianBlur in="offset2" stdDeviation="3"  result="blur2"/>-->  
-        <feColorMatrix in="offset2" type="matrix" result="blur2"
-      	values="1 1 1 1 0
+    <filter id="redFilter">
+        <feOffset in="SourceGraphic" dx="0" dy="0" result="redOffset" />
+        <feColorMatrix in="redOffset" type="matrix" result="red"
+      	values="0 0 0 0 255
               	0 0 0 0 0
               	0 0 0 0 0
               	0 0 0 1 0" />
-
         <feMerge>
-            <feMergeNode in="blur2" />
-            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="red" />
+            <!--<feMergeNode in="SourceGraphic" />-->
+        </feMerge>
+    </filter>
+    <filter id="cyanFilter">
+        <feOffset in="SourceGraphic" dx="0" dy="0" result="cyanOffset" />
+        <feColorMatrix in="cyanOffset" type="matrix" result="cyan"
+      	values="0 0 0 0 0
+              	0 0 0 0 255
+              	0 0 0 0 255
+              	0 0 0 1 0" />
+        <feMerge>
+            <feMergeNode in="cyan" />
+            <!--<feMergeNode in="SourceGraphic" />-->
         </feMerge>
     </filter>
 </defs>
-
-<ellipse cx="300" cy="300" rx="25" ry="15"
-         style="stroke: none; fill: #000000; filter: url(#blurFilter2);" />   
-
 </svg>
 	</body>
 </html>

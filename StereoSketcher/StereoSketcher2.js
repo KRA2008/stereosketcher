@@ -182,7 +182,7 @@ function setFilters(on)
 	for(var ii=0;ii<lines.length;ii++)
 	{
 		line = lines[ii];
-		if(line!=null && on)
+		if(on)
 		{
 			setRegularFilter(line);
 			setCloneFilter(line.clone);
@@ -190,7 +190,7 @@ function setFilters(on)
 		else
 		{
 			dropFilters(line);
-			dropFilters(line.Clone);
+			dropFilters(line.clone);
 		}
 	}
 	var faces = getFaces();
@@ -198,7 +198,7 @@ function setFilters(on)
 	for(var ii=0;ii<faces.length;ii++)
 	{
 		face = faces[ii];
-		if(face!=null && on)
+		if(on)
 		{
 			setRegularFilter(face);
 			setCloneFilter(face.clone);

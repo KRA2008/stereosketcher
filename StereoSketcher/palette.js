@@ -47,6 +47,10 @@ function addPalette()
 				{
 					face.setAttribute("fill",color);
 					face.clone.setAttribute("fill",color);
+					face.under.setAttribute("fill",color);
+					face.clone.under.setAttribute("fill",color);
+					face.under.setAttribute("stroke",color);
+					face.clone.under.setAttribute("stroke",color);
 				}
 				face.deselect();
 			}

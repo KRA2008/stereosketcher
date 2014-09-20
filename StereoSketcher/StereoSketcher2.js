@@ -3,15 +3,6 @@ var mousePressed={};
 var mouseReleased={};
 var dragger={};
 var dotsVisible=true;
-
-//constants
-var originalIPD=250;
-var IPD=originalIPD;
-var lineThickness = 2;
-var dotRadius = 7;
-var shiftDist = 1;
-var labelX = -15;
-var labelY = -8;
 var mode=0;
 
 window.onload=function() {
@@ -427,6 +418,8 @@ function deletePressed()
 			dotFaces.splice(dotFaces.indexOf(face),1);
 			dotFaces = face.dot3.faces;
 			dotFaces.splice(dotFaces.indexOf(face),1);
+			shapeGroup.removeChild(face.clone.under);
+			shapeGroup.removeChild(face.under);
 			shapeGroup.removeChild(face.clone);
 			shapeGroup.removeChild(face);
 		}

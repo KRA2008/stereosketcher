@@ -1,3 +1,11 @@
+var faceSpaceCorrection = "0.5px";
+var faceActionStrokeWidth = 2;
+var labelX = -15;
+var labelY = -8;
+var lineThickness = 2;
+var dotRadius = 7;
+
+
 var shapeFactory={
 	createCircle:function(event) 
 	{
@@ -58,7 +66,7 @@ var shapeFactory={
 			}
 			else if(doesElementHaveClass(this,"face"))
 			{
-				this.setAttribute("stroke-width",1);
+				this.setAttribute("stroke-width",faceActionStrokeWidth);
 				this.setAttribute("stroke","yellow");
 			}
 			addClassToElement(this,"selected");
@@ -118,7 +126,7 @@ var shapeFactory={
 			}
 			if(doesElementHaveClass(this,"face"))
 			{
-				this.setAttribute("stroke-width",1);
+				this.setAttribute("stroke-width",faceActionStrokeWidth);
 			}
 			addClassToElement(this,"highlit");
 		};
@@ -211,12 +219,13 @@ var shapeFactory={
 		face.dot3=dot3;
 		face.setAttribute("points",coords);
 		under.setAttribute("points",coords);
+		face.under = under;
 		face.setAttribute("class","");
 		face.setAttribute("fill-opacity",1);
 		face.setAttribute("fill","gray");
 		under.setAttribute("fill","gray");
 		under.setAttribute("stroke","gray");
-		under.setAttribute("stroke-width","0.5px");
+		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
 		addClassToElement(face,"face");
 		this.attachCommonHandlers(face);
@@ -230,17 +239,25 @@ var shapeFactory={
 	createCloneFace:function(face)
 	{
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		face.clone = clone;
 		var coords = "";
 		coords+=parseInt(face.dot1.getAttribute("cx"))+IPD+face.dot1.shift+","+face.dot1.getAttribute("cy")+" ";
 		coords+=parseInt(face.dot2.getAttribute("cx"))+IPD+face.dot2.shift+","+face.dot2.getAttribute("cy")+" ";
 		coords+=parseInt(face.dot3.getAttribute("cx"))+IPD+face.dot3.shift+","+face.dot3.getAttribute("cy")+" ";
 		clone.setAttribute("points",coords);
+		under.setAttribute("points",coords);
+		clone.under = under;
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneFace");
 		clone.setAttribute("fill-opacity",1);
 		clone.setAttribute("stroke-width",0);
 		clone.setAttribute("fill","gray");
+		under.setAttribute("fill","gray");
+		under.setAttribute("stroke","gray");
+		under.setAttribute("stroke-width",faceSpaceCorrection);
+		under.setAttribute("stroke-opacity",1);
+		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);
 	}
 }

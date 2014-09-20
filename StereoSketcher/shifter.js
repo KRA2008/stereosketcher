@@ -84,3 +84,42 @@ function applyShift(dot)
 	}
 	dot.label.textContent = dot.shift/shiftDist;
 }
+
+function moveSelectedToBack()
+{
+	deselectAllDots();
+	moveSelectedToBackRecursive();
+}
+
+function moveSelectedToBackRecursive()
+{
+	var selected = getSelected();
+	var element = selected[0];
+	if(element == null) return;
+	element.deselect();
+	shapeGroup.removeChild(element);
+	shapeGroup.insertBefore(element,shapeGroup.firstChild);
+	shapeGroup.removeChild(element.clone);
+	shapeGroup.insertBefore(element.clone,shapeGroup.firstChild);
+	moveSelectedToBackRecursive();
+}
+
+function moveSelectedToFront()
+{
+	deselectAllDots();
+	moveSelectedToFrontRecursive();
+}
+
+function moveSelectedToFrontRecursive()
+{
+	var dots = getDots();
+	var selected = getSelected();
+	var element = selected[0];
+	if(element == null) return;
+	element.deselect();
+	shapeGroup.removeChild(element);
+	shapeGroup.removeChild(element.clone);
+	shapeGroup.appendChild(element);
+	shapeGroup.appendChild(element.clone);
+	moveSelectedToFrontRecursive();
+}

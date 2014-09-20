@@ -1,4 +1,4 @@
-var svg;
+var svg,dotGroup,labelGroup,shapeGroup;
 var mousePressed={};
 var mouseReleased={};
 var dragger={};
@@ -16,6 +16,9 @@ var mode=0;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
+	dotGroup=document.getElementById("dots");
+	labelGroup=document.getElementById("labels");
+	shapeGroup=document.getElementById("shapes");
 	svg.onmousedown = function(event) 
 	{
 		mousePressed.is=true;
@@ -158,6 +161,7 @@ function toggleViewMode()
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
+		IPD=2;
 		setFilters(true);
 	} else if(mode==2) {
 		mode=0;
@@ -261,17 +265,17 @@ function toggleDotsVisible()
 
 function getDots()
 {
-	return svg.getElementsByClassName("dot");
+	return dotGroup.getElementsByClassName("dot");
 }
 
 function getLines()
 {
-	return svg.getElementsByClassName("line");
+	return shapeGroup.getElementsByClassName("line");
 }
 
 function getFaces()
 {
-	return svg.getElementsByClassName("face");
+	return shapeGroup.getElementsByClassName("face");
 }
 
 function getSelected()
@@ -281,7 +285,7 @@ function getSelected()
 
 function getLabels()
 {
-	return svg.getElementsByClassName("label");
+	return labelGroup.getElementsByClassName("label");
 }
 
 function createLinePressed()
@@ -389,8 +393,8 @@ function deletePressed()
 		dot=dots[ii];
 		if(dot.isSelected())
 		{
-			removeShape(dot.label);
-			removeShape(dot);
+			labelGroup.removeChild(dot.label);
+			dotGroup.removeChild(dot);
 		}
 	}
 	var line;
@@ -405,8 +409,8 @@ function deletePressed()
 			dotLines.splice(dotLines.indexOf(line),1);
 			dotLines = line.dot2.lines;
 			dotLines.splice(dotLines.indexOf(line),1);
-			removeShape(line.clone);
-			removeShape(line);
+			shapeGroup.removeChild(line.clone);
+			shapeGroup.removeChild(line);
 		}
 	}
 	var face;
@@ -423,15 +427,10 @@ function deletePressed()
 			dotFaces.splice(dotFaces.indexOf(face),1);
 			dotFaces = face.dot3.faces;
 			dotFaces.splice(dotFaces.indexOf(face),1);
-			removeShape(face.clone);
-			removeShape(face);
+			shapeGroup.removeChild(face.clone);
+			shapeGroup.removeChild(face);
 		}
 	}
-}
-
-function removeShape(shape)
-{
-	svg.removeChild(shape);
 }
 
 function preventDefault(event)
@@ -627,45 +626,6 @@ function deselectAllDots()
 	{
 		dots[ii].deselect();
 	}
-}
-
-function moveSelectedToBack()
-{
-	deselectAllDots();
-	moveSelectedToBackRecursive();
-}
-
-function moveSelectedToBackRecursive()
-{
-	var selected = getSelected();
-	var element = selected[0];
-	if(element == null) return;
-	element.deselect();
-	svg.removeChild(element);
-	svg.insertBefore(element, svg.firstChild);
-	svg.removeChild(element.clone);
-	svg.insertBefore(element.clone, svg.firstChild);
-	moveSelectedToBackRecursive();
-}
-
-function moveSelectedToFront()
-{
-	deselectAllDots();
-	moveSelectedToFrontRecursive();
-}
-
-function moveSelectedToFrontRecursive()
-{
-	var dots = getDots();
-	var selected = getSelected();
-	var element = selected[0];
-	if(element == null) return;
-	element.deselect();
-	svg.removeChild(element);
-	svg.removeChild(element.clone);
-	shapeFactory.addElement(element);
-	shapeFactory.addElement(element.clone);
-	moveSelectedToFrontRecursive();
 }
 
 function addModeLabel()

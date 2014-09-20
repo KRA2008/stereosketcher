@@ -1,31 +1,4 @@
 var shapeFactory={
-	createLine:function(dot1,dot2)
-	{
-		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		line.setAttribute("x1",dot1.getAttribute("cx"));
-		line.setAttribute("y1",dot1.getAttribute("cy"));
-		line.setAttribute("x2",dot2.getAttribute("cx"));
-		line.setAttribute("y2",dot2.getAttribute("cy"));
-		line.color="black";
-		line.setAttribute("stroke","black");
-		line.setAttribute("stroke-width",lineThickness);
-		line.setAttribute("class","");
-		addClassToElement(line,"line");
-		line.dot1=dot1;
-		line.dot2=dot2;
-		dot1.lines.push(line);
-		dot2.lines.push(line);
-		this.attachCommonHandlers(line);
-		this.addElement(line);
-		dot1.deselect();
-		dot2.deselect();
-		this.createCloneLine(line);
-		line.ondblclick = function(event)
-		{
-			selectDotsOfLine(this,event);
-		};
-		line.setAttribute("stroke-linecap","round");
-	},
 	createCircle:function(event) 
 	{
 		var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -64,8 +37,8 @@ var shapeFactory={
 		label.textContent = "0";
 		dot.label = label;
 		dot.faces = [];
-		this.addElement(label);
-		this.addElement(dot);
+		labelGroup.appendChild(label);
+		dotGroup.appendChild(dot);
 	},
 	attachCommonHandlers:function(shape) {
 		shape.onmouseenter = function() {
@@ -177,6 +150,33 @@ var shapeFactory={
 			removeClassFromElement(this,"highlit");
 		};
 	},
+	createLine:function(dot1,dot2)
+	{
+		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+		line.setAttribute("x1",dot1.getAttribute("cx"));
+		line.setAttribute("y1",dot1.getAttribute("cy"));
+		line.setAttribute("x2",dot2.getAttribute("cx"));
+		line.setAttribute("y2",dot2.getAttribute("cy"));
+		line.color="black";
+		line.setAttribute("stroke","black");
+		line.setAttribute("stroke-width",lineThickness);
+		line.setAttribute("class","");
+		addClassToElement(line,"line");
+		line.dot1=dot1;
+		line.dot2=dot2;
+		dot1.lines.push(line);
+		dot2.lines.push(line);
+		this.attachCommonHandlers(line);
+		shapeGroup.appendChild(line);
+		dot1.deselect();
+		dot2.deselect();
+		this.createCloneLine(line);
+		line.ondblclick = function(event)
+		{
+			selectDotsOfLine(this,event);
+		};
+		line.setAttribute("stroke-linecap","round");
+	},
 	createCloneLine:function(line)
 	{
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -189,12 +189,13 @@ var shapeFactory={
 		clone.setAttribute("stroke-width",lineThickness);
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneLine");
-		this.addElement(clone);
+		shapeGroup.appendChild(clone);
 		clone.setAttribute("stroke-linecap","round");
 	},
 	createFace:function(dot1,dot2,dot3)
 	{
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var coords = "";
 		dot1.faces.push(face);
 		dot2.faces.push(face);
@@ -209,17 +210,22 @@ var shapeFactory={
 		face.dot2=dot2;
 		face.dot3=dot3;
 		face.setAttribute("points",coords);
+		under.setAttribute("points",coords);
 		face.setAttribute("class","");
-		face.setAttribute("stroke-width",0);
 		face.setAttribute("fill-opacity",1);
 		face.setAttribute("fill","gray");
+		under.setAttribute("fill","gray");
+		under.setAttribute("stroke","gray");
+		under.setAttribute("stroke-width","0.5px");
+		under.setAttribute("stroke-opacity",1);
 		addClassToElement(face,"face");
 		this.attachCommonHandlers(face);
 		face.ondblclick = function(event) {
 			selectDotsOfFace(this,event);
 		}
 		this.createCloneFace(face);
-		this.addElement(face);
+		shapeGroup.appendChild(under);
+		shapeGroup.appendChild(face);
 	},
 	createCloneFace:function(face)
 	{
@@ -235,23 +241,6 @@ var shapeFactory={
 		clone.setAttribute("fill-opacity",1);
 		clone.setAttribute("stroke-width",0);
 		clone.setAttribute("fill","gray");
-		this.addElement(clone);
-	},
-	addElement:function(element)
-	{
-		var dots = getDots();
-		var labels = getLabels();
-		if(doesElementHaveClass(element,"dot"))
-		{
-			svg.appendChild(element);
-		}
-		else if (doesElementHaveClass(element,"label"))
-		{
-			svg.insertBefore(element,dots[0]);
-		}
-		else
-		{
-			svg.insertBefore(element,labels[0]);
-		}
+		shapeGroup.appendChild(clone);
 	}
 }

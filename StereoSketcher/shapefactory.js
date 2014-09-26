@@ -197,7 +197,7 @@ var shapeFactory={
 		clone.setAttribute("stroke-width",lineThickness);
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneLine");
-		shapeGroup.appendChild(clone);
+		cloneGroup.appendChild(clone);
 		clone.setAttribute("stroke-linecap","round");
 	},
 	createFace:function(dot1,dot2,dot3)
@@ -257,7 +257,7 @@ var shapeFactory={
 		under.setAttribute("stroke","gray");
 		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
-		shapeGroup.appendChild(under);
-		shapeGroup.appendChild(clone);
+		cloneGroup.appendChild(under);
+		cloneGroup.appendChild(clone);
 	}
 }

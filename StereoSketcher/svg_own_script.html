@@ -23,7 +23,11 @@
 	</head>
 	<body oncontextmenu="return false;">
 		<svg id="svg" xmlns="http://www.w3.org/2000/svg">
-			<g id="shapes">
+			<g id="output">
+				<g id="clones">
+				</g>
+				<g id="shapes">
+				</g>
 			</g>
 			<g id="labels">
 			</g>
@@ -31,28 +35,18 @@
 			</g>
 			<defs>
 			    <filter id="redFilter">
-			        <feOffset in="SourceGraphic" dx="0" dy="0" result="redOffset" />
-			        <feColorMatrix in="redOffset" type="matrix" result="red"
-			      	values="0 0 0 0 255
+			        <feColorMatrix in="SourceGraphic" type="matrix"
+			      	values="1 0 0 0 0
 			              	0 0 0 0 0
 			              	0 0 0 0 0
 			              	0 0 0 1 0" />
-			        <feMerge>
-			            <feMergeNode in="red" />
-			            <!--<feMergeNode in="SourceGraphic" />-->
-			        </feMerge>
 			    </filter>
 			    <filter id="cyanFilter">
-			        <feOffset in="SourceGraphic" dx="0" dy="0" result="cyanOffset" />
-			        <feColorMatrix in="cyanOffset" type="matrix" result="cyan"
+			        <feColorMatrix in="SourceGraphic" type="matrix"
 			      	values="0 0 0 0 0
-			              	0 0 0 0 255
-			              	0 0 0 0 255
+			              	0 1 0 0 0
+			              	0 0 1 0 0
 			              	0 0 0 1 0" />
-			        <feMerge>
-			            <feMergeNode in="cyan" />
-			            <!--<feMergeNode in="SourceGraphic" />-->
-			        </feMerge>
 			    </filter>
 			</defs>
 		</svg>

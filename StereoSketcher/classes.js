@@ -29,18 +29,3 @@ function doesElementHaveClass(element,className)
 		return true;
 	}
 }
-
-function setRegularFilter(shape)
-{
-	shape.setAttribute("style","filter: url(#redFilter)");
-}
-
-function setCloneFilter(shape)
-{
-	shape.setAttribute("style","filter: url(#cyanFilter)");
-}
-
-function dropFilters(shape)
-{
-	shape.setAttribute("style","");
-}

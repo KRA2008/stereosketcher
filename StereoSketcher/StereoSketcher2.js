@@ -10,7 +10,9 @@ window.onload=function() {
 	dotGroup=document.getElementById("dots");
 	labelGroup=document.getElementById("labels");
 	shapeGroup=document.getElementById("shapes");
-	svg.onmousedown = function(event) 
+	cloneGroup=document.getElementById("clones");
+	output=document.getElementById("output");
+	svg.onmousedown = function(event)
 	{
 		mousePressed.is=true;
 		mousePressed.x=event.clientX;
@@ -172,37 +174,15 @@ function toggleViewMode()
 
 function setFilters(on)
 {
-	var lines = getLines();
-	var line;
-	for(var ii=0;ii<lines.length;ii++)
+	if(on)
 	{
-		line = lines[ii];
-		if(on)
-		{
-			setRegularFilter(line);
-			setCloneFilter(line.clone);
-		}
-		else
-		{
-			dropFilters(line);
-			dropFilters(line.clone);
-		}
-	}
-	var faces = getFaces();
-	var face;
-	for(var ii=0;ii<faces.length;ii++)
+		shapeGroup.setAttribute("style","filter: url(#redFilter)");
+		cloneGroup.setAttribute("style","filter: url(#cyanFilter)");
+	} 
+	else 
 	{
-		face = faces[ii];
-		if(on)
-		{
-			setRegularFilter(face);
-			setCloneFilter(face.clone);
-		}
-		else
-		{
-			dropFilters(face);
-			dropFilters(face.clone);
-		}
+		shapeGroup.setAttribute("style","");
+		cloneGroup.setAttribute("style","");
 	}
 }
 
@@ -400,7 +380,7 @@ function deletePressed()
 			dotLines.splice(dotLines.indexOf(line),1);
 			dotLines = line.dot2.lines;
 			dotLines.splice(dotLines.indexOf(line),1);
-			shapeGroup.removeChild(line.clone);
+			cloneGroup.removeChild(line.clone);
 			shapeGroup.removeChild(line);
 		}
 	}
@@ -418,9 +398,9 @@ function deletePressed()
 			dotFaces.splice(dotFaces.indexOf(face),1);
 			dotFaces = face.dot3.faces;
 			dotFaces.splice(dotFaces.indexOf(face),1);
-			shapeGroup.removeChild(face.clone.under);
+			cloneGroup.removeChild(face.clone.under);
 			shapeGroup.removeChild(face.under);
-			shapeGroup.removeChild(face.clone);
+			cloneGroup.removeChild(face.clone);
 			shapeGroup.removeChild(face);
 		}
 	}

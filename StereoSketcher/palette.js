@@ -3,7 +3,7 @@ var hoverWidth = 30;
 
 function addPalette()
 {
-	var colors = ["red","orange","yellow","green","blue","violet","black","white","cyan"];
+	var colors = ["#ff0000","#ffa500","#ffff00","#008000","#0000ff","#ee82ee","#000000","#ffffff","#00ffff"];
 	var bbox = svg.getBoundingClientRect();
 	for(var ii = 0;ii<colors.length;ii++)
 	{
@@ -13,7 +13,7 @@ function addPalette()
 		box.setAttribute("height",plainWidth);
 		box.setAttribute("width",plainWidth);
 		box.setAttribute("fill",colors[ii]);
-		if(colors[ii]=="white")
+		if(colors[ii]=="#ffffff")
 		{
 			box.setAttribute("stroke","black");
 			box.setAttribute("stroke-width","2");
@@ -45,6 +45,7 @@ function addPalette()
 				face = faces[ii];
 				if(face.isSelected())
 				{
+					face.color=color;
 					face.setAttribute("fill",color);
 					face.clone.setAttribute("fill",color);
 					face.under.setAttribute("fill",color);

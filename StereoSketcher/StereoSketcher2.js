@@ -1,4 +1,4 @@
-var svg,dotGroup,labelGroup,shapeGroup;
+var svg,dotGroup,labelGroup,shapeGroup,defs;
 var mousePressed={};
 var mouseReleased={};
 var dragger={};
@@ -11,7 +11,7 @@ window.onload=function() {
 	labelGroup=document.getElementById("labels");
 	shapeGroup=document.getElementById("shapes");
 	cloneGroup=document.getElementById("clones");
-	output=document.getElementById("output");
+	defs=document.getElementById("defs");
 	svg.onmousedown = function(event)
 	{
 		mousePressed.is=true;
@@ -178,11 +178,13 @@ function setFilters(on)
 	{
 		shapeGroup.setAttribute("style","filter: url(#redFilter)");
 		cloneGroup.setAttribute("style","filter: url(#cyanFilter)");
+		addOverlaps();
 	} 
 	else 
 	{
 		shapeGroup.setAttribute("style","");
 		cloneGroup.setAttribute("style","");
+		removeOverlaps();
 	}
 }
 

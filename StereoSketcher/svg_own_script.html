@@ -20,20 +20,19 @@
 		<script src="dragger.js"></script>
 		<script src="selectangle.js"></script>
 		<script src="palette.js"></script>
+		<script src="overlap.js"></script>
 	</head>
 	<body oncontextmenu="return false;">
 		<svg id="svg" xmlns="http://www.w3.org/2000/svg">
-			<g id="output">
-				<g id="clones">
-				</g>
-				<g id="shapes">
-				</g>
+			<g id="clones">
+			</g>
+			<g id="shapes">
 			</g>
 			<g id="labels">
 			</g>
 			<g id="dots">
 			</g>
-			<defs>
+			<defs id="defs">
 			    <filter id="redFilter">
 			        <feColorMatrix in="SourceGraphic" type="matrix"
 			      	values="1 0 0 0 255

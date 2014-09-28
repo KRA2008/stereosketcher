@@ -221,7 +221,6 @@ var shapeFactory={
 		under.setAttribute("points",coords);
 		face.under = under;
 		face.setAttribute("class","");
-		face.setAttribute("fill-opacity",1);
 		face.setAttribute("fill","gray");
 		under.setAttribute("fill","gray");
 		under.setAttribute("stroke","gray");
@@ -250,7 +249,6 @@ var shapeFactory={
 		clone.under = under;
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneFace");
-		clone.setAttribute("fill-opacity",1);
 		clone.setAttribute("stroke-width",0);
 		clone.setAttribute("fill","gray");
 		under.setAttribute("fill","gray");

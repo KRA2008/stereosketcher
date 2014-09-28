@@ -149,20 +149,27 @@ function toggleViewMode()
 		var label=document.getElementById("modeLabel");
 		label.textContent = "magic eye";
 		IPD=originalIPD*-1;
+		refreshDots();
 		setFilters(false)
 	} else if(mode==1) {
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
-		IPD=2;
+		IPD=20;
+		refreshDots();
 		setFilters(true);
 	} else if(mode==2) {
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross eye";
 		IPD=originalIPD;
+		refreshDots();
 		setFilters(false);
 	}
+}
+
+function refreshDots()
+{
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++)
@@ -171,6 +178,7 @@ function toggleViewMode()
 		applyShift(dot);
 	}
 }
+
 
 function setFilters(on)
 {

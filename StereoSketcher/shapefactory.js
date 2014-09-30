@@ -4,6 +4,7 @@ var labelX = -15;
 var labelY = -8;
 var lineThickness = 2;
 var dotRadius = 7;
+var faceStartColor = "#777777";
 
 
 var shapeFactory={
@@ -175,15 +176,17 @@ var shapeFactory={
 		dot1.lines.push(line);
 		dot2.lines.push(line);
 		this.attachCommonHandlers(line);
-		shapeGroup.appendChild(line);
+		var group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+		group.appendChild(line);
+		shapeGroup.appendChild(group);
 		dot1.deselect();
 		dot2.deselect();
-		this.createCloneLine(line);
 		line.ondblclick = function(event)
 		{
 			selectDotsOfLine(this,event);
 		};
 		line.setAttribute("stroke-linecap","round");
+		this.createCloneLine(line);
 	},
 	createCloneLine:function(line)
 	{
@@ -197,8 +200,8 @@ var shapeFactory={
 		clone.setAttribute("stroke-width",lineThickness);
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneLine");
-		cloneGroup.appendChild(clone);
 		clone.setAttribute("stroke-linecap","round");
+		line.parentNode.insertBefore(clone,line.parentNode.firstChild);
 	},
 	createFace:function(dot1,dot2,dot3)
 	{
@@ -221,9 +224,10 @@ var shapeFactory={
 		under.setAttribute("points",coords);
 		face.under = under;
 		face.setAttribute("class","");
-		face.setAttribute("fill","gray");
-		under.setAttribute("fill","gray");
-		under.setAttribute("stroke","gray");
+		face.setAttribute("fill",faceStartColor);
+		face.color = faceStartColor;
+		under.setAttribute("fill",faceStartColor);
+		under.setAttribute("stroke",faceStartColor);
 		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
 		addClassToElement(face,"face");
@@ -231,9 +235,11 @@ var shapeFactory={
 		face.ondblclick = function(event) {
 			selectDotsOfFace(this,event);
 		}
+		var group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+		group.appendChild(under);
+		group.appendChild(face);
+		shapeGroup.appendChild(group);
 		this.createCloneFace(face);
-		shapeGroup.appendChild(under);
-		shapeGroup.appendChild(face);
 	},
 	createCloneFace:function(face)
 	{
@@ -250,12 +256,12 @@ var shapeFactory={
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneFace");
 		clone.setAttribute("stroke-width",0);
-		clone.setAttribute("fill","gray");
-		under.setAttribute("fill","gray");
-		under.setAttribute("stroke","gray");
+		clone.setAttribute("fill",faceStartColor);
+		under.setAttribute("fill",faceStartColor);
+		under.setAttribute("stroke",faceStartColor);
 		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
-		cloneGroup.appendChild(under);
-		cloneGroup.appendChild(clone);
+		face.parentNode.insertBefore(clone,face.parentNode.firstChild);
+		face.parentNode.insertBefore(under,face.parentNode.firstChild);
 	}
 }

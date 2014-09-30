@@ -2,39 +2,56 @@ function addOverlaps()
 {
 	var face;
 	var faces = getFaces();
-	var clip1;
-	var clip2;
-	var maxx,maxy,minx,miny;
-	var overlap;
-	var top,bottom;
+	var clip;
+	var faceOverlap, faceOverlapUnder;
+	var cloneOverlap, cloneOverlapUnder;
 	for(var ii=0;ii<faces.length;ii++)
 	{
 		face = faces[ii];
-		clip1 = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-		clip1.setAttribute("id","clip"+ii+".1");
-		top = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-		top.setAttribute("points",face.getAttribute("points"));
-		clip1.appendChild(top);
 		
-		clip2 = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-		clip2.setAttribute("id","clip"+ii+".2");
-		bottom = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-		bottom.setAttribute("points",face.clone.getAttribute("points"));
-		clip2.appendChild(bottom);
+		faceClip = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+		faceClip.setAttribute("id","faceClip"+ii);
+		clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		clip.setAttribute("points",face.getAttribute("points"));
+		faceClip.appendChild(clip);
 		
-		clip2.setAttribute("clip-path","url(#clip"+ii+".1)");
+		cloneClip = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+		cloneClip.setAttribute("id","cloneClip"+ii);
+		clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		clip.setAttribute("points",face.clone.getAttribute("points"));
+		cloneClip.appendChild(clip);
 
-		defs.appendChild(clip1);
-		defs.appendChild(clip2);
+		defs.appendChild(faceClip);
+		defs.appendChild(cloneClip);
 		
-		overlap = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-		overlap.setAttribute("x",0);
-		overlap.setAttribute("y",0);
-		overlap.setAttribute("width",window.innerWidth);
-		overlap.setAttribute("height",window.innerHeight);
-		overlap.setAttribute("fill",face.color);
-		overlap.setAttribute("clip-path","url(#clip"+ii+".2)");
-		svg.appendChild(overlap);
+		faceOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		faceOverlap.setAttribute("fill",face.color);
+		faceOverlap.setAttribute("points",face.getAttribute("points"));
+		faceOverlap.setAttribute("clip-path","url(#cloneClip"+ii+")");
+		
+		faceOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		faceOverlapUnder.setAttribute("fill",face.color);
+		faceOverlapUnder.setAttribute("points",face.getAttribute("points"));
+		faceOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
+		faceOverlapUnder.setAttribute("stroke",face.color);
+		faceOverlapUnder.setAttribute("clip-path","url(#cloneClip"+ii+")");
+		
+		cloneOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		cloneOverlap.setAttribute("fill",face.color);
+		cloneOverlap.setAttribute("points",face.clone.getAttribute("points"));
+		cloneOverlap.setAttribute("clip-path","url(#faceClip"+ii+")");
+		
+		cloneOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		cloneOverlapUnder.setAttribute("fill",face.color);
+		cloneOverlapUnder.setAttribute("points",face.clone.getAttribute("points"));
+		cloneOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
+		cloneOverlapUnder.setAttribute("stroke",face.color);
+		cloneOverlapUnder.setAttribute("clip-path","url(#faceClip"+ii+")");
+		
+		face.parentNode.appendChild(faceOverlap);
+		face.parentNode.appendChild(faceOverlapUnder);
+		face.parentNode.appendChild(cloneOverlap);
+		face.parentNode.appendChild(cloneOverlapUnder);
 	}
 }
 

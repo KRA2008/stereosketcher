@@ -10,7 +10,6 @@ window.onload=function() {
 	dotGroup=document.getElementById("dots");
 	labelGroup=document.getElementById("labels");
 	shapeGroup=document.getElementById("shapes");
-	cloneGroup=document.getElementById("clones");
 	defs=document.getElementById("defs");
 	svg.onmousedown = function(event)
 	{
@@ -150,21 +149,21 @@ function toggleViewMode()
 		label.textContent = "magic eye";
 		IPD=originalIPD*-1;
 		refreshDots();
-		setFilters(false)
+		switchFilters(false)
 	} else if(mode==1) {
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
 		IPD=20;
 		refreshDots();
-		setFilters(true);
+		switchFilters(true);
 	} else if(mode==2) {
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross eye";
 		IPD=originalIPD;
 		refreshDots();
-		setFilters(false);
+		switchFilters(false);
 	}
 }
 
@@ -180,18 +179,50 @@ function refreshDots()
 }
 
 
-function setFilters(on)
+function switchFilters(on)
 {
 	if(on)
 	{
-		shapeGroup.setAttribute("style","filter: url(#redFilter)");
-		cloneGroup.setAttribute("style","filter: url(#cyanFilter)");
+		var face;
+		var faces = getFaces();
+		for(var ii=0;ii<faces.length;ii++)
+		{
+			face=faces[ii];
+			face.setAttribute("style","filter: url(#redFilter)");
+			face.under.setAttribute("style","filter: url(#redFilter)");
+			face.clone.setAttribute("style","filter: url(#cyanFilter)");
+			face.clone.under.setAttribute("style","filter: url(#cyanFilter)");
+		}
+		var line;
+		var lines = getLines();
+		for(var ii=0;ii<lines.length;ii++)
+		{
+			line = lines[ii];
+			line.setAttribute("style","filter: url(#redFilter)");
+			line.clone.setAttribute("style","filter: url(#cyanFilter)");
+		}
 		addOverlaps();
 	} 
 	else 
 	{
-		shapeGroup.setAttribute("style","");
-		cloneGroup.setAttribute("style","");
+		var face;
+		var faces = getFaces();
+		for(var ii=0;ii<faces.length;ii++)
+		{
+			face=faces[ii];
+			face.setAttribute("style","");
+			face.under.setAttribute("style","");
+			face.clone.setAttribute("style","");
+			face.clone.under.setAttribute("style","");
+		}
+		var line;
+		var lines = getLines();
+		for(var ii=0;ii<lines.length;ii++)
+		{
+			line = lines[ii];
+			line.setAttribute("style","");
+			line.clone.setAttribute("style","");
+		}
 		removeOverlaps();
 	}
 }
@@ -390,8 +421,7 @@ function deletePressed()
 			dotLines.splice(dotLines.indexOf(line),1);
 			dotLines = line.dot2.lines;
 			dotLines.splice(dotLines.indexOf(line),1);
-			cloneGroup.removeChild(line.clone);
-			shapeGroup.removeChild(line);
+			shapeGroup.removeChild(line.parentNode);
 		}
 	}
 	var face;
@@ -408,10 +438,7 @@ function deletePressed()
 			dotFaces.splice(dotFaces.indexOf(face),1);
 			dotFaces = face.dot3.faces;
 			dotFaces.splice(dotFaces.indexOf(face),1);
-			cloneGroup.removeChild(face.clone.under);
-			shapeGroup.removeChild(face.under);
-			cloneGroup.removeChild(face.clone);
-			shapeGroup.removeChild(face);
+			shapeGroup.removeChild(face.parentNode);
 		}
 	}
 }

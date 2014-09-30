@@ -104,17 +104,9 @@ function moveSelectedToBackRecursive()
 	var element = selected[0];
 	if(element == null) return;
 	element.deselect();
-	shapeGroup.removeChild(element);
-	shapeGroup.insertBefore(element,shapeGroup.firstChild);
-	cloneGroup.removeChild(element.clone);
-	cloneGroup.insertBefore(element.clone,cloneGroup.firstChild);
-	if(element.under != null)
-	{
-		shapeGroup.removeChild(element.under);
-		cloneGroup.removeChild(element.clone.under);
-		shapeGroup.insertBefore(element.under,shapeGroup.firstChild);
-		cloneGroup.insertBefore(element.clone.under,cloneGroup.firstChild);
-	}
+	var group = element.parentNode;
+	shapeGroup.removeChild(group);
+	shapeGroup.insertBefore(group,shapeGroup.firstChild);
 	moveSelectedToBackRecursive();
 }
 
@@ -131,16 +123,8 @@ function moveSelectedToFrontRecursive()
 	var element = selected[0];
 	if(element == null) return;
 	element.deselect();
-	if(element.under != null)
-	{
-		shapeGroup.removeChild(element.under);
-		cloneGroup.removeChild(element.clone.under);
-		shapeGroup.appendChild(element.under);
-		cloneGroup.appendChild(element.clone.under);
-	}
-	shapeGroup.removeChild(element);
-	cloneGroup.removeChild(element.clone);
-	shapeGroup.appendChild(element);
-	cloneGroup.appendChild(element.clone);
+	var group = element.parentNode;
+	shapeGroup.removeChild(group);
+	shapeGroup.appendChild(group);
 	moveSelectedToFrontRecursive();
 }

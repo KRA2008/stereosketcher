@@ -188,20 +188,20 @@ function switchFilters(on)
 		for(var ii=0;ii<faces.length;ii++)
 		{
 			face=faces[ii];
-			face.setAttribute("style","filter: url(#redFilter)");
-			face.under.setAttribute("style","filter: url(#redFilter)");
-			face.clone.setAttribute("style","filter: url(#cyanFilter)");
-			face.clone.under.setAttribute("style","filter: url(#cyanFilter)");
+			setShapeFilter(face);
+			setShapeFilter(face.under);
+			setCloneFilter(face.clone);
+			setCloneFilter(face.clone.under);
 		}
 		var line;
 		var lines = getLines();
 		for(var ii=0;ii<lines.length;ii++)
 		{
 			line = lines[ii];
-			line.setAttribute("style","filter: url(#redFilter)");
-			line.clone.setAttribute("style","filter: url(#cyanFilter)");
+			setShapeFilter(line);
+			setCloneFilter(line.clone);
 		}
-		addOverlaps();
+		//addOverlaps();
 	} 
 	else 
 	{
@@ -210,20 +210,20 @@ function switchFilters(on)
 		for(var ii=0;ii<faces.length;ii++)
 		{
 			face=faces[ii];
-			face.setAttribute("style","");
-			face.under.setAttribute("style","");
-			face.clone.setAttribute("style","");
-			face.clone.under.setAttribute("style","");
+			dropFilters(face);
+			dropFilters(face.under);
+			dropFilters(face.clone);
+			dropFilters(face.clone.under);
 		}
 		var line;
 		var lines = getLines();
 		for(var ii=0;ii<lines.length;ii++)
 		{
 			line = lines[ii];
-			line.setAttribute("style","");
-			line.clone.setAttribute("style","");
+			dropFilters(line);
+			dropFilters(line.clone);
 		}
-		removeOverlaps();
+		//removeOverlaps();
 	}
 }
 

@@ -59,3 +59,18 @@ function removeOverlaps()
 {
 	
 }
+
+function setCloneFilter(element)
+{
+	element.setAttribute("style","filter: url(#cyanFilter)");
+}
+
+function setShapeFilter(element)
+{
+	element.setAttribute("style","filter: url(#redFilter)");
+}
+
+function dropFilters(element)
+{
+	element.setAttribute("style","");
+}

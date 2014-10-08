@@ -201,7 +201,7 @@ function switchFilters(on)
 			setShapeFilter(line);
 			setCloneFilter(line.clone);
 		}
-		//addOverlaps();
+		addOverlaps();
 	} 
 	else 
 	{

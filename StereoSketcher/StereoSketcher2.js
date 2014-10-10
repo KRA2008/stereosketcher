@@ -154,7 +154,7 @@ function toggleViewMode()
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
-		IPD=20;
+		IPD=0;
 		refreshDots();
 		switchFilters(true);
 	} else if(mode==2) {

@@ -176,9 +176,6 @@ var shapeFactory={
 		dot1.lines.push(line);
 		dot2.lines.push(line);
 		this.attachCommonHandlers(line);
-		var group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-		group.appendChild(line);
-		shapeGroup.appendChild(group);
 		dot1.deselect();
 		dot2.deselect();
 		line.ondblclick = function(event)
@@ -187,6 +184,7 @@ var shapeFactory={
 		};
 		line.setAttribute("stroke-linecap","round");
 		this.createCloneLine(line);
+		shapeGroup.appendChild(line);
 	},
 	createCloneLine:function(line)
 	{
@@ -201,7 +199,7 @@ var shapeFactory={
 		clone.setAttribute("class","");
 		addClassToElement(clone,"cloneLine");
 		clone.setAttribute("stroke-linecap","round");
-		line.parentNode.insertBefore(clone,line.parentNode.firstChild);
+		shapeGroup.appendChild(clone);
 	},
 	createFace:function(dot1,dot2,dot3)
 	{
@@ -235,11 +233,9 @@ var shapeFactory={
 		face.ondblclick = function(event) {
 			selectDotsOfFace(this,event);
 		}
-		var group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-		group.appendChild(under);
-		group.appendChild(face);
-		shapeGroup.appendChild(group);
 		this.createCloneFace(face);
+		shapeGroup.appendChild(under);
+		shapeGroup.appendChild(face);
 	},
 	createCloneFace:function(face)
 	{
@@ -261,7 +257,7 @@ var shapeFactory={
 		under.setAttribute("stroke",faceStartColor);
 		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
-		face.parentNode.insertBefore(clone,face.parentNode.firstChild);
-		face.parentNode.insertBefore(under,face.parentNode.firstChild);
+		shapeGroup.appendChild(under);
+		shapeGroup.appendChild(clone);
 	}
 }

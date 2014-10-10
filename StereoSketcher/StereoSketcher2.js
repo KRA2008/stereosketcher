@@ -421,7 +421,8 @@ function deletePressed()
 			dotLines.splice(dotLines.indexOf(line),1);
 			dotLines = line.dot2.lines;
 			dotLines.splice(dotLines.indexOf(line),1);
-			shapeGroup.removeChild(line.parentNode);
+			shapeGroup.removeChild(line);
+			shapeGroup.removeChild(line.clone);
 		}
 	}
 	var face;
@@ -438,7 +439,10 @@ function deletePressed()
 			dotFaces.splice(dotFaces.indexOf(face),1);
 			dotFaces = face.dot3.faces;
 			dotFaces.splice(dotFaces.indexOf(face),1);
-			shapeGroup.removeChild(face.parentNode);
+			shapeGroup.removeChild(face);
+			shapeGroup.removeChild(face.under);
+			shapeGroup.removeChild(face.clone);
+			shapeGroup.removeChild(face.clone.under);
 		}
 	}
 }

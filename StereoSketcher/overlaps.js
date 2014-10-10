@@ -57,10 +57,10 @@ function addOverlaps()
 			cloneOverlapUnder.setAttribute("stroke",resultColor);
 			cloneOverlapUnder.setAttribute("clip-path","url(#faceClip."+ii+"."+jj+")");
 			
-			face.parentNode.appendChild(faceOverlap);
-			face.parentNode.appendChild(faceOverlapUnder);
-			face.parentNode.appendChild(cloneOverlap);
-			face.parentNode.appendChild(cloneOverlapUnder);
+			shapeGroup.appendChild(faceOverlap);
+			shapeGroup.appendChild(faceOverlapUnder);
+			shapeGroup.appendChild(cloneOverlap);
+			shapeGroup.appendChild(cloneOverlapUnder);
 		}
 	}
 }

@@ -100,14 +100,22 @@ function moveSelectedToBack()
 
 function moveSelectedToBackRecursive()
 {
-	var selected = getSelected();
-	var element = selected[0];
-	if(element == null) return;
-	element.deselect();
-	var group = element.parentNode;
-	shapeGroup.removeChild(group);
-	shapeGroup.insertBefore(group,shapeGroup.firstChild);
-	moveSelectedToBackRecursive();
+        var selected = getSelected();
+        var element = selected[0];
+        if(element == null) return;
+        element.deselect();
+        shapeGroup.removeChild(element);
+        shapeGroup.insertBefore(element,shapeGroup.firstChild);
+        shapeGroup.removeChild(element.clone);
+        shapeGroup.insertBefore(element.clone,shapeGroup.firstChild);
+        if(element.under != null)
+        {
+                shapeGroup.removeChild(element.under);
+                shapeGroup.removeChild(element.clone.under);
+                shapeGroup.insertBefore(element.under,shapeGroup.firstChild);
+                shapeGroup.insertBefore(element.clone.under,shapeGroup.firstChild);
+        }
+        moveSelectedToBackRecursive();
 }
 
 function moveSelectedToFront()
@@ -118,13 +126,21 @@ function moveSelectedToFront()
 
 function moveSelectedToFrontRecursive()
 {
-	var dots = getDots();
-	var selected = getSelected();
-	var element = selected[0];
-	if(element == null) return;
-	element.deselect();
-	var group = element.parentNode;
-	shapeGroup.removeChild(group);
-	shapeGroup.appendChild(group);
-	moveSelectedToFrontRecursive();
+        var dots = getDots();
+        var selected = getSelected();
+        var element = selected[0];
+        if(element == null) return;
+        element.deselect();
+        if(element.under != null)
+        {
+                shapeGroup.removeChild(element.under);
+                shapeGroup.removeChild(element.clone.under);
+                shapeGroup.appendChild(element.under);
+                shapeGroup.appendChild(element.clone.under);
+        }
+        shapeGroup.removeChild(element);
+        shapeGroup.removeChild(element.clone);
+        shapeGroup.appendChild(element);
+        shapeGroup.appendChild(element.clone);
+        moveSelectedToFrontRecursive();
 }

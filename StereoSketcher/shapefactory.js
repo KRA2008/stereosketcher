@@ -228,6 +228,7 @@ var shapeFactory={
 		under.setAttribute("stroke",faceStartColor);
 		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
+		under.setAttribute("class","faceUnder");
 		addClassToElement(face,"face");
 		this.attachCommonHandlers(face);
 		face.ondblclick = function(event) {
@@ -236,6 +237,13 @@ var shapeFactory={
 		this.createCloneFace(face);
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(face);
+		face.overlaps = [];
+		correctOverlaps();
+		if(mode==2)
+		{
+			setShapeFilter(face);
+			setShapeFilter(under);
+		}
 	},
 	createCloneFace:function(face)
 	{
@@ -257,7 +265,13 @@ var shapeFactory={
 		under.setAttribute("stroke",faceStartColor);
 		under.setAttribute("stroke-width",faceSpaceCorrection);
 		under.setAttribute("stroke-opacity",1);
+		under.setAttribute("class","cloneUnder");
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);
+		if(mode==2)
+		{
+			setCloneFilter(clone);
+			setCloneFilter(under);
+		}
 	}
 }

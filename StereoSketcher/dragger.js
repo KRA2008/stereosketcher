@@ -100,6 +100,7 @@ function dragDots(event,shape) {
 			dot.label.setAttribute("y",parseInt(dot.getAttribute("cy"))+labelY);
 		}
 	}
+	correctOverlaps();
 	dragger.x=event.clientX;
 	dragger.y=event.clientY;
 }

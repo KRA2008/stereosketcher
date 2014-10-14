@@ -149,7 +149,6 @@ function toggleViewMode()
 		label.textContent = "magic eye";
 		IPD=originalIPD*-1;
 		refreshDots();
-		switchFilters(false)
 	} else if(mode==1) {
 		mode=2;
 		var label=document.getElementById("modeLabel");
@@ -164,6 +163,7 @@ function toggleViewMode()
 		IPD=originalIPD;
 		refreshDots();
 		switchFilters(false);
+		removeOverlaps();
 	}
 }
 
@@ -443,8 +443,10 @@ function deletePressed()
 			shapeGroup.removeChild(face.under);
 			shapeGroup.removeChild(face.clone);
 			shapeGroup.removeChild(face.clone.under);
+			removeOverlapsOfFace(face);
 		}
 	}
+	correctOverlaps();
 }
 
 function preventDefault(event)

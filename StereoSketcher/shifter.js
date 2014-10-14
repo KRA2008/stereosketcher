@@ -15,6 +15,7 @@ function shiftIn()
 			applyShift(dot);
 		}
 	}
+	correctOverlaps();
 }
 
 function shiftOut()
@@ -30,6 +31,7 @@ function shiftOut()
 			applyShift(dot);
 		}
 	}
+	correctOverlaps();
 }
 
 function applyShift(dot)

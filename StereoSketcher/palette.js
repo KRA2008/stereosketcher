@@ -68,6 +68,7 @@ function addPalette()
 				}
 				line.deselect();
 			}
+			correctOverlaps();
 		}
 		box.onmouseup = function(event)
 		{

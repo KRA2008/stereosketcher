@@ -57,6 +57,7 @@ function addOverlaps()
 			faceOverlap.setAttribute("points",face.getAttribute("points"));
 			faceOverlap.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
 			faceOverlap.setAttribute("class","faceOverlap");
+			forwardAllMouseEvents(faceOverlap,face);
 			
 			faceOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 			faceOverlapUnder.setAttribute("fill",resultColor);
@@ -65,12 +66,14 @@ function addOverlaps()
 			faceOverlapUnder.setAttribute("stroke",resultColor);
 			faceOverlapUnder.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
 			faceOverlapUnder.setAttribute("class","faceOverlapUnder");
+			forwardAllMouseEvents(faceOverlapUnder,face);
 			
 			cloneOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 			cloneOverlap.setAttribute("fill",resultColor);
 			cloneOverlap.setAttribute("points",clone.getAttribute("points"));
 			cloneOverlap.setAttribute("clip-path","url(#faceClip."+ii+"."+jj+")");
 			cloneOverlap.setAttribute("class","cloneOverlap");
+			forwardAllMouseEvents(cloneOverlap,face);
 			
 			cloneOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 			cloneOverlapUnder.setAttribute("fill",resultColor);
@@ -79,6 +82,7 @@ function addOverlaps()
 			cloneOverlapUnder.setAttribute("stroke",resultColor);
 			cloneOverlapUnder.setAttribute("clip-path","url(#faceClip."+ii+"."+jj+")");
 			cloneOverlapUnder.setAttribute("class","cloneOverlapUnder");
+			forwardAllMouseEvents(cloneOverlapUnder,face);
 			
 			shapeGroup.appendChild(faceOverlap);
 			shapeGroup.appendChild(faceOverlapUnder);
@@ -90,6 +94,26 @@ function addOverlaps()
 			overlap.cloneOverlapUnder = cloneOverlapUnder;
 			face.overlaps.push(overlap);
 		}
+	}
+}
+
+function forwardAllMouseEvents(element,face)
+{
+	element.onmouseenter = function()
+	{
+		face.onmouseenter();
+	}
+	element.onmouseout = function()
+	{
+		face.onmouseout();
+	}
+	element.onmousedown = function(event)
+	{
+		face.onmousedown(event);
+	}
+	element.onmouseup = function(event)
+	{
+		face.onmouseup(event);
 	}
 }
 

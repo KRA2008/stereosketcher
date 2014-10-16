@@ -75,6 +75,9 @@ window.onload=function() {
 };
 
 document.addEventListener("keydown", keyDown, false);
+window.onkeydown = function(e) { 
+  return !(e.keyCode == 32);
+};
 
 function keyDown(e) {
 		var keyCode = e.keyCode;
@@ -87,7 +90,7 @@ function keyDown(e) {
 				break;
 			case 32: //spacebar
 				toggleDotsVisible();
-				break;
+				return false;
 			case 83: //s
 				shiftIn();
 				break;

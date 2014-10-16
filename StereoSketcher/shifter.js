@@ -98,6 +98,7 @@ function moveSelectedToBack()
 {
 	deselectAllDots();
 	moveSelectedToBackRecursive();
+	correctOverlaps();
 }
 
 function moveSelectedToBackRecursive()
@@ -124,6 +125,7 @@ function moveSelectedToFront()
 {
 	deselectAllDots();
 	moveSelectedToFrontRecursive();
+	correctOverlaps();
 }
 
 function moveSelectedToFrontRecursive()

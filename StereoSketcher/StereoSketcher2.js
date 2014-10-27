@@ -288,6 +288,22 @@ function getLines()
 	return shapeGroup.getElementsByClassName("line");
 }
 
+function getLinesAndFaces()
+{
+	var item;
+	var items = shapeGroup.children;
+	var linesAndFaces = [];
+	for(var ii=0;ii<items.length;ii++)
+	{
+		item = items[ii];
+		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face"))
+		{
+			linesAndFaces.push(item);
+		}
+	}
+	return linesAndFaces;
+}
+
 function getFaces()
 {
 	return shapeGroup.getElementsByClassName("face");

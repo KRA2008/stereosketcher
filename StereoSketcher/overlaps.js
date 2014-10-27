@@ -1,39 +1,40 @@
 function addOverlaps()
 {
 	var face;
+	var line;
 	var clone;
-	var faces = getFaces();
 	var clip;
 	var faceOverlap, faceOverlapUnder;
+	var lineOverlap;
 	var cloneOverlap, cloneOverlapUnder;
 	var resultColor;
-	var ibbox, jbbox;
+	var outerBBox, innerBBox;
 	var imaxX,imaxY,iminX,iminY,jmaxX,jmaxY,jminX,jminY;
 	var overlap;
-	for(var ii=0;ii<faces.length;ii++)
+	
+	var lines = getLines();
+	var faces = getFaces();
+	var linesAndFaces = getLinesAndFaces();
+	
+	for(var ii=0;ii<linesAndFaces.length;ii++)
 	{
-		face = faces[ii];
-		face.overlaps = [];
+		var item = linesAndFaces[ii];
+		outerBBox = item.getBBox();
+		item.overlaps = [];
 		
-		ibbox = face.getBBox();
-		imaxX = ibbox.x+ibbox.width;
-		iminX = ibbox.x;
-		imaxY = ibbox.y+ibbox.height;
-		iminY = ibbox.y;
+		face = item;
+		
 		for(var jj=0;jj<faces.length;jj++)
 		{
 			var tempFace = faces[jj];
-			clone = tempFace.clone;
-			resultColor = "#"+("000000"+(getCyanComponent(face.color)|getRedComponent(tempFace.color)).toString(16)).slice(-6);
+			
+			innerBBox = tempFace.getBBox();
+			
+			if (!doBoundingBoxesOverlap(outerBBox,innerBBox)) continue;
+			
+			resultColor = getResultColor(face,tempFace);
 			overlap = {};
-			
-			jbbox = tempFace.getBBox();
-			jmaxX = jbbox.x+jbbox.width;
-			jminX = jbbox.x;
-			jmaxY = jbbox.y+jbbox.height;
-			jminY = jbbox.y;
-			
-			if (!(iminX < jmaxX && imaxX > jminX && iminY < jmaxY && imaxY > jminY)) continue;
+			clone = tempFace.clone;
 			
 			faceClip = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
 			faceClip.setAttribute("id","faceClip."+ii+"."+jj);
@@ -97,24 +98,38 @@ function addOverlaps()
 	}
 }
 
-function forwardAllMouseEvents(element,face)
+function doBoundingBoxesOverlap(bbox1,bbox2)
+{
+	return (bbox1.x < bbox2.x+bbox2.width && bbox1.x+bbox1.width > bbox2.x && bbox1.y < bbox2.y+bbox2.height && bbox1.y+bbox1.height > bbox2.y);
+}
+
+function forwardAllMouseEvents(element,recipient)
 {
 	element.onmouseenter = function()
 	{
-		face.onmouseenter();
+		recipient.onmouseenter();
 	}
 	element.onmouseout = function()
 	{
-		face.onmouseout();
+		recipient.onmouseout();
 	}
 	element.onmousedown = function(event)
 	{
-		face.onmousedown(event);
+		recipient.onmousedown(event);
 	}
 	element.onmouseup = function(event)
 	{
-		face.onmouseup(event);
+		recipient.onmouseup(event);
 	}
+	element.ondblclick = function(event)
+	{
+		recipient.ondblclick(event);
+	}
+}
+
+function getResultColor(base,clone)
+{
+	return "#"+("000000"+(getCyanComponent(base.color)|getRedComponent(clone.color)).toString(16)).slice(-6);
 }
 
 function getCyanComponent(colorAttr)

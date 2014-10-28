@@ -40,15 +40,25 @@ function addOverlaps()
 			{
 				clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 				clip.setAttribute("points",item.getAttribute("points"));
-				itemClip.appendChild(clip);
 			} 
 			else if (doesElementHaveClass(item,"line"))
 			{
 				clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-				var slope = (item.getAttribute("y2")-item.getAttribute("y1"))/(item.getAttribute("x2")-item.getAttribute("x1"));
-				
-				// make line clip
+				var x1 = parseFloat(item.getAttribute("x1"));
+				var y1 = parseFloat(item.getAttribute("y1"));
+				var x2 = parseFloat(item.getAttribute("x2"));
+				var y2 = parseFloat(item.getAttribute("y2"));
+				var theta = Math.atan((y2-y1)/(x2-x1));
+				var littleX = (lineThickness/2)*Math.sin(theta);
+				var littleY = (lineThickness/2)*Math.cos(theta);
+				var p1 = (x1-littleX)+","+(y1+littleY);
+				var p2 = (x1+littleX)+","+(y1-littleY);
+				var p3 = (x2+littleX)+","+(y2-littleY);
+				var p4 = (x2-littleX)+","+(y2+littleY);
+				var path = p1+" "+p2+" "+p3+" "+p4;
+				clip.setAttribute("points",path);
 			}
+			itemClip.appendChild(clip);
 			
 			cloneClip = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
 			cloneClip.setAttribute("id","cloneClip."+ii+"."+jj);
@@ -61,17 +71,31 @@ function addOverlaps()
 			overlap.itemClip = itemClip;
 			overlap.cloneClip = cloneClip;
 			
+			
 			if(doesElementHaveClass(item,"face"))
 			{
 				itemOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 				itemOverlap.setAttribute("fill",resultColor);
 				itemOverlap.setAttribute("points",item.getAttribute("points"));
-				itemOverlap.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
-				itemOverlap.setAttribute("class","itemOverlap");
-				forwardAllMouseEvents(itemOverlap,item);
-				shapeGroup.appendChild(itemOverlap);
-				overlap.itemOverlap = itemOverlap;
+			} 
+			else if (doesElementHaveClass(item,"line"))
+			{
+				itemOverlap = document.createElementNS("http://www.w3.org/2000/svg","line");
+				itemOverlap.setAttribute("x1",item.getAttribute("x1"));
+				itemOverlap.setAttribute("y1",item.getAttribute("y1"));
+				itemOverlap.setAttribute("x2",item.getAttribute("x2"));
+				itemOverlap.setAttribute("y2",item.getAttribute("y2"));
+				itemOverlap.setAttribute("stroke","resultColor");
+				itemOverlap.setAttribute("stroke-width",lineThickness);
+			}
+			itemOverlap.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
+			itemOverlap.setAttribute("class","itemOverlap");
+			forwardAllMouseEvents(itemOverlap,item);
+			shapeGroup.appendChild(itemOverlap);
+			overlap.itemOverlap = itemOverlap;
 				
+			if(doesElementHaveClass(item,"face"))
+			{
 				itemOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 				itemOverlapUnder.setAttribute("fill",resultColor);
 				itemOverlapUnder.setAttribute("points",item.getAttribute("points"));
@@ -170,29 +194,35 @@ function correctOverlaps()
 
 function removeOverlaps()
 {
-	var face;
-	var faces = getFaces();
+	var item;
+	var linesAndFaces = getLinesAndFaces();
 	var overlap;
-	for(var ii = 0; ii < faces.length; ii++)
+	for(var ii = 0; ii < linesAndFaces.length; ii++)
 	{
-		face = faces[ii];
-		removeOverlapsOfFace(face);
+		item = linesAndFaces[ii];
+		removeOverlapsOfItem(item);
 	}
 }
 
-function removeOverlapsOfFace(face)
+function removeOverlapsOfItem(item)
 {
-	for(var jj=0;jj<face.overlaps.length;jj++)
+	for(var jj=0;jj<item.overlaps.length;jj++)
 	{
-		overlap = face.overlaps[jj];
+		overlap = item.overlaps[jj];
 		defs.removeChild(overlap.itemClip);
 		defs.removeChild(overlap.cloneClip);
 		shapeGroup.removeChild(overlap.itemOverlap);
-		shapeGroup.removeChild(overlap.itemOverlapUnder);
+		if(overlap.itemOverlapUnder != null)
+		{
+			shapeGroup.removeChild(overlap.itemOverlapUnder);
+		}
 		shapeGroup.removeChild(overlap.cloneOverlap);
-		shapeGroup.removeChild(overlap.cloneOverlapUnder);
+		if(overlap.cloneOverlapUnder != null)
+		{
+			shapeGroup.removeChild(overlap.cloneOverlapUnder);
+		}
 	}
-	face.overlaps = [];
+	item.overlaps = [];
 }
 
 function setCloneFilter(element)

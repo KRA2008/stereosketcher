@@ -442,6 +442,7 @@ function deletePressed()
 			dotLines.splice(dotLines.indexOf(line),1);
 			shapeGroup.removeChild(line);
 			shapeGroup.removeChild(line.clone);
+			removeOverlapsOfItem(line);
 		}
 	}
 	var face;
@@ -462,7 +463,7 @@ function deletePressed()
 			shapeGroup.removeChild(face.under);
 			shapeGroup.removeChild(face.clone);
 			shapeGroup.removeChild(face.clone.under);
-			removeOverlapsOfFace(face);
+			removeOverlapsOfItem(face);
 		}
 	}
 	correctOverlaps();

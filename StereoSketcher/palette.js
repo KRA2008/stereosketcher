@@ -24,15 +24,15 @@ function addPalette()
 		{
 			this.setAttribute("height",hoverWidth);
 			this.setAttribute("width",hoverWidth);
-			this.setAttribute("x",parseInt(this.getAttribute("x"))-(hoverWidth-plainWidth)/2)
-			this.setAttribute("y",parseInt(this.getAttribute("y"))-(hoverWidth-plainWidth)/2)
+			this.setAttribute("x",parseFloat(this.getAttribute("x"))-(hoverWidth-plainWidth)/2)
+			this.setAttribute("y",parseFloat(this.getAttribute("y"))-(hoverWidth-plainWidth)/2)
 		}
 		box.onmouseleave = function()
 		{
 			this.setAttribute("height",plainWidth);
 			this.setAttribute("width",plainWidth);
-			this.setAttribute("x",parseInt(this.getAttribute("x"))+(hoverWidth-plainWidth)/2)
-			this.setAttribute("y",parseInt(this.getAttribute("y"))+(hoverWidth-plainWidth)/2)
+			this.setAttribute("x",parseFloat(this.getAttribute("x"))+(hoverWidth-plainWidth)/2)
+			this.setAttribute("y",parseFloat(this.getAttribute("y"))+(hoverWidth-plainWidth)/2)
 		}
 		box.onclick = function(event)
 		{

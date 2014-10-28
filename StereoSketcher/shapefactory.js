@@ -38,8 +38,8 @@ var shapeFactory={
 		dot.lines = [];
 		dot.shift = 0;
 		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-		label.setAttribute("x",parseInt(dot.getAttribute("cx"))+labelX);
-		label.setAttribute("y",parseInt(dot.getAttribute("cy"))+labelY);
+		label.setAttribute("x",parseFloat(dot.getAttribute("cx"))+labelX);
+		label.setAttribute("y",parseFloat(dot.getAttribute("cy"))+labelY);
 		label.setAttribute("fill","black");
 		label.setAttribute("class","");
 		addClassToElement(label,"label");
@@ -190,9 +190,9 @@ var shapeFactory={
 	{
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.clone=clone;
-		clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+line.dot1.shift);
+		clone.setAttribute("x1",parseFloat(line.dot1.getAttribute("cx"))+IPD+line.dot1.shift);
 		clone.setAttribute("y1",line.dot1.getAttribute("cy"));
-		clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+line.dot2.shift);
+		clone.setAttribute("x2",parseFloat(line.dot2.getAttribute("cx"))+IPD+line.dot2.shift);
 		clone.setAttribute("y2",line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke","black");
 		clone.setAttribute("stroke-width",lineThickness);
@@ -251,9 +251,9 @@ var shapeFactory={
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		face.clone = clone;
 		var coords = "";
-		coords+=parseInt(face.dot1.getAttribute("cx"))+IPD+face.dot1.shift+","+face.dot1.getAttribute("cy")+" ";
-		coords+=parseInt(face.dot2.getAttribute("cx"))+IPD+face.dot2.shift+","+face.dot2.getAttribute("cy")+" ";
-		coords+=parseInt(face.dot3.getAttribute("cx"))+IPD+face.dot3.shift+","+face.dot3.getAttribute("cy")+" ";
+		coords+=parseFloat(face.dot1.getAttribute("cx"))+IPD+face.dot1.shift+","+face.dot1.getAttribute("cy")+" ";
+		coords+=parseFloat(face.dot2.getAttribute("cx"))+IPD+face.dot2.shift+","+face.dot2.getAttribute("cy")+" ";
+		coords+=parseFloat(face.dot3.getAttribute("cx"))+IPD+face.dot3.shift+","+face.dot3.getAttribute("cy")+" ";
 		clone.setAttribute("points",coords);
 		under.setAttribute("points",coords);
 		clone.under = under;

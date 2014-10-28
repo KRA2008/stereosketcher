@@ -3,12 +3,11 @@ function addOverlaps()
 	var item;
 	var clone;
 	var clip;
-	var faceOverlap, faceOverlapUnder;
+	var itemOverlap, itemOverlapUnder;
 	var lineOverlap;
 	var cloneOverlap, cloneOverlapUnder;
 	var resultColor;
 	var outerBBox, innerBBox;
-	var imaxX,imaxY,iminX,iminY,jmaxX,jmaxY,jminX,jminY;
 	var overlap;
 	var itemClip;
 	
@@ -34,15 +33,20 @@ function addOverlaps()
 			overlap = {};
 			clone = tempFace.clone;
 			
+			itemClip = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+			itemClip.setAttribute("id","itemClip."+ii+"."+jj);
+			
 			if(doesElementHaveClass(item,"face"))
 			{
-				itemClip = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-				itemClip.setAttribute("id","itemClip."+ii+"."+jj);
 				clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 				clip.setAttribute("points",item.getAttribute("points"));
 				itemClip.appendChild(clip);
-			} else if (doesElementHaveClass(item,"line"))
+			} 
+			else if (doesElementHaveClass(item,"line"))
 			{
+				clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+				var slope = (item.getAttribute("y2")-item.getAttribute("y1"))/(item.getAttribute("x2")-item.getAttribute("x1"));
+				
 				// make line clip
 			}
 			
@@ -57,28 +61,27 @@ function addOverlaps()
 			overlap.itemClip = itemClip;
 			overlap.cloneClip = cloneClip;
 			
-
-			faceOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-			faceOverlap.setAttribute("fill",resultColor);
-			faceOverlap.setAttribute("points",item.getAttribute("points"));
-			faceOverlap.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
-			faceOverlap.setAttribute("class","faceOverlap");
-			forwardAllMouseEvents(faceOverlap,item);
-			shapeGroup.appendChild(faceOverlap);
-			overlap.faceOverlap = faceOverlap;
-			
 			if(doesElementHaveClass(item,"face"))
 			{
-				faceOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-				faceOverlapUnder.setAttribute("fill",resultColor);
-				faceOverlapUnder.setAttribute("points",item.getAttribute("points"));
-				faceOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
-				faceOverlapUnder.setAttribute("stroke",resultColor);
-				faceOverlapUnder.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
-				faceOverlapUnder.setAttribute("class","faceOverlapUnder");
-				forwardAllMouseEvents(faceOverlapUnder,item);
-				shapeGroup.appendChild(faceOverlapUnder);
-				overlap.faceOverlapUnder = faceOverlapUnder;
+				itemOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+				itemOverlap.setAttribute("fill",resultColor);
+				itemOverlap.setAttribute("points",item.getAttribute("points"));
+				itemOverlap.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
+				itemOverlap.setAttribute("class","itemOverlap");
+				forwardAllMouseEvents(itemOverlap,item);
+				shapeGroup.appendChild(itemOverlap);
+				overlap.itemOverlap = itemOverlap;
+				
+				itemOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+				itemOverlapUnder.setAttribute("fill",resultColor);
+				itemOverlapUnder.setAttribute("points",item.getAttribute("points"));
+				itemOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
+				itemOverlapUnder.setAttribute("stroke",resultColor);
+				itemOverlapUnder.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
+				itemOverlapUnder.setAttribute("class","itemOverlapUnder");
+				forwardAllMouseEvents(itemOverlapUnder,item);
+				shapeGroup.appendChild(itemOverlapUnder);
+				overlap.itemOverlapUnder = itemOverlapUnder;
 			} 
 			else if(doesElementHaveClass(item,"line"))
 			{
@@ -184,8 +187,8 @@ function removeOverlapsOfFace(face)
 		overlap = face.overlaps[jj];
 		defs.removeChild(overlap.itemClip);
 		defs.removeChild(overlap.cloneClip);
-		shapeGroup.removeChild(overlap.faceOverlap);
-		shapeGroup.removeChild(overlap.faceOverlapUnder);
+		shapeGroup.removeChild(overlap.itemOverlap);
+		shapeGroup.removeChild(overlap.itemOverlapUnder);
 		shapeGroup.removeChild(overlap.cloneOverlap);
 		shapeGroup.removeChild(overlap.cloneOverlapUnder);
 	}

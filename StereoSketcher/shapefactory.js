@@ -185,6 +185,8 @@ var shapeFactory={
 		line.setAttribute("stroke-linecap","round");
 		this.createCloneLine(line);
 		shapeGroup.appendChild(line);
+		line.overlaps = [];
+		correctOverlaps();
 	},
 	createCloneLine:function(line)
 	{

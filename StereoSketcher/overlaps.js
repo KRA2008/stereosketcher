@@ -94,10 +94,10 @@ function addOverlaps()
 			else if (doesElementHaveClass(clone,"cloneLine"))
 			{
 				cloneOverlap = document.createElementNS("http://www.w3.org/2000/svg","line");
-				cloneOverlap.setAttribute("x1",item.getAttribute("x1"));
-				cloneOverlap.setAttribute("y1",item.getAttribute("y1"));
-				cloneOverlap.setAttribute("x2",item.getAttribute("x2"));
-				cloneOverlap.setAttribute("y2",item.getAttribute("y2"));
+				cloneOverlap.setAttribute("x1",clone.getAttribute("x1"));
+				cloneOverlap.setAttribute("y1",clone.getAttribute("y1"));
+				cloneOverlap.setAttribute("x2",clone.getAttribute("x2"));
+				cloneOverlap.setAttribute("y2",clone.getAttribute("y2"));
 				cloneOverlap.setAttribute("stroke",resultColor);
 				cloneOverlap.setAttribute("stroke-width",lineThickness);
 			}

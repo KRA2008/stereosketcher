@@ -10,6 +10,7 @@ function addOverlaps()
 	var outerBBox, innerBBox;
 	var overlap;
 	var clipPath;
+	var tempItem;
 	
 	var lines = getLines();
 	var faces = getFaces();
@@ -23,7 +24,7 @@ function addOverlaps()
 		
 		for(var jj=0;jj<linesAndFaces.length;jj++)
 		{
-			var tempItem = linesAndFaces[jj];
+			tempItem = linesAndFaces[jj];
 			
 			innerBBox = tempItem.getBBox();
 			
@@ -34,11 +35,11 @@ function addOverlaps()
 			clone = tempItem.clone;
 			
 			clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-			clipPath.setAttribute("id","itemClip."+ii+"."+jj);
+			clipPath.setAttribute("id",["itemClip.",ii,".",jj].join(''));
 			overlap.itemClip = createClipPath(item,clipPath);
 			
 			clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-			clipPath.setAttribute("id","cloneClip."+ii+"."+jj);
+			clipPath.setAttribute("id",["cloneClip.",ii,".",jj].join(''));
 			overlap.cloneClip = createClipPath(clone,clipPath);
 
 			if(doesElementHaveClass(item,"face"))
@@ -52,7 +53,7 @@ function addOverlaps()
 				itemOverlapUnder.setAttribute("points",item.getAttribute("points"));
 				itemOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
 				itemOverlapUnder.setAttribute("stroke",resultColor);
-				itemOverlapUnder.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
+				itemOverlapUnder.setAttribute("clip-path",["url(#cloneClip.",ii,".",jj,")"].join(''));
 				itemOverlapUnder.setAttribute("class","itemOverlapUnder");
 				forwardAllMouseEvents(itemOverlapUnder,item);
 				shapeGroup.appendChild(itemOverlapUnder);
@@ -71,7 +72,7 @@ function addOverlaps()
 			itemOverlap.setAttribute("class","itemOverlap");
 			forwardAllMouseEvents(itemOverlap,item);
 			shapeGroup.appendChild(itemOverlap);
-			itemOverlap.setAttribute("clip-path","url(#cloneClip."+ii+"."+jj+")");
+			itemOverlap.setAttribute("clip-path",["url(#cloneClip.",ii,".",jj,")"].join(''));
 			overlap.itemOverlap = itemOverlap;
 			
 			if(doesElementHaveClass(clone,"cloneFace"))
@@ -85,7 +86,7 @@ function addOverlaps()
 				cloneOverlapUnder.setAttribute("points",clone.getAttribute("points"));
 				cloneOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
 				cloneOverlapUnder.setAttribute("stroke",resultColor);
-				cloneOverlapUnder.setAttribute("clip-path","url(#itemClip."+ii+"."+jj+")");
+				cloneOverlapUnder.setAttribute("clip-path",["url(#itemClip.",ii,".",jj,")"].join(''));
 				cloneOverlapUnder.setAttribute("class","cloneOverlapUnder");
 				forwardAllMouseEvents(cloneOverlapUnder,item);
 				shapeGroup.appendChild(cloneOverlapUnder);
@@ -104,7 +105,7 @@ function addOverlaps()
 			cloneOverlap.setAttribute("class","cloneOverlap");
 			shapeGroup.appendChild(cloneOverlap);
 			forwardAllMouseEvents(cloneOverlap,item);	
-			cloneOverlap.setAttribute("clip-path","url(#itemClip."+ii+"."+jj+")");
+			cloneOverlap.setAttribute("clip-path",["url(#itemClip.",ii,".",jj,")"].join(''));
 			overlap.cloneOverlap = cloneOverlap;
 			
 			item.overlaps.push(overlap);
@@ -131,7 +132,7 @@ function createClipPath(item,clipPath)
 		var theta = Math.atan((y2-y1)/(x2-x1));
 		var littleX = (lineThickness/2)*Math.sin(theta);
 		var littleY = (lineThickness/2)*Math.cos(theta);
-		var path = (x1-littleX)+","+(y1+littleY)+" "+(x1+littleX)+","+(y1-littleY)+" "+(x2+littleX)+","+(y2-littleY)+" "+(x2-littleX)+","+(y2+littleY);
+		var path = [(x1-littleX),",",(y1+littleY)," ",(x1+littleX),",",(y1-littleY)," ",(x2+littleX),",",(y2-littleY)," ",(x2-littleX),",",(y2+littleY)].join('');
 		clip.setAttribute("points",path);
 		clipPath.appendChild(clip);
 		
@@ -153,7 +154,7 @@ function createClipPath(item,clipPath)
 
 function doBoundingBoxesOverlap(bbox1,bbox2)
 {
-	return (bbox1.x < bbox2.x+bbox2.width && bbox1.x+bbox1.width > bbox2.x && bbox1.y < bbox2.y+bbox2.height && bbox1.y+bbox1.height > bbox2.y);
+	return (bbox1.x <= bbox2.x+bbox2.width && bbox1.x+bbox1.width >= bbox2.x && bbox1.y <= bbox2.y+bbox2.height && bbox1.y+bbox1.height >= bbox2.y);
 }
 
 function forwardAllMouseEvents(element,recipient)

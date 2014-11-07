@@ -58,10 +58,10 @@ function dragDots(event,shape) {
 					facey2 = face.dot2.getAttribute("cy");
 					facex3 = face.dot3.getAttribute("cx");
 					facey3 = face.dot3.getAttribute("cy");
-					faceCoord = facex1+","+facey1+" "+facex2+","+facey2+" "+facex3+","+facey3;
+					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = (parseFloat(facex1)+IPD+face.dot1.shift)+","+facey1+" "+(parseFloat(facex2)+face.dot2.shift+IPD)+","+facey2+" "+(parseFloat(facex3)+face.dot3.shift+IPD)+","+facey3;
+					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -73,10 +73,10 @@ function dragDots(event,shape) {
 					facey2 = dot.getAttribute("cy");
 					facex3 = face.dot3.getAttribute("cx");
 					facey3 = face.dot3.getAttribute("cy");
-					faceCoord = facex1+","+facey1+" "+facex2+","+facey2+" "+facex3+","+facey3;
+					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = (parseFloat(facex1)+IPD+face.dot1.shift)+","+facey1+" "+(parseFloat(facex2)+face.dot2.shift+IPD)+","+facey2+" "+(parseFloat(facex3)+face.dot3.shift+IPD)+","+facey3;
+					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -88,10 +88,10 @@ function dragDots(event,shape) {
 					facey2 = face.dot2.getAttribute("cy");
 					facex3 = dot.getAttribute("cx");
 					facey3 = dot.getAttribute("cy");
-					faceCoord = facex1+","+facey1+" "+facex2+","+facey2+" "+facex3+","+facey3;
+					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = (parseFloat(facex1)+IPD+face.dot1.shift)+","+facey1+" "+(parseFloat(facex2)+face.dot2.shift+IPD)+","+facey2+" "+(parseFloat(facex3)+face.dot3.shift+IPD)+","+facey3;
+					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -100,7 +100,7 @@ function dragDots(event,shape) {
 			dot.label.setAttribute("y",parseFloat(dot.getAttribute("cy"))+labelY);
 		}
 	}
-	correctOverlaps();
+	//correctOverlaps();
 	dragger.x=event.clientX;
 	dragger.y=event.clientY;
 }

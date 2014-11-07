@@ -23,10 +23,10 @@ function dragDots(event,shape) {
 		dot=dots[ii];
 		if(dot.isSelected())
 		{
-			x=parseFloat(dot.getAttribute("cx"));
-			y=parseFloat(dot.getAttribute("cy"));
-			dot.setAttribute("cx",x+dx);
-			dot.setAttribute("cy",y+dy);
+			x=parseFloat(dot.getAttribute("cx"))+dx;
+			y=parseFloat(dot.getAttribute("cy"))+dy;
+			dot.setAttribute("cx",x);
+			dot.setAttribute("cy",y);
 			lines=dot.lines;
 			for(var ij=0;ij<lines.length;ij++)
 			{
@@ -100,7 +100,7 @@ function dragDots(event,shape) {
 			dot.label.setAttribute("y",y+labelY);
 		}
 	}
-	//correctOverlaps();
+	correctOverlaps();
 	dragger.x=event.clientX;
 	dragger.y=event.clientY;
 }

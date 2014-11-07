@@ -33,17 +33,17 @@ function dragDots(event,shape) {
 				line = lines[ij];
 				if(line.dot1 == dot)
 				{
-					line.setAttribute("x1",line.dot1.getAttribute("cx"));
-					line.setAttribute("y1",line.dot1.getAttribute("cy"));
-					line.clone.setAttribute("x1",parseFloat(line.dot1.getAttribute("cx"))+IPD+dot.shift);
-					line.clone.setAttribute("y1",line.dot1.getAttribute("cy"));
+					line.setAttribute("x1",x);
+					line.setAttribute("y1",y);
+					line.clone.setAttribute("x1",x+IPD+dot.shift);
+					line.clone.setAttribute("y1",y);
 				}
 				else if(line.dot2 == dot)
 				{
-					line.setAttribute("x2",line.dot2.getAttribute("cx"));
-					line.setAttribute("y2",line.dot2.getAttribute("cy"));
-					line.clone.setAttribute("x2",parseFloat(line.dot2.getAttribute("cx"))+IPD+dot.shift);
-					line.clone.setAttribute("y2",line.dot2.getAttribute("cy"));
+					line.setAttribute("x2",x);
+					line.setAttribute("y2",y);
+					line.clone.setAttribute("x2",x+IPD+dot.shift);
+					line.clone.setAttribute("y2",y);
 				}
 			}
 			faces = dot.faces;
@@ -52,8 +52,8 @@ function dragDots(event,shape) {
 				face = faces[ik];
 				if(face.dot1 == dot)
 				{
-					facex1 = dot.getAttribute("cx");
-					facey1 = dot.getAttribute("cy");
+					facex1 = x;
+					facey1 = y;
 					facex2 = face.dot2.getAttribute("cx");
 					facey2 = face.dot2.getAttribute("cy");
 					facex3 = face.dot3.getAttribute("cx");
@@ -61,7 +61,7 @@ function dragDots(event,shape) {
 					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+					cloneCoord = [(x+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -69,14 +69,14 @@ function dragDots(event,shape) {
 				{
 					facex1 = face.dot1.getAttribute("cx");
 					facey1 = face.dot1.getAttribute("cy");
-					facex2 = dot.getAttribute("cx");
-					facey2 = dot.getAttribute("cy");
+					facex2 = x;
+					facey2 = y;
 					facex3 = face.dot3.getAttribute("cx");
 					facey3 = face.dot3.getAttribute("cy");
 					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(x+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -86,18 +86,18 @@ function dragDots(event,shape) {
 					facey1 = face.dot1.getAttribute("cy");
 					facex2 = face.dot2.getAttribute("cx");
 					facey2 = face.dot2.getAttribute("cy");
-					facex3 = dot.getAttribute("cx");
-					facey3 = dot.getAttribute("cy");
+					facex3 = x;
+					facey3 = y;
 					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(x+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
 			}
-			dot.label.setAttribute("x",parseFloat(dot.getAttribute("cx"))+labelX);
-			dot.label.setAttribute("y",parseFloat(dot.getAttribute("cy"))+labelY);
+			dot.label.setAttribute("x",x+labelX);
+			dot.label.setAttribute("y",y+labelY);
 		}
 	}
 	//correctOverlaps();

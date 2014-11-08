@@ -24,7 +24,11 @@
 		<script type="text/javascript" src="jscolor.js"></script>
 	</head>
 	<body oncontextmenu="return false;">
-		<input class="color" style="position: absolute; z-index: 9999;" id="colorPicker"/>
+		<div style="position: absolute; z-index: 9999;" onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()">
+		<input class="color {hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker" />
+		<input type="button" value="Set" onclick="setColor()"/>
+		<input type="button" value="Sample" onclick="sampleColor()"/>
+		</div>
 		<svg id="svg" xmlns="http://www.w3.org/2000/svg">
 			<g id="shapes">
 			</g>

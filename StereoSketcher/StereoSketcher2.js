@@ -70,7 +70,6 @@ window.onload=function() {
 			selectangle = null;
 		}
 	};
-	//addPalette();
 	addModeLabel();
 };
 
@@ -673,4 +672,18 @@ function addModeLabel()
 	label.textContent = "cross eye";
 	label.setAttribute("id","modeLabel");
 	svg.appendChild(label);
+}
+
+function hideColorPicker()
+{
+	var picker = document.getElementById('colorPicker');
+	picker.color.hidePicker();
+	picker.blur();
+}
+
+function showColorPicker()
+{
+	var picker = document.getElementById('colorPicker');
+	picker.color.showPicker();
+	//picker.focus();
 }

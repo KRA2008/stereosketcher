@@ -613,7 +613,7 @@ var jscolor = {
 
 			// controls interaction
 			p.box.onmouseup =
-			p.box.onmouseout = function() { target.focus(); };
+			p.box.onmouseout = function() { showColorPicker(); };
 			p.box.onmousedown = function() { abortBlur=true; };
 			p.box.onmousemove = function(e) {
 				if (holdPad || holdSld) {
@@ -626,6 +626,12 @@ var jscolor = {
 					}
 					dispatchImmediateChange();
 				}
+			p.box.onmouseenter = function() {
+				showColorPicker();
+			}
+			p.box.onmouseleave = function() {
+				hideColorPicker();
+			}
 			};
 			if('ontouchstart' in window) { // if touch device
 				var handle_touchmove = function(e) {

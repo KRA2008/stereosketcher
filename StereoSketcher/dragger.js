@@ -1,4 +1,4 @@
-function dragDots(event,shape) {
+function dragDots(event) {
 	event.stopPropagation();
 	var dx=event.clientX-dragger.x;
 	var dy=event.clientY-dragger.y;

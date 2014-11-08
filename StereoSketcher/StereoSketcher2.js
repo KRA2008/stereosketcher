@@ -70,7 +70,7 @@ window.onload=function() {
 			selectangle = null;
 		}
 	};
-	addPalette();
+	//addPalette();
 	addModeLabel();
 };
 

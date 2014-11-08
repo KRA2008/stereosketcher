@@ -1,9 +1,9 @@
 var faceSpaceCorrection = "0.5px";
 var faceActionStrokeWidth = 2;
-var labelX = -15;
-var labelY = -8;
+var labelX = -11;
+var labelY = -4;
 var lineThickness = 2;
-var dotRadius = 7;
+var dotRadius = 5;
 var faceStartColor = "#777777";
 
 

@@ -225,7 +225,6 @@ function switchFilters(on)
 			dropFilters(line);
 			dropFilters(line.clone);
 		}
-		//removeOverlaps();
 	}
 }
 
@@ -685,5 +684,4 @@ function showColorPicker()
 {
 	var picker = document.getElementById('colorPicker');
 	picker.color.showPicker();
-	//picker.focus();
 }

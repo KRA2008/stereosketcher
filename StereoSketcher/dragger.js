@@ -1,4 +1,4 @@
-function dragDots(event) {
+function dragDots(event,dots) {
 	event.stopPropagation();
 	var dx=event.clientX-dragger.x;
 	var dy=event.clientY-dragger.y;
@@ -7,7 +7,6 @@ function dragDots(event) {
 	var face;
 	var x=0;
 	var y=0;
-	var dots = getDots();
 	var lines = [];
 	var faces = [];
 	var facex1 = 0;

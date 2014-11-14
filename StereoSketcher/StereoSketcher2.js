@@ -157,14 +157,14 @@ function toggleViewMode()
 		label.textContent = "red/cyan";
 		IPD=0;
 		refreshDots();
-		switchFilters(true);
+		//switchFilters(true);
 	} else if(mode==2) {
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross eye";
 		IPD=originalIPD;
 		refreshDots();
-		switchFilters(false);
+		//switchFilters(false);
 	}
 }
 
@@ -598,6 +598,7 @@ function recursiveSelectDots(dot)
 
 function mousePressedOnShape(event,shape) 
 {
+	var dots = getDots();
 	if(doesElementHaveClass(shape,"dot"))
 	{
 		event.stopPropagation();
@@ -615,7 +616,7 @@ function mousePressedOnShape(event,shape)
 		{
 			if(mousePressed.is && mousePressed.shape.isSelected())
 			{
-				dragDots(event);
+				dragDots(event,dots);
 			}
 		};
 	}

@@ -23,8 +23,8 @@ function dragDots(event) {
 		dot=dots[ii];
 		if(dot.isSelected())
 		{
-			x=parseFloat(dot.getAttribute("cx"))+dx;
-			y=parseFloat(dot.getAttribute("cy"))+dy;
+			x=parseInt(dot.getAttribute("cx"))+dx;
+			y=parseInt(dot.getAttribute("cy"))+dy;
 			dot.setAttribute("cx",x);
 			dot.setAttribute("cy",y);
 			lines=dot.lines;
@@ -61,7 +61,7 @@ function dragDots(event) {
 					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = [(x+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+					cloneCoord = [(x+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -76,7 +76,7 @@ function dragDots(event) {
 					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(x+face.dot2.shift+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+					cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(x+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -91,7 +91,7 @@ function dragDots(event) {
 					faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 					face.setAttribute("points",faceCoord);
 					face.under.setAttribute("points",faceCoord);
-					cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseFloat(facex2)+face.dot2.shift+IPD),",",facey2," ",(x+face.dot3.shift+IPD),",",facey3].join('');
+					cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(x+face.dot3.shift+IPD),",",facey3].join('');
 					face.clone.setAttribute("points",cloneCoord);
 					face.clone.under.setAttribute("points",cloneCoord);
 				}
@@ -100,7 +100,6 @@ function dragDots(event) {
 			dot.label.setAttribute("y",y+labelY);
 		}
 	}
-	correctOverlaps();
 	dragger.x=event.clientX;
 	dragger.y=event.clientY;
 }

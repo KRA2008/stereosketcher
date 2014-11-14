@@ -15,7 +15,6 @@ function shiftIn()
 			applyShift(dot);
 		}
 	}
-	correctOverlaps();
 }
 
 function shiftOut()
@@ -31,7 +30,6 @@ function shiftOut()
 			applyShift(dot);
 		}
 	}
-	correctOverlaps();
 }
 
 function applyShift(dot)
@@ -43,11 +41,11 @@ function applyShift(dot)
 		line = lines[ii];
 		if(line.dot1 == dot)
 		{
-			line.clone.setAttribute("x1",parseFloat(line.dot1.getAttribute("cx"))+IPD+dot.shift);
+			line.clone.setAttribute("x1",parseInt(line.dot1.getAttribute("cx"))+IPD+dot.shift);
 		}
 		else if (line.dot2 == dot) 
 		{
-			line.clone.setAttribute("x2",parseFloat(line.dot2.getAttribute("cx"))+IPD+dot.shift);
+			line.clone.setAttribute("x2",parseInt(line.dot2.getAttribute("cx"))+IPD+dot.shift);
 		}
 	}
 	faces = dot.faces;
@@ -62,7 +60,7 @@ function applyShift(dot)
 			facey2 = face.dot2.getAttribute("cy");
 			facex3 = face.dot3.getAttribute("cx");
 			facey3 = face.dot3.getAttribute("cy");
-			cloneCoord = (parseFloat(facex1)+IPD+face.dot1.shift)+","+facey1+" "+(parseFloat(facex2)+face.dot2.shift+IPD)+","+facey2+" "+(parseFloat(facex3)+face.dot3.shift+IPD)+","+facey3;
+			cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
@@ -74,7 +72,7 @@ function applyShift(dot)
 			facey2 = dot.getAttribute("cy");
 			facex3 = face.dot3.getAttribute("cx");
 			facey3 = face.dot3.getAttribute("cy");
-			cloneCoord = (parseFloat(facex1)+IPD+face.dot1.shift)+","+facey1+" "+(parseFloat(facex2)+face.dot2.shift+IPD)+","+facey2+" "+(parseFloat(facex3)+face.dot3.shift+IPD)+","+facey3;
+			cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
@@ -86,7 +84,7 @@ function applyShift(dot)
 			facey2 = face.dot2.getAttribute("cy");
 			facex3 = dot.getAttribute("cx");
 			facey3 = dot.getAttribute("cy");
-			cloneCoord = (parseFloat(facex1)+IPD+face.dot1.shift)+","+facey1+" "+(parseFloat(facex2)+face.dot2.shift+IPD)+","+facey2+" "+(parseFloat(facex3)+face.dot3.shift+IPD)+","+facey3;
+			cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
@@ -98,7 +96,6 @@ function moveSelectedToBack()
 {
 	deselectAllDots();
 	moveSelectedToBackRecursive();
-	correctOverlaps();
 }
 
 function moveSelectedToBackRecursive()
@@ -125,7 +122,6 @@ function moveSelectedToFront()
 {
 	deselectAllDots();
 	moveSelectedToFrontRecursive();
-	correctOverlaps();
 }
 
 function moveSelectedToFrontRecursive()

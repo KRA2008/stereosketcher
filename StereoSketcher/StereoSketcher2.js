@@ -42,10 +42,10 @@ window.onload=function() {
 		{
 			if(selectangle!=null)
 			{
-				var maxx=parseFloat(selectangle.getAttribute("width"))+parseFloat(selectangle.getAttribute("x"));
-				var minx=parseFloat(selectangle.getAttribute("x"));
-				var maxy=parseFloat(selectangle.getAttribute("height"))+parseFloat(selectangle.getAttribute("y"));
-				var miny=parseFloat(selectangle.getAttribute("y"));
+				var maxx=parseInt(selectangle.getAttribute("width"))+parseInt(selectangle.getAttribute("x"));
+				var minx=parseInt(selectangle.getAttribute("x"));
+				var maxy=parseInt(selectangle.getAttribute("height"))+parseInt(selectangle.getAttribute("y"));
+				var miny=parseInt(selectangle.getAttribute("y"));
 				var dots = getDots();
 				if(!event.shiftKey)
 				{
@@ -54,8 +54,8 @@ window.onload=function() {
 				for(var ik=0;ik<dots.length;ik++)
 				{
 					var dot=dots[ik];
-					var dotx=parseFloat(dot.getAttribute("cx"));
-					var doty=parseFloat(dot.getAttribute("cy"));
+					var dotx=parseInt(dot.getAttribute("cx"));
+					var doty=parseInt(dot.getAttribute("cy"));
 					if(dotx<maxx && dotx>minx)
 					{
 						if(doty<maxy && doty>miny)
@@ -165,7 +165,6 @@ function toggleViewMode()
 		IPD=originalIPD;
 		refreshDots();
 		switchFilters(false);
-		removeOverlaps();
 	}
 }
 
@@ -203,7 +202,6 @@ function switchFilters(on)
 			setShapeFilter(line);
 			setCloneFilter(line.clone);
 		}
-		addOverlaps();
 	} 
 	else 
 	{
@@ -265,6 +263,7 @@ function toggleDotsVisible()
 			dot.label.setAttribute("visibility","hidden");
 		}
 		dotsVisible = false;
+		correctOverlaps();
 	} else {
 		for(var ii=0;ii<dots.length;ii++)
 		{
@@ -273,6 +272,7 @@ function toggleDotsVisible()
 			dot.label.setAttribute("visibility","visible");
 		}
 		dotsVisible = true;
+		removeOverlaps();
 	}
 }
 
@@ -464,7 +464,6 @@ function deletePressed()
 			removeOverlapsOfItem(face);
 		}
 	}
-	correctOverlaps();
 }
 
 function preventDefault(event)

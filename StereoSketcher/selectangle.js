@@ -4,10 +4,10 @@ function changeSelectangle(event) {
 	event.stopPropagation();
 	if(selectangle!=null)
 	{
-		var x=parseFloat(selectangle.getAttribute("x"));
-		var y=parseFloat(selectangle.getAttribute("y"));
-		var width=parseFloat(selectangle.getAttribute("width"));
-		var height=parseFloat(selectangle.getAttribute("height"));
+		var x=parseInt(selectangle.getAttribute("x"));
+		var y=parseInt(selectangle.getAttribute("y"));
+		var width=parseInt(selectangle.getAttribute("width"));
+		var height=parseInt(selectangle.getAttribute("height"));
 		var ex=event.clientX;
 		var ey=event.clientY;
 		if(selectangle.originalX<ex)

@@ -157,14 +157,12 @@ function toggleViewMode()
 		label.textContent = "red/cyan";
 		IPD=0;
 		refreshDots();
-		//switchFilters(true);
 	} else if(mode==2) {
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross eye";
 		IPD=originalIPD;
 		refreshDots();
-		//switchFilters(false);
 	}
 }
 

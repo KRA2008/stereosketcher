@@ -111,6 +111,7 @@ function addOverlaps()
 			item.overlaps.push(overlap);
 		}
 	}
+	switchFilters(true);
 }
 
 function createClipPath(item,clipPath)
@@ -209,6 +210,7 @@ function correctOverlaps()
 
 function removeOverlaps()
 {
+	switchFilters(false);
 	var item;
 	var linesAndFaces = getLinesAndFaces();
 	var overlap;

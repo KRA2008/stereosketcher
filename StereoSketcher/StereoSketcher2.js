@@ -1,9 +1,8 @@
 var svg,dotGroup,labelGroup,shapeGroup,defs;
-var mousePressed={};
-var mouseReleased={};
-var dragger={};
 var dotsVisible=true;
 var mode=0;
+var pressX, pressY;
+var prevX, prevY;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
@@ -11,16 +10,18 @@ window.onload=function() {
 	labelGroup=document.getElementById("labels");
 	shapeGroup=document.getElementById("shapes");
 	defs=document.getElementById("defs");
+	addModeLabel();
+	
 	svg.onmousedown = function(event)
 	{
-		mousePressed.is=true;
-		mousePressed.x=event.clientX;
-		mousePressed.y=event.clientY;
-		mousePressed.shape=null;
+		pressX = event.clientX;
+		pressY = event.clientY;
+		prevX = pressX;
+		prevY = pressY;
 		if(event.button==0)
 		{
-			preventDefault(event);
 			svg.onmousemove = function(event) {
+				preventDefault(event);
 				changeSelectangle(event);
 			};
 		}
@@ -28,13 +29,14 @@ window.onload=function() {
 		{
 			var dots = getDots();
 			svg.onmousemove = function(event) {
+				preventDefault(event);
 				dragDots(event,dots);
 			};
 		}
 	};
 	svg.onmouseup = function(event)
 	{
-		if(mousePressed.shape==null && mousePressed.x==event.clientX && mousePressed.y==event.clientY)
+		if(wasAClick(event))
 		{
 			if(event.button==0)
 			{
@@ -45,7 +47,7 @@ window.onload=function() {
 				deselectAll();
 			}
 		}
-		if(event.button==0)
+		else if(event.button==0)
 		{
 			if(selectangle!=null)
 			{
@@ -72,24 +74,21 @@ window.onload=function() {
 					}
 				}
 				svg.removeChild(selectangle);
+				selectangle = null;
 			}
-			svg.onmousemove = null;
-			selectangle = null;
-		} 
-		else if(event.button==2)
-		{
-			svg.onmousemove = null;
 		}
+		svg.onmousemove = null;
 	};
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);
-	addModeLabel();
 };
 
+function wasAClick(event)
+{
+	return event.clientX == pressX && event.clientY == pressY;
+}
+
 document.addEventListener("keydown", keyDown, false);
-window.onkeydown = function(e) { 
-  return !(e.keyCode == 32);
-};
 
 function keyDown(e) {
 		var keyCode = e.keyCode;
@@ -130,29 +129,15 @@ function keyDown(e) {
 		}
 }
 
-function deselectAll()
+function addModeLabel()
 {
-	var dot;
-	var dots = getDots();
-	for(var il=0;il<dots.length;il++)
-	{
-		dot=dots[il];
-		dot.deselect();
-	}
-	var line;
-	var lines=getLines();
-	for(var nn=0;nn<lines.length;nn++)
-	{
-		line=lines[nn];
-		line.deselect();
-	}
-	var face;
-	var faces=getFaces();
-	for(var ii=0;ii<faces.length;ii++)
-	{
-		face=faces[ii];
-		face.deselect();
-	}
+	var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	label.setAttribute("x",10);
+	label.setAttribute("y",40);
+	label.setAttribute("fill","black");
+	label.textContent = "cross eye";
+	label.setAttribute("id","modeLabel");
+	svg.appendChild(label);
 }
 
 function toggleViewMode()
@@ -480,218 +465,6 @@ function deletePressed()
 function preventDefault(event)
 {
 	event.preventDefault ? event.preventDefault() : event.returnValue=false;
-}
-
-
-
-function selectAllContiguous(sourceDot,event)
-{
-	var dots = getDots();
-	var dot;
-	if(!event.shiftKey) {
-		deselectAll();
-	} else {
-		for(var ii=0;ii<dots.length;ii++)
-		{
-			dot = dots[ii];
-			if(dot.isSelected())
-			{
-				dot.deselect();
-				addClassToElement(dot,"tempSelect");
-			}
-		}
-	}
-	sourceDot.select();
-	recursiveSelectDots(sourceDot);
-	dots = getDots();
-	for(var ii=0;ii<dots.length;ii++)
-	{
-		dot = dots[ii];
-		if(doesElementHaveClass(dot,"tempSelect"))
-		{
-			dot.select();
-			removeClassFromElement(dot,"tempSelect");
-		}
-	}
-}
-
-function selectDotsOfLine(line,event)
-{
-	if(!event.shiftKey) {
-		deselectAll();
-	}
-	line.dot1.select();
-	line.dot2.select();
-}
-
-function selectDotsOfFace(face,event)
-{
-	if(!event.shiftKey) {
-		deselectAll();
-	}
-	face.dot1.select();
-	face.dot2.select();
-	face.dot3.select();
-}
-
-function recursiveSelectDots(dot)
-{
-	var lines = dot.lines;
-	var line;
-	for(var ii=0;ii<lines.length;ii++)
-	{
-		line = lines[ii];
-		if(line.dot1.isSelected() && line.dot2.isSelected())
-		{
-			continue;
-		}
-		if(line.dot1 == dot)
-		{
-			line.dot2.select();
-			recursiveSelectDots(line.dot2);
-		} 
-		else if (line.dot2 == dot)
-		{
-			line.dot1.select();
-			recursiveSelectDots(line.dot1);
-		}
-	}
-	var faces = dot.faces;
-	var face;
-	for(var ii=0;ii<faces.length;ii++)
-	{
-		face = faces[ii];
-		if(face.dot1.isSelected() && face.dot2.isSelected() && face.dot3.isSelected())
-		{
-			continue;
-		}
-		if(face.dot1 == dot)
-		{
-			if(!face.dot2.isSelected())
-			{
-				face.dot2.select();
-				recursiveSelectDots(face.dot2);
-			}
-			if(!face.dot3.isSelected())
-			{
-				face.dot3.select();
-				recursiveSelectDots(face.dot3);
-			}
-		}
-		if(face.dot2 == dot)
-		{
-			if(!face.dot1.isSelected())
-			{
-				face.dot1.select();
-				recursiveSelectDots(face.dot1);
-			}
-			if(!face.dot3.isSelected())
-			{
-				face.dot3.select();
-				recursiveSelectDots(face.dot3);
-			}
-		}
-		if(face.dot3 == dot)
-		{
-			if(!face.dot2.isSelected())
-			{
-				face.dot2.select();
-				recursiveSelectDots(face.dot2);
-			}
-			if(!face.dot1.isSelected())
-			{
-				face.dot1.select();
-				recursiveSelectDots(face.dot1);
-			}
-		}
-	}
-}
-
-function mousePressedOnShape(event,shape) 
-{
-	if(doesElementHaveClass(shape,"dot"))
-	{
-		event.stopPropagation();
-	}
-	mousePressed.is=true;
-	mousePressed.x=event.clientX;
-	mousePressed.y=event.clientY;
-	mousePressed.shape=shape;
-	if(doesElementHaveClass(shape,"dot"))
-	{
-		var dot;
-		var dots = getDots();
-		var selectedDots = [];
-		for(var ii=0;ii<dots.length;ii++)
-		{
-			dot = dots[ii];
-			if(dot.isSelected())
-			{
-				selectedDots.push(dot);
-			}
-		}
-		dragger.x=mousePressed.x;
-		dragger.y=mousePressed.y;
-		dragger.handle=shape;
-		svg.onmousemove = function(event) 
-		{
-			if(mousePressed.is && mousePressed.shape.isSelected())
-			{
-				dragDots(event,selectedDots);
-			}
-		};
-	}
-}
-
-function mouseReleasedOnShape(event,shape) 
-{
-	event.stopPropagation();
-	var wasSelected = false;
-	if(mousePressed.x==event.clientX && mousePressed.y==event.clientY)
-	{
-		if(event.shiftKey)
-		{
-			shape.toggleSelect();
-		}
-		else
-		{
-			if(shape.isSelected())
-			{
-				wasSelected=true;
-			}
-			deselectAll();
-			if(wasSelected)
-			{
-				shape.deselect();
-			} 
-			else 
-			{
-				shape.select();
-			}
-		}
-	}
-	mousePressed.is=false;
-	svg.onmousemove = null;
-}
-
-function deselectAllDots()
-{
-	var dots = getDots();
-	for(var ii=0;ii<dots.length;ii++)
-	{
-		dots[ii].deselect();
-	}
-}
-
-function addModeLabel()
-{
-	var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-	label.setAttribute("x",plainWidth);
-	label.setAttribute("y",plainWidth*3);
-	label.setAttribute("fill","black");
-	label.textContent = "cross eye";
-	label.setAttribute("id","modeLabel");
-	svg.appendChild(label);
 }
 
 function hideColorPicker()

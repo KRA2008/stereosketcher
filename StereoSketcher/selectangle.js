@@ -1,7 +1,6 @@
 var selectangle;
 
 function changeSelectangle(event) {
-	event.stopPropagation();
 	if(selectangle!=null)
 	{
 		var x=parseInt(selectangle.getAttribute("x"));

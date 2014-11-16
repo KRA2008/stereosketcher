@@ -1,15 +1,17 @@
 function dragDots(event,dots) {
-	event.stopPropagation();
-	var dx=event.clientX-dragger.x;
-	var dy=event.clientY-dragger.y;
+	var dx=event.clientX-prevX;
+	var dy=event.clientY-prevY;
 	var dot;
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot=dots[ii];
 		dragDot(dot,dx,dy);
+		dot.originalX = parseInt(dot.getAttribute("cx"));
+		dot.originalY = parseInt(dot.getAttribute("cy"));
+		dot.originalZoom = zoomLevel;
 	}
-	dragger.x=event.clientX;
-	dragger.y=event.clientY;
+	prevX=event.clientX;
+	prevY=event.clientY;
 }
 
 function dragDot(dot,dx,dy)

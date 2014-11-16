@@ -1,7 +1,11 @@
 function addClassToElement(element,className)
 {
 	var old = element.getAttribute("class");
-	if(old == null || old == "" || !doesElementHaveClass(element,className))
+	if(old == null) {
+		element.setAttribute("class","");
+		old == "";
+	}
+	if(!doesElementHaveClass(element,className))
 	{
 		element.setAttribute("class",old+" "+className);
 	}

@@ -13,10 +13,12 @@ function zoom(event)
 	if(roll>0) 
 	{
 		IPD*=zoomSpeed;
+		zoomLevel++;
 	}
 	else
 	{
 		IPD/=zoomSpeed;
+		zoomLevel--;
 	}
 	for(var ii=0;ii<dots.length;ii++)
 	{
@@ -25,12 +27,12 @@ function zoom(event)
 		oldY = parseInt(dot.getAttribute("cy"));
 		diffX = eventX-oldX;
 		diffY = eventY-oldY;
-		if(roll>0) //in
+		if(roll>0)
 		{
 			shiftX = (1-zoomSpeed)*diffX;
 			shiftY = (1-zoomSpeed)*diffY;
 		}
-		else //out
+		else
 		{
 			shiftX = diffX/zoomSpeed;
 			shiftY = diffY/zoomSpeed;

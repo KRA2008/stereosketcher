@@ -24,6 +24,13 @@ window.onload=function() {
 				changeSelectangle(event);
 			};
 		}
+		if(event.button==2)
+		{
+			var dots = getDots();
+			svg.onmousemove = function(event) {
+				dragDots(event,dots);
+			};
+		}
 	};
 	svg.onmouseup = function(event)
 	{
@@ -68,8 +75,14 @@ window.onload=function() {
 			}
 			svg.onmousemove = null;
 			selectangle = null;
+		} 
+		else if(event.button==2)
+		{
+			svg.onmousemove = null;
 		}
 	};
+	svg.addEventListener("mousewheel",zoom,false);
+	svg.addEventListener("DOMMouseScroll",zoom,false);
 	addModeLabel();
 };
 
@@ -596,7 +609,6 @@ function recursiveSelectDots(dot)
 
 function mousePressedOnShape(event,shape) 
 {
-	var dots = getDots();
 	if(doesElementHaveClass(shape,"dot"))
 	{
 		event.stopPropagation();
@@ -607,6 +619,17 @@ function mousePressedOnShape(event,shape)
 	mousePressed.shape=shape;
 	if(doesElementHaveClass(shape,"dot"))
 	{
+		var dot;
+		var dots = getDots();
+		var selectedDots = [];
+		for(var ii=0;ii<dots.length;ii++)
+		{
+			dot = dots[ii];
+			if(dot.isSelected())
+			{
+				selectedDots.push(dot);
+			}
+		}
 		dragger.x=mousePressed.x;
 		dragger.y=mousePressed.y;
 		dragger.handle=shape;
@@ -614,7 +637,7 @@ function mousePressedOnShape(event,shape)
 		{
 			if(mousePressed.is && mousePressed.shape.isSelected())
 			{
-				dragDots(event,dots);
+				dragDots(event,selectedDots);
 			}
 		};
 	}

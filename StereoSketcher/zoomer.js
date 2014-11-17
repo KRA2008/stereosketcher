@@ -1,5 +1,6 @@
-var zoomLevel = 0;
-var zoomSpeed = 2;
+var zoomLevel = 0.0;
+var zoomSpeed = 2.0;
+var zoomLimit = 15.0;
 
 function zoom(event)
 {
@@ -12,19 +13,21 @@ function zoom(event)
 	var roll = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
 	if(roll>0) 
 	{
-		IPD*=zoomSpeed;
+		if(zoomLevel>=zoomLimit) return;
+		//IPD*=zoomSpeed;
 		zoomLevel++;
 	}
 	else
 	{
-		IPD/=zoomSpeed;
+		if(zoomLevel<=-1*zoomLimit) return;
+		//IPD/=zoomSpeed;
 		zoomLevel--;
 	}
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot = dots[ii];
-		oldX = parseInt(dot.getAttribute("cx"));
-		oldY = parseInt(dot.getAttribute("cy"));
+		oldX = parseFloat(dot.getAttribute("cx"));
+		oldY = parseFloat(dot.getAttribute("cy"));
 		diffX = eventX-oldX;
 		diffY = eventY-oldY;
 		if(roll>0)

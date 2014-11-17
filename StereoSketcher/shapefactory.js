@@ -1,9 +1,9 @@
 var faceSpaceCorrection = "0.5px";
-var faceActionStrokeWidth = 2;
-var labelX = -11;
-var labelY = -4;
-var lineThickness = 2;
-var dotRadius = 5;
+var faceActionStrokeWidth = 2.0;
+var labelX = -11.0;
+var labelY = -4.0;
+var lineThickness = 2.0;
+var dotRadius = 5.0;
 var faceStartColor = "#777777";
 
 var shapeFactory = {
@@ -17,7 +17,7 @@ var shapeFactory = {
 		dot.originalZoom = zoomLevel;
 		dot.setAttribute("r", dotRadius);
 		dot.setAttribute("stroke", "black");
-		dot.setAttribute("stroke-width", 1);
+		dot.setAttribute("stroke-width", 1.0);
 		dot.setAttribute("fill", "yellow");
 		dot.setAttribute("fill-opacity", 0);
 		addClassToElement(dot, "dot");
@@ -32,10 +32,10 @@ var shapeFactory = {
 			}
 		};
 		dot.lines = [];
-		dot.shift = 0;
+		dot.shift = 0.0;
 		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-		label.setAttribute("x", parseInt(dot.getAttribute("cx")) + labelX);
-		label.setAttribute("y", parseInt(dot.getAttribute("cy")) + labelY);
+		label.setAttribute("x", parseFloat(dot.getAttribute("cx")) + labelX);
+		label.setAttribute("y", parseFloat(dot.getAttribute("cy")) + labelY);
 		label.setAttribute("fill", "black");
 		label.setAttribute("class", "");
 		addClassToElement(label, "label");
@@ -241,9 +241,9 @@ var shapeFactory = {
 	{
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.clone = clone;
-		clone.setAttribute("x1", parseInt(line.dot1.getAttribute("cx")) + IPD + line.dot1.shift);
+		clone.setAttribute("x1", parseFloat(line.dot1.getAttribute("cx")) + IPD + line.dot1.shift*shiftSpeed);
 		clone.setAttribute("y1", line.dot1.getAttribute("cy"));
-		clone.setAttribute("x2", parseInt(line.dot2.getAttribute("cx")) + IPD + line.dot2.shift);
+		clone.setAttribute("x2", parseFloat(line.dot2.getAttribute("cx")) + IPD + line.dot2.shift*shiftSpeed);
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke", "black");
 		clone.setAttribute("stroke-width", lineThickness);
@@ -280,7 +280,7 @@ var shapeFactory = {
 		under.setAttribute("fill", faceStartColor);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
-		under.setAttribute("stroke-opacity", 1);
+		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "faceUnder");
 		addClassToElement(face, "face");
 		this.attachCommonHandlers(face);
@@ -338,9 +338,9 @@ var shapeFactory = {
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		face.clone = clone;
 		var coords = "";
-		coords += parseInt(face.dot1.getAttribute("cx")) + IPD + face.dot1.shift + "," + face.dot1.getAttribute("cy") + " ";
-		coords += parseInt(face.dot2.getAttribute("cx")) + IPD + face.dot2.shift + "," + face.dot2.getAttribute("cy") + " ";
-		coords += parseInt(face.dot3.getAttribute("cx")) + IPD + face.dot3.shift + "," + face.dot3.getAttribute("cy") + " ";
+		coords += parseFloat(face.dot1.getAttribute("cx")) + IPD + face.dot1.shift*shiftSpeed + "," + face.dot1.getAttribute("cy") + " ";
+		coords += parseFloat(face.dot2.getAttribute("cx")) + IPD + face.dot2.shift*shiftSpeed + "," + face.dot2.getAttribute("cy") + " ";
+		coords += parseFloat(face.dot3.getAttribute("cx")) + IPD + face.dot3.shift*shiftSpeed + "," + face.dot3.getAttribute("cy") + " ";
 		clone.setAttribute("points", coords);
 		under.setAttribute("points", coords);
 		clone.under = under;
@@ -351,7 +351,7 @@ var shapeFactory = {
 		under.setAttribute("fill", faceStartColor);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
-		under.setAttribute("stroke-opacity", 1);
+		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "cloneUnder");
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);

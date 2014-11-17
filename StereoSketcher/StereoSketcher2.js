@@ -51,10 +51,10 @@ window.onload=function() {
 		{
 			if(selectangle!=null)
 			{
-				var maxx=parseInt(selectangle.getAttribute("width"))+parseInt(selectangle.getAttribute("x"));
-				var minx=parseInt(selectangle.getAttribute("x"));
-				var maxy=parseInt(selectangle.getAttribute("height"))+parseInt(selectangle.getAttribute("y"));
-				var miny=parseInt(selectangle.getAttribute("y"));
+				var maxx=parseFloat(selectangle.getAttribute("width"))+parseFloat(selectangle.getAttribute("x"));
+				var minx=parseFloat(selectangle.getAttribute("x"));
+				var maxy=parseFloat(selectangle.getAttribute("height"))+parseFloat(selectangle.getAttribute("y"));
+				var miny=parseFloat(selectangle.getAttribute("y"));
 				var dots = getDots();
 				if(!event.shiftKey)
 				{
@@ -63,8 +63,8 @@ window.onload=function() {
 				for(var ik=0;ik<dots.length;ik++)
 				{
 					var dot=dots[ik];
-					var dotx=parseInt(dot.getAttribute("cx"));
-					var doty=parseInt(dot.getAttribute("cy"));
+					var dotx=parseFloat(dot.getAttribute("cx"));
+					var doty=parseFloat(dot.getAttribute("cy"));
 					if(dotx<maxx && dotx>minx)
 					{
 						if(doty<maxy && doty>miny)
@@ -132,8 +132,8 @@ function keyDown(e) {
 function addModeLabel()
 {
 	var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-	label.setAttribute("x",10);
-	label.setAttribute("y",40);
+	label.setAttribute("x",10.0);
+	label.setAttribute("y",40.0);
 	label.setAttribute("fill","black");
 	label.textContent = "cross eye";
 	label.setAttribute("id","modeLabel");
@@ -147,13 +147,13 @@ function toggleViewMode()
 		mode=1;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "magic eye";
-		IPD=originalIPD*-1;
+		IPD=originalIPD*-1.0;
 		refreshDots();
 	} else if(mode==1) {
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
-		IPD=0;
+		IPD=0.0;
 		refreshDots();
 	} else if(mode==2) {
 		mode=0;

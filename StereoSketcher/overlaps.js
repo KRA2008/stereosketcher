@@ -126,10 +126,10 @@ function createClipPath(item,clipPath)
 	else if (doesElementHaveClass(item,"line")||doesElementHaveClass(item,"cloneLine"))
 	{
 		clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-		var x1 = parseInt(item.getAttribute("x1"));
-		var y1 = parseInt(item.getAttribute("y1"));
-		var x2 = parseInt(item.getAttribute("x2"));
-		var y2 = parseInt(item.getAttribute("y2"));
+		var x1 = parseFloat(item.getAttribute("x1"));
+		var y1 = parseFloat(item.getAttribute("y1"));
+		var x2 = parseFloat(item.getAttribute("x2"));
+		var y2 = parseFloat(item.getAttribute("y2"));
 		var theta = Math.atan((y2-y1)/(x2-x1));
 		var littleX = (lineThickness/2)*Math.sin(theta);
 		var littleY = (lineThickness/2)*Math.cos(theta);

@@ -6,8 +6,8 @@ function dragDots(event,dots) {
 	{
 		dot=dots[ii];
 		dragDot(dot,dx,dy);
-		dot.originalX = parseInt(dot.getAttribute("cx"));
-		dot.originalY = parseInt(dot.getAttribute("cy"));
+		dot.originalX = parseFloat(dot.getAttribute("cx"));
+		dot.originalY = parseFloat(dot.getAttribute("cy"));
 		dot.originalZoom = zoomLevel;
 	}
 	prevX=event.clientX;
@@ -18,20 +18,20 @@ function dragDot(dot,dx,dy)
 {
 	var line;
 	var face;
-	var x=0;
-	var y=0;
+	var x=0.0;
+	var y=0.0;
 	var lines = [];
 	var faces = [];
-	var facex1 = 0;
-	var facey1 = 0;
-	var facex2 = 0;
-	var facey2 = 0;
-	var facex3 = 0;
-	var facey3 = 0;
+	var facex1 = 0.0;
+	var facey1 = 0.0;
+	var facex2 = 0.0;
+	var facey2 = 0.0;
+	var facex3 = 0.0;
+	var facey3 = 0.0;
 	var faceCoord = "";
 	var cloneCoord = "";
-	x=parseInt(dot.getAttribute("cx"))+dx;
-	y=parseInt(dot.getAttribute("cy"))+dy;
+	x=parseFloat(dot.getAttribute("cx"))+dx;
+	y=parseFloat(dot.getAttribute("cy"))+dy;
 	dot.setAttribute("cx",x);
 	dot.setAttribute("cy",y);
 	lines=dot.lines;
@@ -42,14 +42,14 @@ function dragDot(dot,dx,dy)
 		{
 			line.setAttribute("x1",x);
 			line.setAttribute("y1",y);
-			line.clone.setAttribute("x1",x+IPD+dot.shift);
+			line.clone.setAttribute("x1",x+IPD+dot.shift*shiftSpeed);
 			line.clone.setAttribute("y1",y);
 		}
 		else if(line.dot2 == dot)
 		{
 			line.setAttribute("x2",x);
 			line.setAttribute("y2",y);
-			line.clone.setAttribute("x2",x+IPD+dot.shift);
+			line.clone.setAttribute("x2",x+IPD+dot.shift*shiftSpeed);
 			line.clone.setAttribute("y2",y);
 		}
 	}
@@ -68,7 +68,7 @@ function dragDot(dot,dx,dy)
 			faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 			face.setAttribute("points",faceCoord);
 			face.under.setAttribute("points",faceCoord);
-			cloneCoord = [(x+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+			cloneCoord = [(x+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
@@ -83,7 +83,7 @@ function dragDot(dot,dx,dy)
 			faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 			face.setAttribute("points",faceCoord);
 			face.under.setAttribute("points",faceCoord);
-			cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(x+face.dot2.shift+IPD),",",facey2," ",(parseInt(facex3)+face.dot3.shift+IPD),",",facey3].join('');
+			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(x+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
@@ -98,7 +98,7 @@ function dragDot(dot,dx,dy)
 			faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 			face.setAttribute("points",faceCoord);
 			face.under.setAttribute("points",faceCoord);
-			cloneCoord = [(parseInt(facex1)+IPD+face.dot1.shift),",",facey1," ",(parseInt(facex2)+face.dot2.shift+IPD),",",facey2," ",(x+face.dot3.shift+IPD),",",facey3].join('');
+			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(x+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}

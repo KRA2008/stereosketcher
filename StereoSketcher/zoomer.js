@@ -15,12 +15,14 @@ function zoom(event)
 	{
 		if(zoomLevel>=zoomLimit) return;
 		//IPD*=zoomSpeed;
+		shiftSpeed*=zoomSpeed;
 		zoomLevel++;
 	}
 	else
 	{
 		if(zoomLevel<=-1*zoomLimit) return;
 		//IPD/=zoomSpeed;
+		shiftSpeed/=zoomSpeed;
 		zoomLevel--;
 	}
 	for(var ii=0;ii<dots.length;ii++)

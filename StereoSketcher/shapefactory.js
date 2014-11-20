@@ -1,5 +1,5 @@
 var faceSpaceCorrection = "0.5px";
-var faceActionStrokeWidth = 2.0;
+var faceActionStrokeWidth = 3.0;
 var labelX = -11.0;
 var labelY = -4.0;
 var lineThickness = 2.0;

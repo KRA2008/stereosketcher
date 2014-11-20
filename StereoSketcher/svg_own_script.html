@@ -25,7 +25,7 @@
 		<script type="text/javascript" src="jscolor.js"></script>
 		<script type="text/javascript" src="selector.js"></script>
 	</head>
-	<body oncontextmenu="return false;">
+	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
 		<div style="position: absolute; z-index: 9999;" onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()">
 		<input class="color {hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker" />
 		<input type="button" value="Set" onclick="setColor()"/>

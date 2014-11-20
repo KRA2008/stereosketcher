@@ -1,5 +1,5 @@
 var zoomLevel = 0.0;
-var zoomSpeed = 2.0;
+var zoomSpeed = 1.5;
 var zoomLimit = 15.0;
 
 function zoom(event)
@@ -11,18 +11,20 @@ function zoom(event)
 	var eventX = event.clientX;
 	var eventY = event.clientY;
 	var roll = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+	var up = zoomSpeed;
+	var down = 1-((zoomSpeed-1)/zoomSpeed);
 	if(roll>0) 
 	{
 		if(zoomLevel>=zoomLimit) return;
 		//IPD*=zoomSpeed;
-		shiftSpeed*=zoomSpeed;
+		shiftSpeed*=up;
 		zoomLevel++;
 	}
 	else
 	{
 		if(zoomLevel<=-1*zoomLimit) return;
 		//IPD/=zoomSpeed;
-		shiftSpeed/=zoomSpeed;
+		shiftSpeed*=down;
 		zoomLevel--;
 	}
 	for(var ii=0;ii<dots.length;ii++)
@@ -34,13 +36,13 @@ function zoom(event)
 		diffY = eventY-oldY;
 		if(roll>0)
 		{
-			shiftX = (1-zoomSpeed)*diffX;
-			shiftY = (1-zoomSpeed)*diffY;
+			shiftX = diffX-up*diffX;
+			shiftY = diffY-up*diffY;
 		}
 		else
 		{
-			shiftX = diffX/zoomSpeed;
-			shiftY = diffY/zoomSpeed;
+			shiftX = diffX-diffX*down;
+			shiftY = diffY-diffY*down;
 		}
 		dragDot(dot,shiftX,shiftY);
 	}

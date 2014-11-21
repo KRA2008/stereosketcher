@@ -24,12 +24,17 @@
 		<script type="text/javascript" src="zoomer.js"></script>
 		<script type="text/javascript" src="jscolor.js"></script>
 		<script type="text/javascript" src="selector.js"></script>
+		<script type="text/javascript" src="upload.js"></script>
+		<script type="text/javascript" src="saveSvgAsPng.js"></script>
 	</head>
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
-		<div style="position: absolute; z-index: 9999;" onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()">
-		<input class="color {hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker" />
-		<input type="button" value="Set" onclick="setColor()"/>
-		<input type="button" value="Sample" onclick="sampleColor()"/>
+		<div style="position: absolute; z-index: 9999;" onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()" id="pickerDiv">
+			<input class="color {hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker" visibility="inherit"/>
+			<input type="button" value="Set" onclick="setColor()" visibility="inherit"/>
+			<input type="button" value="Sample" onclick="sampleColor()" visibility="inherit"/>
+		</div>
+		<div style="position: absolute; top:0; right:0; z-index: 9999;" id="senderDiv">
+			<input type="button" onclick="uploadGo()" value="Send to imgur" visibility="inherit"/>
 		</div>
 		<svg id="svg" xmlns="http://www.w3.org/2000/svg">
 			<g id="shapes">

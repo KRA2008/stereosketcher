@@ -1,3 +1,5 @@
+'use strict';
+
 function dragDots(event,dots) {
 	var dx=event.clientX-prevX;
 	var dy=event.clientY-prevY;

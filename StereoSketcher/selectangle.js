@@ -1,3 +1,5 @@
+'use strict';
+
 var selectangle;
 
 function changeSelectangle(event) {

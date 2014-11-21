@@ -1,3 +1,5 @@
+'use strict';
+
 var zoomLevel = 0.0;
 var zoomSpeed = 1.5;
 var zoomLimit = 15.0;
@@ -8,6 +10,7 @@ function zoom(event)
 	var dots = getDots();
 	var diffX, diffY;
 	var shiftX, shiftY;
+	var oldX, oldY;
 	var eventX = event.clientX;
 	var eventY = event.clientY;
 	var roll = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));

@@ -1,3 +1,5 @@
+'use strict';
+
 var shiftSpeed = 0.5;
 var originalIPD=250.0;
 var IPD=originalIPD;
@@ -48,7 +50,10 @@ function applyShift(dot)
 			line.clone.setAttribute("x2",parseFloat(line.dot2.getAttribute("cx"))+IPD+dot.shift*shiftSpeed);
 		}
 	}
-	faces = dot.faces;
+	var faces = dot.faces;
+	var face;
+	var facex1, facey1, facex2, facey2, facex3, facey3;
+	var cloneCoord = "";
 	for(var ik=0;ik<faces.length;ik++)
 	{
 		face = faces[ik];

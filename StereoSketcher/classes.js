@@ -1,3 +1,5 @@
+'use strict';
+
 function addClassToElement(element,className)
 {
 	var old = element.getAttribute("class");

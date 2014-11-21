@@ -1,3 +1,5 @@
+'use strict';
+
 var faceSpaceCorrection = "0.5px";
 var faceActionStrokeWidth = 3.0;
 var labelX = -11.0;

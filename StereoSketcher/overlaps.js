@@ -1,3 +1,5 @@
+'use strict';
+
 function addOverlaps()
 {
 	var item;
@@ -223,6 +225,7 @@ function removeOverlaps()
 
 function removeOverlapsOfItem(item)
 {
+	var overlap;
 	for(var jj=0;jj<item.overlaps.length;jj++)
 	{
 		overlap = item.overlaps[jj];

@@ -1,3 +1,5 @@
+'use strict';
+
 var svg,dotGroup,labelGroup,shapeGroup,defs;
 var dotsVisible=true;
 var mode=0;
@@ -144,18 +146,21 @@ function toggleViewMode()
 {
 	if(mode==0)
 	{
+		showDots();
 		mode=1;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "magic eye";
 		IPD=originalIPD*-1.0;
 		refreshDots();
 	} else if(mode==1) {
+		showDots();
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
 		IPD=0.0;
 		refreshDots();
 	} else if(mode==2) {
+		showDots();
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross eye";
@@ -248,28 +253,52 @@ function redrawAllDots()
 
 function toggleDotsVisible()
 {
-	var dots = getDots();
-	var dot;
 	if(dotsVisible)
 	{
-		for(var ii=0;ii<dots.length;ii++)
-		{
-			dot = dots[ii];
-			dot.setAttribute("visibility","hidden");
-			dot.label.setAttribute("visibility","hidden");
-		}
-		dotsVisible = false;
-		correctOverlaps();
+		hideDots();
 	} else {
-		for(var ii=0;ii<dots.length;ii++)
-		{
-			dot = dots[ii];
-			dot.setAttribute("visibility","visible");
-			dot.label.setAttribute("visibility","visible");
-		}
-		dotsVisible = true;
-		removeOverlaps();
+		showDots();
 	}
+}
+
+function showDots()
+{
+	var label = document.getElementById("modeLabel");
+	label.setAttribute("visibility","visible");
+	var picker = document.getElementById("pickerDiv");
+	picker.setAttribute("visibility","visible");
+	var sender = document.getElementById("senderDiv");
+	sender.setAttribute("visibility","hidden");
+	var dots = getDots();
+	var dot;
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		dot.setAttribute("visibility","visible");
+		dot.label.setAttribute("visibility","visible");
+	}
+	dotsVisible = true;
+	removeOverlaps();
+}
+
+function hideDots()
+{
+	var label = document.getElementById("modeLabel");
+	label.setAttribute("visibility","hidden");
+	var picker = document.getElementById("pickerDiv");
+	picker.setAttribute("visibility","hidden");
+	var sender = document.getElementById("senderDiv");
+	sender.setAttribute("visibility","visible");
+	var dots = getDots();
+	var dot;
+	for(var ii=0;ii<dots.length;ii++)
+	{
+		dot = dots[ii];
+		dot.setAttribute("visibility","hidden");
+		dot.label.setAttribute("visibility","hidden");
+	}
+	dotsVisible = false;
+	correctOverlaps();
 }
 
 function getDots()

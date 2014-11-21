@@ -1,3 +1,5 @@
+'use strict';
+
 function selectAllContiguous(sourceDot,event)
 {
 	var dots = getDots();

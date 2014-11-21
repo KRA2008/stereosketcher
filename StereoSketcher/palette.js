@@ -1,3 +1,5 @@
+'use strict';
+
 function sampleColor()
 {
 	var selectedItem = null;

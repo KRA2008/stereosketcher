@@ -14,6 +14,8 @@ window.onload=function() {
 	defs=document.getElementById("defs");
 	addModeLabel();
 	
+	svg.setAttribute("style","background: #FFFFFF");
+	
 	svg.onmousedown = function(event)
 	{
 		pressX = event.clientX;
@@ -93,42 +95,42 @@ function wasAClick(event)
 document.addEventListener("keydown", keyDown, false);
 
 function keyDown(e) {
-		var keyCode = e.keyCode;
-		switch (keyCode) {
-			case 46: //delete
-				deletePressed();
-				break;
-			case 65: //a
-				createLinePressed();
-				break;
-			case 32: //spacebar
-				toggleDotsVisible();
-				return false;
-			case 83: //s
-				shiftIn();
-				break;
-			case 68: //d
-				shiftOut();
-				break;
-			case 70: //f
-				createFacePressed();
-				break;
-			case 86: //v
-				moveSelectedToBack();
-				break;
-			case 84: //t
-				moveSelectedToFront();
-				break;
-			case 87: //w
-				changeIPD("left");
-				break;
-			case 69: //e
-				changeIPD("right");
-				break;
-			case 81: //q
-				toggleViewMode();
-				break;
-		}
+	var keyCode = e.keyCode;
+	switch (keyCode) {
+		case 46: //delete
+			deletePressed();
+			break;
+		case 65: //a
+			createLinePressed();
+			break;
+		case 32: //spacebar
+			toggleDotsVisible();
+			return false;
+		case 83: //s
+			shiftIn();
+			break;
+		case 68: //d
+			shiftOut();
+			break;
+		case 70: //f
+			createFacePressed();
+			break;
+		case 86: //v
+			moveSelectedToBack();
+			break;
+		case 84: //t
+			moveSelectedToFront();
+			break;
+		case 87: //w
+			changeIPD("left");
+			break;
+		case 69: //e
+			changeIPD("right");
+			break;
+		case 81: //q
+			toggleViewMode();
+			break;
+	}
 }
 
 function addModeLabel()
@@ -137,7 +139,7 @@ function addModeLabel()
 	label.setAttribute("x",10.0);
 	label.setAttribute("y",40.0);
 	label.setAttribute("fill","black");
-	label.textContent = "cross eye";
+	label.textContent = "cross-eyed";
 	label.setAttribute("id","modeLabel");
 	svg.appendChild(label);
 }
@@ -146,6 +148,8 @@ function toggleViewMode()
 {
 	if(mode==0)
 	{
+		document.getElementById("setBackground").disabled = false;
+		document.getElementById("sampleBackground").disabled = false;
 		showDots();
 		mode=1;
 		var label=document.getElementById("modeLabel");
@@ -153,6 +157,9 @@ function toggleViewMode()
 		IPD=originalIPD*-1.0;
 		refreshDots();
 	} else if(mode==1) {
+		svg.setAttribute("style","background: #ffffff");
+		document.getElementById("setBackground").disabled = true;
+		document.getElementById("sampleBackground").disabled = true;
 		showDots();
 		mode=2;
 		var label=document.getElementById("modeLabel");
@@ -160,10 +167,12 @@ function toggleViewMode()
 		IPD=0.0;
 		refreshDots();
 	} else if(mode==2) {
+		document.getElementById("setBackground").disabled = false;
+		document.getElementById("sampleBackground").disabled = false;
 		showDots();
 		mode=0;
 		var label=document.getElementById("modeLabel");
-		label.textContent = "cross eye";
+		label.textContent = "cross-eyed";
 		IPD=originalIPD;
 		refreshDots();
 	}
@@ -265,10 +274,6 @@ function showDots()
 {
 	var label = document.getElementById("modeLabel");
 	label.setAttribute("visibility","visible");
-	var picker = document.getElementById("pickerDiv");
-	picker.setAttribute("visibility","visible");
-	var sender = document.getElementById("senderDiv");
-	sender.setAttribute("visibility","hidden");
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++)
@@ -285,10 +290,6 @@ function hideDots()
 {
 	var label = document.getElementById("modeLabel");
 	label.setAttribute("visibility","hidden");
-	var picker = document.getElementById("pickerDiv");
-	picker.setAttribute("visibility","hidden");
-	var sender = document.getElementById("senderDiv");
-	sender.setAttribute("visibility","visible");
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++)

@@ -106,7 +106,8 @@
         canvas.height = image.height;
         var context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
-        imageToSend = canvas.toDataURL('image/png');
+        imageToSend = canvas.toDataURL('image/png').slice(22);
+        callbacksAreFuckingStupid();
       }
     });
   }

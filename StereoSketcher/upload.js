@@ -1,29 +1,49 @@
 'use strict';
 var imageToSend;
 
-function uploadGo() 
+function startUploadingShit()
 {
 	hideDots();
 	saveSvgAsPng(document.getElementById("svg"), 1);
 	showDots();
+}
+
+function callbacksAreFuckingStupid() 
+{
+	setSuccessDisplay(false,"Uploading image...");
+	var params="image="+encodeURIComponent(imageToSend)+"&album=HTD2v8UUS3zApIz";
 	
-	var formData = new FormData();
-	formData.append("image",imageToSend);
-	formData.append("album","HTD2v8UUS3zApIz");
-	
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			alert("success: "+xmlhttp.responseText);
-		} 
-		else 
-		{
-			alert("fail: "+xmlhttp.responseText);
+	var ajax = new XMLHttpRequest();
+	ajax.open("POST","https://api.imgur.com/3/image",true);
+	ajax.setRequestHeader("Authorization", "Client-ID 1070461d2c44f9f");
+	ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	ajax.onload = function(e) {
+		if(ajax.readyState === 4) {
+			if(ajax.status === 200) {
+				var response = JSON.parse(ajax.responseText);
+				setSuccessDisplay(true,"Success!",response.data.link);
+			}
+			else
+			{
+				setSuccessDisplay(false,"Upload failed.");
+			}
 		}
 	}
-	xmlhttp.open("POST","https://api.imgur.com/3/image",true);
-	xmlhttp.setRequestHeader("Authorization","Client-ID 1070461d2c44f9f");
-	xmlhttp.send();
+	ajax.onerror = function (e) {
+		setSuccessDisplay(false,"Upload failed.");
+	}
+	ajax.send(params);
+}
+
+function setSuccessDisplay(success,text,link)
+{
+	var resultDisplay = document.getElementById("uploadResult");
+	if(success)
+	{
+		resultDisplay.innerHTML = "<a target='none' href='"+link+"'>"+text+"</a>"
+	}
+	else
+	{
+		resultDisplay.innerHTML = text;
+	}
 }

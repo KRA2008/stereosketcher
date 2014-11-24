@@ -125,22 +125,18 @@ function recursiveSelectDots(dot)
 
 function deselectAllDots()
 {
+	var dot;
 	var dots = getDots();
 	for(var ii=0;ii<dots.length;ii++)
 	{
-		dots[ii].deselect();
+		dot=dots[ii];
+		dot.deselect();
 	}
 }
 
 function deselectAll()
 {
-	var dot;
-	var dots = getDots();
-	for(var il=0;il<dots.length;il++)
-	{
-		dot=dots[il];
-		dot.deselect();
-	}
+	deselectAllDots();
 	var line;
 	var lines=getLines();
 	for(var nn=0;nn<lines.length;nn++)

@@ -56,3 +56,14 @@ function setColor()
 		line.deselect();
 	}
 }
+
+function setBackground()
+{
+	var color = document.getElementById('colorPicker').value;
+	svg.setAttribute("style","background: "+color);
+}
+
+function sampleBackground()
+{
+	document.getElementById('colorPicker').color.fromString(svg.getAttribute("style").substr(style.indexOf("#")));
+}

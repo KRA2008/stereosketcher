@@ -2,10 +2,10 @@
 
 var faceSpaceCorrection = "0.5px";
 var faceActionStrokeWidth = 3.0;
-var labelX = -11.0;
-var labelY = -4.0;
+var labelX = -15.0;
+var labelY = -7.0;
 var lineThickness = 2.0;
-var dotRadius = 5.0;
+var dotRadius = 7.0;
 var faceStartColor = "#777777";
 
 var shapeFactory = {
@@ -14,9 +14,6 @@ var shapeFactory = {
 		var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 		dot.setAttribute("cx", event.clientX);
 		dot.setAttribute("cy", event.clientY);
-		dot.originalX = event.clientX;
-		dot.originalY = event.clientY;
-		dot.originalZoom = zoomLevel;
 		dot.setAttribute("r", dotRadius);
 		dot.setAttribute("stroke", "black");
 		dot.setAttribute("stroke-width", 1.0);
@@ -203,9 +200,6 @@ var shapeFactory = {
 		this.createCloneLine(line);
 		shapeGroup.appendChild(line);
 		line.overlaps = [];
-		if (mode == 2) {
-			setShapeFilter(line);
-		}
 		
 		line.select = function()
 		{
@@ -252,10 +246,6 @@ var shapeFactory = {
 		addClassToElement(clone, "cloneLine");
 		clone.setAttribute("stroke-linecap", "round");
 		shapeGroup.appendChild(clone);
-		if (mode == 2) 
-		{
-			setCloneFilter(clone);
-		}
 	},
 	createFace : function(dot1, dot2, dot3) 
 	{
@@ -295,11 +285,6 @@ var shapeFactory = {
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(face);
 		face.overlaps = [];
-		if (mode == 2) 
-		{
-			setShapeFilter(face);
-			setShapeFilter(under);
-		}
 		face.select = function()
 		{
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
@@ -357,10 +342,5 @@ var shapeFactory = {
 		under.setAttribute("class", "cloneUnder");
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);
-		if (mode == 2) 
-		{
-			setCloneFilter(clone);
-			setCloneFilter(under);
-		}
 	}
 }

@@ -19,16 +19,20 @@ function zoom(event)
 	if(roll>0) 
 	{
 		if(zoomLevel>=zoomLimit) return;
-		//IPD*=zoomSpeed;
+		IPD*=zoomSpeed;
 		shiftSpeed*=up;
+		lineThickness*=up;
 		zoomLevel++;
+		showDots();
 	}
 	else
 	{
 		if(zoomLevel<=-1*zoomLimit) return;
-		//IPD/=zoomSpeed;
+		IPD/=zoomSpeed;
 		shiftSpeed*=down;
+		lineThickness*=down;
 		zoomLevel--;
+		showDots();
 	}
 	for(var ii=0;ii<dots.length;ii++)
 	{
@@ -47,6 +51,7 @@ function zoom(event)
 			shiftX = diffX-diffX*down;
 			shiftY = diffY-diffY*down;
 		}
-		dragDot(dot,shiftX,shiftY);
+		moveDot(dot,shiftX,shiftY);
 	}
+	refresh();
 }

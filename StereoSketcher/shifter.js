@@ -14,9 +14,10 @@ function shiftIn()
 		if(dot.isSelected())
 		{
 			dot.shift++;
-			applyShift(dot);
+			dot.label.textContent = dot.shift;
 		}
 	}
+	refresh();
 }
 
 function shiftOut()
@@ -29,72 +30,10 @@ function shiftOut()
 		if(dot.isSelected())
 		{
 			dot.shift--;
-			applyShift(dot);
+			dot.label.textContent = dot.shift;
 		}
 	}
-}
-
-function applyShift(dot)
-{
-	var lines = dot.lines;
-	var line;
-	for(var ii=0;ii<lines.length;ii++)
-	{
-		line = lines[ii];
-		if(line.dot1 == dot)
-		{
-			line.clone.setAttribute("x1",parseFloat(line.dot1.getAttribute("cx"))+IPD+dot.shift*shiftSpeed);
-		}
-		else if (line.dot2 == dot) 
-		{
-			line.clone.setAttribute("x2",parseFloat(line.dot2.getAttribute("cx"))+IPD+dot.shift*shiftSpeed);
-		}
-	}
-	var faces = dot.faces;
-	var face;
-	var facex1, facey1, facex2, facey2, facex3, facey3;
-	var cloneCoord = "";
-	for(var ik=0;ik<faces.length;ik++)
-	{
-		face = faces[ik];
-		if(face.dot1 == dot)
-		{
-			facex1 = dot.getAttribute("cx");
-			facey1 = dot.getAttribute("cy");
-			facex2 = face.dot2.getAttribute("cx");
-			facey2 = face.dot2.getAttribute("cy");
-			facex3 = face.dot3.getAttribute("cx");
-			facey3 = face.dot3.getAttribute("cy");
-			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
-			face.clone.setAttribute("points",cloneCoord);
-			face.clone.under.setAttribute("points",cloneCoord);
-		}
-		if(face.dot2 == dot)
-		{
-			facex1 = face.dot1.getAttribute("cx");
-			facey1 = face.dot1.getAttribute("cy");
-			facex2 = dot.getAttribute("cx");
-			facey2 = dot.getAttribute("cy");
-			facex3 = face.dot3.getAttribute("cx");
-			facey3 = face.dot3.getAttribute("cy");
-			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
-			face.clone.setAttribute("points",cloneCoord);
-			face.clone.under.setAttribute("points",cloneCoord);
-		}
-		if(face.dot3 == dot)
-		{
-			facex1 = face.dot1.getAttribute("cx");
-			facey1 = face.dot1.getAttribute("cy");
-			facex2 = face.dot2.getAttribute("cx");
-			facey2 = face.dot2.getAttribute("cy");
-			facex3 = dot.getAttribute("cx");
-			facey3 = dot.getAttribute("cy");
-			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
-			face.clone.setAttribute("points",cloneCoord);
-			face.clone.under.setAttribute("points",cloneCoord);
-		}
-	}
-	dot.label.textContent = dot.shift;
+	refresh();
 }
 
 function moveSelectedToBack()

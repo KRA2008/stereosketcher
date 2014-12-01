@@ -65,5 +65,24 @@ function setBackground()
 
 function sampleBackground()
 {
-	document.getElementById('colorPicker').color.fromString(svg.getAttribute("style").substr(style.indexOf("#")));
+	document.getElementById('colorPicker').color.fromString(getBackgroundColor());
+}
+
+function getBackgroundColor()
+{
+	var style=svg.getAttribute("style");
+	return style.substr(style.indexOf("#"));
+}
+
+function hideColorPicker()
+{
+	var picker = document.getElementById('colorPicker');
+	picker.color.hidePicker();
+	picker.blur();
+}
+
+function showColorPicker()
+{
+	var picker = document.getElementById('colorPicker');
+	picker.color.showPicker();
 }

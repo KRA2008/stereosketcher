@@ -1,0 +1,19 @@
+black on white:
+overlap: 000000
+red: ff0000
+blue: 00ffff
+
+white on white:
+overlap: ffffff
+red: ffffff
+blue: ffffff
+
+
+black on 666666
+red: 880000
+blue: 006666
+
+
+black on 4F6630
+red: 770000
+blue: 006630

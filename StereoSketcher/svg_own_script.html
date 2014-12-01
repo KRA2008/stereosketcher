@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="selector.js"></script>
 		<script type="text/javascript" src="upload.js"></script>
 		<script type="text/javascript" src="saveSvgAsPng.js"></script>
+		<script type="text/javascript" src="refresh.js"></script>
 	</head>
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
 		<div style="position: absolute; z-index: 9999;" onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()" id="pickerDiv">
@@ -36,10 +37,14 @@
 			<input id="sampleBackground" type="button" value="Sample Background" onclick="sampleBackground()" />
 		</div>
 		<div style="position: absolute; top:0; right:0; z-index: 9999;" id="senderDiv">
-			<input type="button" onclick="startUploadingShit()" value="Upload to imgur"/><br/>
+			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>
 			<span id="uploadResult"></span>
 		</div>
-		<svg style="background: #00ff00" id="svg" xmlns="http://www.w3.org/2000/svg">
+		<div style="position: absolute; bottom:0;Left:0; z-index: 9999;">
+			<a target='none' href='help.html'>Help</a>
+		</div>
+		
+		<svg style="background: #ffffff" id="svg" xmlns="http://www.w3.org/2000/svg">
 			<g id="shapes">
 			</g>
 			<g id="labels">
@@ -47,20 +52,6 @@
 			<g id="dots">
 			</g>
 			<defs id="defs">
-			    <filter id="redFilter">
-			        <feColorMatrix in="SourceGraphic" type="matrix"
-			      	values="1 0 0 0 255
-			              	0 1 0 0 0
-			              	0 0 1 0 0
-			              	0 0 0 1 0" />
-			    </filter>
-			    <filter id="cyanFilter">
-			        <feColorMatrix in="SourceGraphic" type="matrix"
-			      	values="1 0 0 0 0
-			              	0 1 0 0 255
-			              	0 0 1 0 255
-			              	0 0 0 1 0" />
-			    </filter>
 			</defs>
 		</svg>
 	</body>

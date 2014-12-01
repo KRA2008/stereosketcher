@@ -14,8 +14,6 @@ window.onload=function() {
 	defs=document.getElementById("defs");
 	addModeLabel();
 	
-	svg.setAttribute("style","background: #FFFFFF");
-	
 	svg.onmousedown = function(event)
 	{
 		pressX = event.clientX;
@@ -148,91 +146,33 @@ function toggleViewMode()
 {
 	if(mode==0)
 	{
-		document.getElementById("setBackground").disabled = false;
-		document.getElementById("sampleBackground").disabled = false;
+		//document.getElementById("setBackground").disabled = false;
+		//document.getElementById("sampleBackground").disabled = false;
 		showDots();
 		mode=1;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "magic eye";
 		IPD=originalIPD*-1.0;
-		refreshDots();
+		refresh();
 	} else if(mode==1) {
-		svg.setAttribute("style","background: #ffffff");
-		document.getElementById("setBackground").disabled = true;
-		document.getElementById("sampleBackground").disabled = true;
+		//svg.setAttribute("style","background: #ffffff");
+		//document.getElementById("setBackground").disabled = true;
+		//document.getElementById("sampleBackground").disabled = true;
 		showDots();
 		mode=2;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "red/cyan";
 		IPD=0.0;
-		refreshDots();
+		refresh();
 	} else if(mode==2) {
-		document.getElementById("setBackground").disabled = false;
-		document.getElementById("sampleBackground").disabled = false;
+		//document.getElementById("setBackground").disabled = false;
+		//document.getElementById("sampleBackground").disabled = false;
 		showDots();
 		mode=0;
 		var label=document.getElementById("modeLabel");
 		label.textContent = "cross-eyed";
 		IPD=originalIPD;
-		refreshDots();
-	}
-}
-
-function refreshDots()
-{
-	var dots = getDots();
-	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
-		dot = dots[ii];
-		applyShift(dot);
-	}
-}
-
-
-function switchFilters(on)
-{
-	if(on)
-	{
-		var face;
-		var faces = getFaces();
-		for(var ii=0;ii<faces.length;ii++)
-		{
-			face=faces[ii];
-			setShapeFilter(face);
-			setShapeFilter(face.under);
-			setCloneFilter(face.clone);
-			setCloneFilter(face.clone.under);
-		}
-		var line;
-		var lines = getLines();
-		for(var ii=0;ii<lines.length;ii++)
-		{
-			line = lines[ii];
-			setShapeFilter(line);
-			setCloneFilter(line.clone);
-		}
-	} 
-	else 
-	{
-		var face;
-		var faces = getFaces();
-		for(var ii=0;ii<faces.length;ii++)
-		{
-			face=faces[ii];
-			dropFilters(face);
-			dropFilters(face.under);
-			dropFilters(face.clone);
-			dropFilters(face.clone.under);
-		}
-		var line;
-		var lines = getLines();
-		for(var ii=0;ii<lines.length;ii++)
-		{
-			line = lines[ii];
-			dropFilters(line);
-			dropFilters(line.clone);
-		}
+		refresh();
 	}
 }
 
@@ -246,18 +186,7 @@ function changeIPD(direction)
 	{
 		IPD--;
 	}
-	redrawAllDots();
-}
-
-function redrawAllDots()
-{
-	var dots = getDots();
-	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
-		dot = dots[ii];
-		applyShift(dot);
-	}
+	refresh();
 }
 
 function toggleDotsVisible()
@@ -495,17 +424,4 @@ function deletePressed()
 function preventDefault(event)
 {
 	event.preventDefault ? event.preventDefault() : event.returnValue=false;
-}
-
-function hideColorPicker()
-{
-	var picker = document.getElementById('colorPicker');
-	picker.color.hidePicker();
-	picker.blur();
-}
-
-function showColorPicker()
-{
-	var picker = document.getElementById('colorPicker');
-	picker.color.showPicker();
 }

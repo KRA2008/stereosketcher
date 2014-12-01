@@ -24,25 +24,6 @@ function addOverlaps()
 		item = linesAndFaces[ii];
 		outerBBox = item.getBBox();
 		item.overlaps = [];
-		item.deselect();
-		item.lowlight();
-		
-		if(doesElementHaveClass(item,"line"))
-		{
-			item.setAttribute("stroke",getAnaglyphedColor(item.color,backgroundColor));
-			item.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,item.color));
-		}
-		else if(doesElementHaveClass(item,"face"))
-		{
-			item.setAttribute("fill",getAnaglyphedColor(item.color,backgroundColor));
-			item.setAttribute("stroke",getAnaglyphedColor(item.color,backgroundColor));
-			item.under.setAttribute("fill",getAnaglyphedColor(item.color,backgroundColor));
-			item.under.setAttribute("stroke",getAnaglyphedColor(item.color,backgroundColor));
-			item.clone.setAttribute("fill",getAnaglyphedColor(backgroundColor,item.color));
-			item.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,item.color));
-			item.clone.under.setAttribute("fill",getAnaglyphedColor(backgroundColor,item.color));
-			item.clone.under.setAttribute("stroke",getAnaglyphedColor(backgroundColor,item.color));
-		}
 		
 		for(var jj=0;jj<linesAndFaces.length;jj++)
 		{
@@ -52,7 +33,7 @@ function addOverlaps()
 			
 			if (!doBoundingBoxesOverlap(outerBBox,innerBBox)) continue;
 			
-			resultColor = getAnaglyphedColor(item.color,tempItem.color);
+			resultColor = getResultColor(item,tempItem);
 			overlap = {};
 			clone = tempItem.clone;
 			
@@ -133,6 +114,7 @@ function addOverlaps()
 			item.overlaps.push(overlap);
 		}
 	}
+	switchFilters(true);
 }
 
 function createClipPath(item,clipPath)
@@ -203,9 +185,9 @@ function forwardAllMouseEvents(element,recipient)
 	}
 }
 
-function getAnaglyphedColor(cyanInfo,redInfo)
+function getResultColor(base,clone)
 {
-	return "#"+("000000"+(getCyanComponent(cyanInfo)|getRedComponent(redInfo)).toString(16)).slice(-6);
+	return "#"+("000000"+(getCyanComponent(base.color)|getRedComponent(clone.color)).toString(16)).slice(-6);
 }
 
 function getCyanComponent(colorAttr)
@@ -231,29 +213,14 @@ function correctOverlaps()
 
 function removeOverlaps()
 {
+	switchFilters(false);
 	var item;
 	var linesAndFaces = getLinesAndFaces();
 	var overlap;
 	for(var ii = 0; ii < linesAndFaces.length; ii++)
 	{
 		item = linesAndFaces[ii];
-		removeOverlapsOfItem(item);		
-		if(doesElementHaveClass(item,"line"))
-		{
-			item.setAttribute("stroke",item.color);
-			item.clone.setAttribute("stroke",item.color);
-		}
-		else if(doesElementHaveClass(item,"face"))
-		{
-			item.setAttribute("fill",item.color);
-			item.setAttribute("stroke",item.color);
-			item.under.setAttribute("fill",item.color);
-			item.under.setAttribute("stroke",item.color);
-			item.clone.setAttribute("fill",item.color);
-			item.clone.setAttribute("stroke",item.color);
-			item.clone.under.setAttribute("fill",item.color);
-			item.clone.under.setAttribute("stroke",item.color);
-		}
+		removeOverlapsOfItem(item);
 	}
 }
 
@@ -277,4 +244,65 @@ function removeOverlapsOfItem(item)
 		}
 	}
 	item.overlaps = [];
+}
+
+function setCloneFilter(element)
+{
+	element.setAttribute("style","filter: url(#cyanFilter)");
+}
+
+function setShapeFilter(element)
+{
+	element.setAttribute("style","filter: url(#redFilter)");
+}
+
+function dropFilters(element)
+{
+	element.setAttribute("style","");
+}
+
+function switchFilters(on)
+{
+	if(on)
+	{
+		var face;
+		var faces = getFaces();
+		for(var ii=0;ii<faces.length;ii++)
+		{
+			face=faces[ii];
+			setShapeFilter(face);
+			setShapeFilter(face.under);
+			setCloneFilter(face.clone);
+			setCloneFilter(face.clone.under);
+		}
+		var line;
+		var lines = getLines();
+		for(var ii=0;ii<lines.length;ii++)
+		{
+			line = lines[ii];
+			setShapeFilter(line);
+			setCloneFilter(line.clone);
+		}
+	} 
+	else 
+	{
+		var face;
+		var faces = getFaces();
+		for(var ii=0;ii<faces.length;ii++)
+		{
+			face=faces[ii];
+			dropFilters(face);
+			dropFilters(face.under);
+			dropFilters(face.clone);
+			dropFilters(face.clone.under);
+		}
+		var line;
+		var lines = getLines();
+		for(var ii=0;ii<lines.length;ii++)
+		{
+			line = lines[ii];
+			dropFilters(line);
+			dropFilters(line.clone);
+		}
+	}
 }

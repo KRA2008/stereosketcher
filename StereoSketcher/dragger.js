@@ -7,16 +7,13 @@ function dragDots(event,dots) {
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot=dots[ii];
-		dragDot(dot,dx,dy);
-		dot.originalX = parseFloat(dot.getAttribute("cx"));
-		dot.originalY = parseFloat(dot.getAttribute("cy"));
-		dot.originalZoom = zoomLevel;
+		moveDot(dot,dx,dy);
 	}
 	prevX=event.clientX;
 	prevY=event.clientY;
 }
 
-function dragDot(dot,dx,dy)
+function moveDot(dot,dx,dy)
 {
 	var line;
 	var face;
@@ -105,6 +102,6 @@ function dragDot(dot,dx,dy)
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
 	}
-	dot.label.setAttribute("x",x+labelX);
-	dot.label.setAttribute("y",y+labelY);
+	dot.label.setAttribute("x",parseFloat(dot.getAttribute("cx"))+labelX);
+	dot.label.setAttribute("y",parseFloat(dot.getAttribute("cy"))+labelY);
 }

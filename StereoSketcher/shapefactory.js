@@ -5,6 +5,8 @@ var faceActionStrokeWidth = 3.0;
 var labelX = -15.0;
 var labelY = -7.0;
 var lineThickness = 2.0;
+var thickenRate = 1.2;
+var thinRate = 1-((thickenRate-1)/thickenRate);
 var dotRadius = 7.0;
 var faceStartColor = "#777777";
 
@@ -19,7 +21,7 @@ var shapeFactory = {
 		dot.setAttribute("stroke-width", 1.0);
 		dot.setAttribute("fill", "yellow");
 		dot.setAttribute("fill-opacity", 0);
-		addClassToElement(dot, "dot");
+		dot.setAttribute("class","dot");
 		addClassToElement(dot, "highlit");
 		this.attachCommonHandlers(dot);
 		dot.ondblclick = function(event) 
@@ -36,8 +38,7 @@ var shapeFactory = {
 		label.setAttribute("x", parseFloat(dot.getAttribute("cx")) + labelX);
 		label.setAttribute("y", parseFloat(dot.getAttribute("cy")) + labelY);
 		label.setAttribute("fill", "black");
-		label.setAttribute("class", "");
-		addClassToElement(label, "label");
+		label.setAttribute("class", "label");
 		label.textContent = "0";
 		dot.label = label;
 		dot.faces = [];
@@ -127,11 +128,6 @@ var shapeFactory = {
 						event.stopPropagation();
 						dragDots(event,selectedDots);
 					}
-					this.onmouseout = function(event)
-					{
-						event.stopPropagation();
-						dragDots(event,selectedDots);
-					}
 				}
 			}
 		};
@@ -183,7 +179,7 @@ var shapeFactory = {
 		line.color = "black";
 		line.setAttribute("stroke", "black");
 		line.setAttribute("stroke-width", lineThickness);
-		addClassToElement(line, "line");
+		line.setAttribute("class","line");
 		line.dot1 = dot1;
 		line.dot2 = dot2;
 		dot1.lines.push(line);
@@ -227,10 +223,22 @@ var shapeFactory = {
 			{
 				this.setAttribute("stroke", "yellow");
 			} 
-			else 
+			else
 			{
 				this.setAttribute("stroke", this.color);
 			}
+		}
+		line.thicken = function()
+		{
+			var thickness = parseFloat(this.getAttribute("stroke-width"));
+			this.setAttribute("stroke-width",thickness*thickenRate);
+			this.clone.setAttribute("stroke-width",thickness*thickenRate);
+		}
+		line.thin = function()
+		{
+			var thickness = parseFloat(this.getAttribute("stroke-width"));
+			this.setAttribute("stroke-width",thickness*thinRate);
+			this.clone.setAttribute("stroke-width",thickness*thinRate);
 		}
 	},
 	createCloneLine : function(line) 
@@ -243,7 +251,7 @@ var shapeFactory = {
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke", "black");
 		clone.setAttribute("stroke-width", lineThickness);
-		addClassToElement(clone, "cloneLine");
+		clone.setAttribute("class","cloneLine");
 		clone.setAttribute("stroke-linecap", "round");
 		shapeGroup.appendChild(clone);
 	},
@@ -268,13 +276,13 @@ var shapeFactory = {
 		under.setAttribute("points", coords);
 		face.under = under;
 		face.setAttribute("fill", faceStartColor);
+		face.setAttribute("class", "face");
 		face.color = faceStartColor;
 		under.setAttribute("fill", faceStartColor);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
 		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "faceUnder");
-		addClassToElement(face, "face");
 		this.attachCommonHandlers(face);
 		face.ondblclick = function(event) 
 		{
@@ -331,8 +339,7 @@ var shapeFactory = {
 		clone.setAttribute("points", coords);
 		under.setAttribute("points", coords);
 		clone.under = under;
-		clone.setAttribute("class", "");
-		addClassToElement(clone, "cloneFace");
+		clone.setAttribute("class", "cloneFace");
 		clone.setAttribute("stroke-width", 0);
 		clone.setAttribute("fill", faceStartColor);
 		under.setAttribute("fill", faceStartColor);

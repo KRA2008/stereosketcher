@@ -31,6 +31,15 @@ function selectAllContiguous(sourceDot,event)
 	}
 }
 
+function lowlightAll()
+{
+	var highlit = shapeGroup.getElementsByClassName("highlit");
+	for (var ii=0;ii<highlit.length;ii++)
+	{
+		highlit[ii].lowlight();
+	}
+}
+
 function selectDotsOfLine(line,event)
 {
 	if(!event.shiftKey) {

@@ -16,6 +16,7 @@ window.onload=function() {
 	
 	svg.onmousedown = function(event)
 	{
+		showDots();
 		pressX = event.clientX;
 		pressY = event.clientY;
 		prevX = pressX;
@@ -125,10 +126,52 @@ function keyDown(e) {
 		case 69: //e
 			changeIPD("right");
 			break;
-		case 81: //q
-			toggleViewMode();
+		case 88: //x
+			thickenLines();
+			break;
+		case 67: //c
+			thinLines();
+			break;
+		case 49: //1
+			crossEyeMode();
+			break;
+		case 50: //2
+			magicEyeMode();
+			break;
+		case 51: //3
+			redCyanMode();
 			break;
 	}
+}
+
+function thickenLines()
+{
+	var lines = getLines();
+	var line;
+	for(var ii=0;ii<lines.length;ii++)
+	{
+		line = lines[ii];
+		if(line.isSelected())
+		{
+			line.thicken();
+		}
+	}
+	deselectAll();
+}
+
+function thinLines()
+{
+	var lines = getLines();
+	var line;
+	for(var ii=0;ii<lines.length;ii++)
+	{
+		line = lines[ii];
+		if(line.isSelected())
+		{
+			line.thin();
+		}
+	}
+	deselectAll();
 }
 
 function addModeLabel()
@@ -142,38 +185,34 @@ function addModeLabel()
 	svg.appendChild(label);
 }
 
-function toggleViewMode()
+function magicEyeMode()
 {
-	if(mode==0)
-	{
-		//document.getElementById("setBackground").disabled = false;
-		//document.getElementById("sampleBackground").disabled = false;
-		showDots();
-		mode=1;
-		var label=document.getElementById("modeLabel");
-		label.textContent = "magic eye";
-		IPD=originalIPD*-1.0;
-		refresh();
-	} else if(mode==1) {
-		//svg.setAttribute("style","background: #ffffff");
-		//document.getElementById("setBackground").disabled = true;
-		//document.getElementById("sampleBackground").disabled = true;
-		showDots();
-		mode=2;
-		var label=document.getElementById("modeLabel");
-		label.textContent = "red/cyan";
-		IPD=0.0;
-		refresh();
-	} else if(mode==2) {
-		//document.getElementById("setBackground").disabled = false;
-		//document.getElementById("sampleBackground").disabled = false;
-		showDots();
-		mode=0;
-		var label=document.getElementById("modeLabel");
-		label.textContent = "cross-eyed";
-		IPD=originalIPD;
-		refresh();
-	}
+	showDots();
+	mode=1;
+	var label=document.getElementById("modeLabel");
+	label.textContent = "magic eye";
+	IPD=originalIPD*-1.0;
+	refresh();
+}
+
+function redCyanMode()
+{
+	showDots();
+	mode=2;
+	var label=document.getElementById("modeLabel");
+	label.textContent = "red/cyan";
+	IPD=0.0;
+	refresh();
+}
+
+function crossEyeMode()
+{
+	showDots();
+	mode=0;
+	var label=document.getElementById("modeLabel");
+	label.textContent = "cross-eyed";
+	IPD=originalIPD;
+	refresh();
 }
 
 function changeIPD(direction)

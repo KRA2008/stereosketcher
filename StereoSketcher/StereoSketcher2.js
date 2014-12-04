@@ -99,7 +99,7 @@ function keyDown(e) {
 		case 46: //delete
 			deletePressed();
 			break;
-		case 65: //a
+		case 68: //d
 			createLinePressed();
 			break;
 		case 32: //spacebar
@@ -108,28 +108,34 @@ function keyDown(e) {
 		case 83: //s
 			shiftIn();
 			break;
-		case 68: //d
+		case 65: //a
 			shiftOut();
 			break;
 		case 70: //f
 			createFacePressed();
 			break;
-		case 86: //v
+		case 81: //q
 			moveSelectedToBack();
 			break;
-		case 84: //t
+		case 82: //r
 			moveSelectedToFront();
 			break;
+		case 69: //e
+			moveSelectedThroughLayers(true);
+			break;
 		case 87: //w
+			moveSelectedThroughLayers(false);
+			break;
+		case 67: //c
 			changeIPD("left");
 			break;
-		case 69: //e
+		case 86: //v
 			changeIPD("right");
 			break;
 		case 88: //x
 			thickenLines();
 			break;
-		case 67: //c
+		case 90: //z
 			thinLines();
 			break;
 		case 49: //1

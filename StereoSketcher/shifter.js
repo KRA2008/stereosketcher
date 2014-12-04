@@ -39,52 +39,101 @@ function shiftOut()
 function moveSelectedToBack()
 {
 	deselectAllDots();
-	moveSelectedToBackRecursive();
-}
-
-function moveSelectedToBackRecursive()
-{
-        var selected = getSelected();
-        var element = selected[0];
-        if(element == null) return;
-        element.deselect();
-        shapeGroup.removeChild(element);
-        shapeGroup.insertBefore(element,shapeGroup.firstChild);
-        shapeGroup.removeChild(element.clone);
-        shapeGroup.insertBefore(element.clone,shapeGroup.firstChild);
-        if(element.under != null)
-        {
-                shapeGroup.removeChild(element.under);
-                shapeGroup.removeChild(element.clone.under);
-                shapeGroup.insertBefore(element.under,shapeGroup.firstChild);
-                shapeGroup.insertBefore(element.clone.under,shapeGroup.firstChild);
-        }
-        moveSelectedToBackRecursive();
+    var selected = getSelected();
+    while(selected.length>0)
+    {
+	    var element = selected[0];
+	    element.remove();
+	    shapeGroup.insertBefore(element,shapeGroup.firstChild);
+	    shapeGroup.insertBefore(element.clone,shapeGroup.firstChild);
+	    if(element.under != null)
+	    {
+	            shapeGroup.insertBefore(element.under,shapeGroup.firstChild);
+	            shapeGroup.insertBefore(element.clone.under,shapeGroup.firstChild);
+	    }
+	    element.lowlight();
+	    element.deselect();
+	    selected = getSelected();
+    }
 }
 
 function moveSelectedToFront()
-{
+{		
 	deselectAllDots();
-	moveSelectedToFrontRecursive();
+    var selected = getSelected();
+    while(selected.length>0)
+    {
+	    var element = selected[0];
+	    element.remove();
+	    element.add();
+	    element.lowlight();
+	    element.deselect();
+	    selected = getSelected();
+    }
 }
 
-function moveSelectedToFrontRecursive()
+function moveSelectedThroughLayers(forward)
 {
-        var dots = getDots();
-        var selected = getSelected();
-        var element = selected[0];
-        if(element == null) return;
-        element.deselect();
-        if(element.under != null)
-        {
-                shapeGroup.removeChild(element.under);
-                shapeGroup.removeChild(element.clone.under);
-                shapeGroup.appendChild(element.under);
-                shapeGroup.appendChild(element.clone.under);
-        }
-        shapeGroup.removeChild(element);
-        shapeGroup.removeChild(element.clone);
-        shapeGroup.appendChild(element);
-        shapeGroup.appendChild(element.clone);
-        moveSelectedToFrontRecursive();
+	deselectAllDots();
+	var selected = getSelected();
+	var thingToMove;
+	var linesAndFaces;
+	var marker;
+	var remainder = [];
+	var temp;
+	while(selected.length>0)
+	{
+		thingToMove = selected[0];
+		remainder = [];
+		linesAndFaces = getLinesAndFaces();
+		for(var ii=0;ii<linesAndFaces.length;ii++)
+		{
+			marker = linesAndFaces[ii];
+			if(marker === thingToMove)
+			{
+				if(forward)
+				{
+					if(linesAndFaces.length==ii) 
+					{
+						thingToMove.deselect();
+						return;
+					}
+					marker = linesAndFaces[ii+1];
+				}
+				else
+				{
+					if(0==ii) {
+						thingToMove.deselect();
+						return;
+					}
+					marker = linesAndFaces[ii-1];
+					remainder.push(marker);
+				}
+				for(;ii<linesAndFaces.length;ii++)
+				{
+					remainder.push(linesAndFaces[ii]);
+				}
+				if(remainder.length>1)
+				{
+					temp = remainder[0];
+					remainder[0] = remainder[1];
+					remainder[1] = temp;
+					var restacked;
+					for(var jj=0;jj<remainder.length;jj++)
+					{
+						restacked = remainder[jj];
+						restacked.remove();
+						restacked.add();
+					}
+				}
+				break;
+			}
+		}
+		if(!forward)
+		{
+			thingToMove.lowlight();
+		}
+		thingToMove.deselect();
+		selected = getSelected();
+	}
 }

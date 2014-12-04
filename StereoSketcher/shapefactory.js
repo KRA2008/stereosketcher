@@ -70,6 +70,10 @@ var shapeFactory = {
 			this.label.setAttribute("fill", "black");
 			removeClassFromElement(this, "highlit");
 		}
+		if(event.shiftKey)
+		{
+			dot.select();
+		}
 	},
 	attachCommonHandlers : function(shape) 
 	{
@@ -240,6 +244,16 @@ var shapeFactory = {
 			this.setAttribute("stroke-width",thickness*thinRate);
 			this.clone.setAttribute("stroke-width",thickness*thinRate);
 		}
+		line.add = function()
+		{
+			shapeGroup.appendChild(this.clone);
+			shapeGroup.appendChild(this);
+		}
+		line.remove = function()
+		{
+			shapeGroup.removeChild(this);
+			shapeGroup.removeChild(this.clone);
+		}
 	},
 	createCloneLine : function(line) 
 	{
@@ -325,6 +339,20 @@ var shapeFactory = {
 			{
 				this.setAttribute("stroke-width", 0);
 			}
+		}
+		face.add = function()
+		{
+			shapeGroup.appendChild(this.clone.under);
+			shapeGroup.appendChild(this.clone);
+			shapeGroup.appendChild(this.under);
+			shapeGroup.appendChild(this);
+		}
+		face.remove = function()
+		{
+			shapeGroup.removeChild(this.clone.under);
+			shapeGroup.removeChild(this.clone);
+			shapeGroup.removeChild(this.under);
+			shapeGroup.removeChild(this);
 		}
 	},
 	createCloneFace : function(face) 

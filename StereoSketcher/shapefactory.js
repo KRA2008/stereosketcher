@@ -53,7 +53,7 @@ var shapeFactory = {
 		{
 			this.setAttribute("fill-opacity", 0);
 			removeClassFromElement(this, "selected");
-			if (doesElementHaveClass(this, "highlit")) 
+			if (this.isHighlit()) 
 			{
 				this.highlight();
 			}
@@ -89,6 +89,10 @@ var shapeFactory = {
 		{
 			return doesElementHaveClass(this, "selected");
 		};
+		shape.isHighlit = function()
+		{
+			return doesElementHaveClass(this,"highlit");
+		}
 		shape.toggleSelect = function() 
 		{
 			if (this.isSelected()) 
@@ -103,34 +107,38 @@ var shapeFactory = {
 		shape.onmousedown = function(event) 
 		{
 			preventDefault(event);
-			if (event.button == 0) {
+			if (event.button == 0) 
+			{
 				pressX=event.clientX;
 				pressY=event.clientY;
 				prevX = pressX;
 				prevY = pressY;
 				if(doesElementHaveClass(this,"dot"))
 				{
-					event.stopPropagation();
-					var dot;
-					var dots = getDots();
-					var selectedDots = [];
-					for(var ii=0;ii<dots.length;ii++)
+					if(this.isSelected())
 					{
-						dot = dots[ii];
-						if(dot.isSelected())
+						event.stopPropagation();
+						var dot;
+						var dots = getDots();
+						var selectedDots = [];
+						for(var ii=0;ii<dots.length;ii++)
 						{
-							selectedDots.push(dot);
+							dot = dots[ii];
+							if(dot.isSelected())
+							{
+								selectedDots.push(dot);
+							}
 						}
-					}
-					this.onmousemove = function(event) 
-					{
-						event.stopPropagation();
-						dragDots(event,selectedDots);
-					};
-					svg.onmousemove = function(event)
-					{
-						event.stopPropagation();
-						dragDots(event,selectedDots);
+						this.onmousemove = function(event) 
+						{
+							event.stopPropagation();
+							dragDots(event,selectedDots);
+						};
+						svg.onmousemove = function(event)
+						{
+							event.stopPropagation();
+							dragDots(event,selectedDots);
+						}
 					}
 				}
 			}
@@ -210,7 +218,7 @@ var shapeFactory = {
 		{
 			this.setAttribute("stroke", this.color);
 			removeClassFromElement(this, "selected");
-			if (doesElementHaveClass(this, "highlit")) 
+			if (this.isHighlit()) 
 			{
 				this.highlight();
 			}
@@ -253,6 +261,7 @@ var shapeFactory = {
 		{
 			shapeGroup.removeChild(this);
 			shapeGroup.removeChild(this.clone);
+			removeOverlapsOfItem(this);
 		}
 	},
 	createCloneLine : function(line) 
@@ -317,7 +326,7 @@ var shapeFactory = {
 		{
 			this.setAttribute("stroke-width", 0);
 			removeClassFromElement(this, "selected");
-			if (doesElementHaveClass(this, "highlit")) 
+			if (this.isHighlit()) 
 			{
 				this.highlight();
 			}
@@ -353,6 +362,7 @@ var shapeFactory = {
 			shapeGroup.removeChild(this.clone);
 			shapeGroup.removeChild(this.under);
 			shapeGroup.removeChild(this);
+			removeOverlapsOfItem(this);
 		}
 	},
 	createCloneFace : function(face) 

@@ -12,7 +12,6 @@ window.onload=function() {
 	labelGroup=document.getElementById("labels");
 	shapeGroup=document.getElementById("shapes");
 	defs=document.getElementById("defs");
-	addModeLabel();
 	
 	svg.onmousedown = function(event)
 	{
@@ -84,6 +83,7 @@ window.onload=function() {
 	};
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);
+	crossEyeMode();
 };
 
 function wasAClick(event)
@@ -180,23 +180,12 @@ function thinLines()
 	deselectAll();
 }
 
-function addModeLabel()
-{
-	var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-	label.setAttribute("x",10.0);
-	label.setAttribute("y",40.0);
-	label.setAttribute("fill","black");
-	label.textContent = "cross-eyed";
-	label.setAttribute("id","modeLabel");
-	svg.appendChild(label);
-}
-
 function magicEyeMode()
 {
 	showDots();
 	mode=1;
 	var label=document.getElementById("modeLabel");
-	label.textContent = "magic eye";
+	label.innerHTML = "parallel";
 	IPD=originalIPD*-1.0;
 	refresh();
 }
@@ -206,7 +195,7 @@ function redCyanMode()
 	showDots();
 	mode=2;
 	var label=document.getElementById("modeLabel");
-	label.textContent = "red/cyan";
+	label.innerHTML = "red/cyan";
 	IPD=0.0;
 	refresh();
 }
@@ -216,7 +205,7 @@ function crossEyeMode()
 	showDots();
 	mode=0;
 	var label=document.getElementById("modeLabel");
-	label.textContent = "cross-eyed";
+	label.innerHTML = "cross";
 	IPD=originalIPD;
 	refresh();
 }
@@ -428,40 +417,22 @@ function deletePressed()
 	}
 	var line;
 	var lines=getLines();
-	var dotLines = [];
 	for(var ii=lines.length-1;ii>=0;ii--)
 	{
 		line=lines[ii];
 		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected())
 		{
-			dotLines = line.dot1.lines;
-			dotLines.splice(dotLines.indexOf(line),1);
-			dotLines = line.dot2.lines;
-			dotLines.splice(dotLines.indexOf(line),1);
-			shapeGroup.removeChild(line);
-			shapeGroup.removeChild(line.clone);
-			removeOverlapsOfItem(line);
+			line.remove();
 		}
 	}
 	var face;
 	var faces = getFaces();
-	var dotFaces = [];
 	for (var ii=faces.length-1;ii>=0;ii--)
 	{
 		face=faces[ii];
 		if(face.isSelected() || face.dot1.isSelected() || face.dot2.isSelected() || face.dot3.isSelected())
 		{
-			dotFaces = face.dot1.faces;
-			dotFaces.splice(dotFaces.indexOf(face),1);
-			dotFaces = face.dot2.faces;
-			dotFaces.splice(dotFaces.indexOf(face),1);
-			dotFaces = face.dot3.faces;
-			dotFaces.splice(dotFaces.indexOf(face),1);
-			shapeGroup.removeChild(face);
-			shapeGroup.removeChild(face.under);
-			shapeGroup.removeChild(face.clone);
-			shapeGroup.removeChild(face.clone.under);
-			removeOverlapsOfItem(face);
+			face.remove();
 		}
 	}
 }

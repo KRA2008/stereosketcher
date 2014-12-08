@@ -266,12 +266,12 @@ function removeOverlapsOfItem(item)
 		defs.removeChild(overlap.itemClip);
 		defs.removeChild(overlap.cloneClip);
 		shapeGroup.removeChild(overlap.itemOverlap);
+		shapeGroup.removeChild(overlap.cloneOverlap);
 		if(overlap.itemOverlapUnder != null)
 		{
 			shapeGroup.removeChild(overlap.itemOverlapUnder);
 		}
-		shapeGroup.removeChild(overlap.cloneOverlap);
-		if(overlap.cloneOverlapUnder != null)
+		if(overlap.cloneOverlapUnder)
 		{
 			shapeGroup.removeChild(overlap.cloneOverlapUnder);
 		}

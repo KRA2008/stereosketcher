@@ -2,6 +2,7 @@
 
 function addOverlaps()
 {
+	showLoading();
 	var item;
 	var clone;
 	var clip;
@@ -133,6 +134,7 @@ function addOverlaps()
 			item.overlaps.push(overlap);
 		}
 	}
+	hideLoading();
 }
 
 function createClipPath(item,clipPath)

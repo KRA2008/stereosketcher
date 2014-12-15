@@ -15,7 +15,6 @@ window.onload=function() {
 	
 	svg.onmousedown = function(event)
 	{
-		showDots();
 		pressX = event.clientX;
 		pressY = event.clientY;
 		prevX = pressX;
@@ -261,7 +260,10 @@ function showDots()
 		dot.label.setAttribute("visibility","visible");
 	}
 	dotsVisible = true;
-	removeOverlaps();
+	if(mode ==2)
+	{
+		removeOverlaps();
+	}
 }
 
 function hideDots()

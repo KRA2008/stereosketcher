@@ -25,6 +25,9 @@
 			top:0;
 			left:0;
 			z-index: 9999;
+		    border-style: solid;
+		    border-color: grey;
+		    border-width: 1px;
 		}
 		.topmiddle
 		{
@@ -70,13 +73,13 @@
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
 		<div class="topleft">
 			<div onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()" id="pickerDiv">
-				<input class="color {hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/>
-				<input type="button" value="Set Selected" onclick="setColor()" />
+				<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
+				<input type="button" value="Set Selected" onclick="setColor()" /><br/>
 				<input id="setBackground" type="button" value="Set Background" onclick="setBackground()" /><br/>
 			</div>
 			<input type="button" value="Sample Selected" onclick="sampleColor()" /><br/>
 			<input id="sampleBackground" type="button" value="Sample Background" onclick="sampleBackground()" /><br/>
-			<p>View mode: <span id="modeLabel"></span></p>
+			<span>View mode: <span id="modeLabel"></span></span>
 		</div>
 		<div class="topright" id="senderDiv">
 			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>

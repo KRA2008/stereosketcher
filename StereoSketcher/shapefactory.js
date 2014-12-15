@@ -9,6 +9,8 @@ var thickenRate = 1.2;
 var thinRate = 1-((thickenRate-1)/thickenRate);
 var dotRadius = 7.0;
 var faceStartColor = "#777777";
+var selectedColor = "yellow";
+var highlitColor = "green";
 
 var shapeFactory = {
 	createCircle : function(event) 
@@ -40,6 +42,21 @@ var shapeFactory = {
 		label.setAttribute("fill", "black");
 		label.setAttribute("class", "label");
 		label.textContent = "0";
+		label.onmouseup = function(event)
+		{
+			dot.onmouseup(event);
+			event.stopPropagation();
+		};
+		label.onmouseenter = function(event)
+		{
+			dot.onmouseenter(event);
+			event.stopPropagation();
+		};
+		label.onmouseout = function(event)
+		{
+			dot.onmouseout(event);
+			event.stopPropagation();
+		};
 		dot.label = label;
 		dot.faces = [];
 		labelGroup.appendChild(label);

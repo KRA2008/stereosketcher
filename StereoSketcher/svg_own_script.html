@@ -1,6 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en-US">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>StereoSketcher</title>
@@ -33,7 +32,7 @@
 		{
 			position: absolute; 
 			top:0; 
-			left:50%; 
+			right:50%; 
 			z-index: 9999;
 		}
 		.loading
@@ -42,7 +41,6 @@
 			bottom:50%;
 			right:50%;
 			z-index:9999;
-			background-color: gray;
 			padding:30px;
 		}
 		.hidden
@@ -71,7 +69,7 @@
 		</script>
 	</head>
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
-		<div onmouseenter="showColorPicker()" onmouseleave="hideColorPicker()" id="pickerDiv" class="topleft">
+		<div id="pickerDiv" class="topleft">
 			<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
 			<input type="button" value="Set Selected" onclick="setColor()" /><br/>
 			<input id="setBackground" type="button" value="Set Background" onclick="setBackground()" /><br/>
@@ -87,9 +85,11 @@
 			<a target='none' href='help.html'>Help</a>
 		</div>
 		<div id="loading" class="loading">
-			<h2>
-				LOADING...
-			</h2>
+			<table>
+				<tr><td>
+			<img src="loading.gif"/></td></tr>
+				<tr><td><h2>Loading...</h2></td></tr>
+			</table>
 		</div>
 		
 		<svg style="background: #ffffff" id="svg" xmlns="http://www.w3.org/2000/svg">

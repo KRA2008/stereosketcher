@@ -56,10 +56,22 @@ function addWatermark()
 {
 	var watermark = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	watermark.setAttribute("id", "waterMark");
-	watermark.setAttribute("x", window.innerWidth-130);
 	watermark.setAttribute("y", window.innerHeight-10);
 	watermark.setAttribute("fill", "black");
-	watermark.textContent = "StereoSketcher.com";
+	switch(mode) {
+		case 0:
+			watermark.textContent="X ";
+			watermark.setAttribute("x", window.innerWidth-155);
+			break;
+		case 1:
+			watermark.textContent="|| ";
+			watermark.setAttribute("x", window.innerWidth-155);
+			break;
+		default:
+			watermark.setAttribute("x", window.innerWidth-140);
+			break;
+	}
+	watermark.textContent+="StereoSketcher.com";
 	svg.appendChild(watermark);
 }
 

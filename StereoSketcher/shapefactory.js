@@ -238,7 +238,6 @@ var shapeFactory = {
 		};
 		line.deselect = function()
 		{
-			showDots();
 			this.setAttribute("stroke", this.color);
 			removeClassFromElement(this, "selected");
 			if (this.isHighlit()) 
@@ -348,7 +347,6 @@ var shapeFactory = {
 		};
 		face.deselect = function()
 		{
-			showDots();
 			this.setAttribute("stroke-width", 0);
 			removeClassFromElement(this, "selected");
 			if (this.isHighlit()) 

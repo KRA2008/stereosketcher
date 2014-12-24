@@ -4,17 +4,17 @@ function addOverlaps()
 {
 	showLoading();
 	setTimeout(function() {
-		var item;
+		var shape;
 		var clone;
 		var clip;
 		var itemOverlap, itemOverlapUnder;
 		var lineOverlap;
 		var cloneOverlap, cloneOverlapUnder;
 		var resultColor;
-		var outerBBox, innerBBox;
+		var shapeBBox, cloneBBox;
 		var overlap;
 		var clipPath;
-		var tempItem;
+		var cloneShape;
 		
 		var lines = getLines();
 		var faces = getFaces();
@@ -23,78 +23,77 @@ function addOverlaps()
 		
 		for(var ii=0;ii<linesAndFaces.length;ii++)
 		{
-			item = linesAndFaces[ii];
-			outerBBox = item.getBBox();
-			item.overlaps = [];
-			item.deselect();
-			item.lowlight();
+			shape = linesAndFaces[ii];
+			shapeBBox = shape.getBBox();
+			shape.overlaps = [];
+			shape.deselect();
+			shape.lowlight();
 			
-			if(doesElementHaveClass(item,"line"))
+			if(doesElementHaveClass(shape,"line"))
 			{
-				item.setAttribute("stroke",getAnaglyphedColor(item.color,backgroundColor));
-				item.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,item.color));
+				shape.setAttribute("stroke",getAnaglyphedColor(shape.color,backgroundColor));
+				shape.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,shape.color));
 			}
-			else if(doesElementHaveClass(item,"face"))
+			else if(doesElementHaveClass(shape,"face"))
 			{
-				item.setAttribute("fill",getAnaglyphedColor(item.color,backgroundColor));
-				item.setAttribute("stroke",getAnaglyphedColor(item.color,backgroundColor));
-				item.under.setAttribute("fill",getAnaglyphedColor(item.color,backgroundColor));
-				item.under.setAttribute("stroke",getAnaglyphedColor(item.color,backgroundColor));
-				item.clone.setAttribute("fill",getAnaglyphedColor(backgroundColor,item.color));
-				item.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,item.color));
-				item.clone.under.setAttribute("fill",getAnaglyphedColor(backgroundColor,item.color));
-				item.clone.under.setAttribute("stroke",getAnaglyphedColor(backgroundColor,item.color));
+				shape.setAttribute("fill",getAnaglyphedColor(shape.color,backgroundColor));
+				shape.setAttribute("stroke",getAnaglyphedColor(shape.color,backgroundColor));
+				shape.under.setAttribute("fill",getAnaglyphedColor(shape.color,backgroundColor));
+				shape.under.setAttribute("stroke",getAnaglyphedColor(shape.color,backgroundColor));
+				shape.clone.setAttribute("fill",getAnaglyphedColor(backgroundColor,shape.color));
+				shape.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,shape.color));
+				shape.clone.under.setAttribute("fill",getAnaglyphedColor(backgroundColor,shape.color));
+				shape.clone.under.setAttribute("stroke",getAnaglyphedColor(backgroundColor,shape.color));
 			}
 			
 			for(var jj=0;jj<linesAndFaces.length;jj++)
 			{
-				tempItem = linesAndFaces[jj];
+				cloneShape = linesAndFaces[jj];
+				clone = cloneShape.clone;
+				cloneBBox = clone.getBBox();
 				
-				innerBBox = tempItem.getBBox();
+				if (!doBoundingBoxesOverlap(shapeBBox,cloneBBox)) continue;
 				
-				if (!doBoundingBoxesOverlap(outerBBox,innerBBox)) continue;
-				
-				resultColor = getAnaglyphedColor(item.color,tempItem.color);
+				resultColor = getAnaglyphedColor(shape.color,cloneShape.color);
 				overlap = {};
-				clone = tempItem.clone;
 				
 				clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
 				clipPath.setAttribute("id",["itemClip.",ii,".",jj].join(''));
-				overlap.itemClip = createClipPath(item,clipPath);
+				overlap.itemClip = createClipPath(shape,clipPath);
 				
 				clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
 				clipPath.setAttribute("id",["cloneClip.",ii,".",jj].join(''));
 				overlap.cloneClip = createClipPath(clone,clipPath);
 	
-				if(doesElementHaveClass(item,"face"))
+				if(doesElementHaveClass(shape,"face"))
 				{
 					itemOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 					itemOverlap.setAttribute("fill",resultColor);
-					itemOverlap.setAttribute("points",item.getAttribute("points"));
+					itemOverlap.setAttribute("points",shape.getAttribute("points"));
 					
 					itemOverlapUnder = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 					itemOverlapUnder.setAttribute("fill",resultColor);
-					itemOverlapUnder.setAttribute("points",item.getAttribute("points"));
+					itemOverlapUnder.setAttribute("points",shape.getAttribute("points"));
 					itemOverlapUnder.setAttribute("stroke-width",faceSpaceCorrection);
 					itemOverlapUnder.setAttribute("stroke",resultColor);
 					itemOverlapUnder.setAttribute("clip-path",["url(#cloneClip.",ii,".",jj,")"].join(''));
 					itemOverlapUnder.setAttribute("class","itemOverlapUnder");
-					forwardAllMouseEvents(itemOverlapUnder,item);
+					forwardAllMouseEvents(itemOverlapUnder,shape);
 					shapeGroup.appendChild(itemOverlapUnder);
 					overlap.itemOverlapUnder = itemOverlapUnder;
 				} 
-				else if (doesElementHaveClass(item,"line"))
+				else if (doesElementHaveClass(shape,"line"))
 				{
 					itemOverlap = document.createElementNS("http://www.w3.org/2000/svg","line");
-					itemOverlap.setAttribute("x1",item.getAttribute("x1"));
-					itemOverlap.setAttribute("y1",item.getAttribute("y1"));
-					itemOverlap.setAttribute("x2",item.getAttribute("x2"));
-					itemOverlap.setAttribute("y2",item.getAttribute("y2"));
+					itemOverlap.setAttribute("x1",shape.getAttribute("x1"));
+					itemOverlap.setAttribute("y1",shape.getAttribute("y1"));
+					itemOverlap.setAttribute("x2",shape.getAttribute("x2"));
+					itemOverlap.setAttribute("y2",shape.getAttribute("y2"));
 					itemOverlap.setAttribute("stroke",resultColor);
 					itemOverlap.setAttribute("stroke-width",lineThickness);
 				}
 				itemOverlap.setAttribute("class","itemOverlap");
-				forwardAllMouseEvents(itemOverlap,item);
+				forwardAllMouseEvents(itemOverlap,shape);
 				shapeGroup.appendChild(itemOverlap);
 				itemOverlap.setAttribute("clip-path",["url(#cloneClip.",ii,".",jj,")"].join(''));
 				overlap.itemOverlap = itemOverlap;
@@ -112,7 +111,7 @@ function addOverlaps()
 					cloneOverlapUnder.setAttribute("stroke",resultColor);
 					cloneOverlapUnder.setAttribute("clip-path",["url(#itemClip.",ii,".",jj,")"].join(''));
 					cloneOverlapUnder.setAttribute("class","cloneOverlapUnder");
-					forwardAllMouseEvents(cloneOverlapUnder,item);
+					forwardAllMouseEvents(cloneOverlapUnder,shape);
 					shapeGroup.appendChild(cloneOverlapUnder);
 					overlap.cloneOverlapUnder = cloneOverlapUnder;
 				}
@@ -128,11 +127,11 @@ function addOverlaps()
 				}
 				cloneOverlap.setAttribute("class","cloneOverlap");
 				shapeGroup.appendChild(cloneOverlap);
-				forwardAllMouseEvents(cloneOverlap,item);	
+				forwardAllMouseEvents(cloneOverlap,shape);	
 				cloneOverlap.setAttribute("clip-path",["url(#itemClip.",ii,".",jj,")"].join(''));
 				overlap.cloneOverlap = cloneOverlap;
 				
-				item.overlaps.push(overlap);
+				shape.overlaps.push(overlap);
 			}
 		}
 		hideLoading();

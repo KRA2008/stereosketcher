@@ -32,7 +32,6 @@ function zoom(event)
 	IPD*=zoom;
 	shiftSpeed*=zoom;
 	lineThickness*=zoom;
-	showDots();
 	for(var ii=0;ii<dots.length;ii++)
 	{
 		dot = dots[ii];

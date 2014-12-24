@@ -9,6 +9,8 @@ var thickenRate = 1.2;
 var thinRate = 1-((thickenRate-1)/thickenRate);
 var dotRadius = 7.0;
 var faceStartColor = "#777777";
+var lineStartColor = "#000000";
+var dotColor = "#000000";
 var selectedColor = "yellow";
 var highlitColor = "green";
 
@@ -19,9 +21,9 @@ var shapeFactory = {
 		dot.setAttribute("cx", event.clientX);
 		dot.setAttribute("cy", event.clientY);
 		dot.setAttribute("r", dotRadius);
-		dot.setAttribute("stroke", "black");
+		dot.setAttribute("stroke", dotColor);
 		dot.setAttribute("stroke-width", 1.0);
-		dot.setAttribute("fill", "yellow");
+		dot.setAttribute("fill", selectedColor);
 		dot.setAttribute("fill-opacity", 0);
 		dot.setAttribute("class","dot");
 		addClassToElement(dot, "highlit");
@@ -29,6 +31,7 @@ var shapeFactory = {
 		dot.ondblclick = function(event) 
 		{
 			event.stopPropagation();
+			showDots();
 			if (wasAClick(event)) 
 			{
 				selectAllContiguous(this, event);
@@ -39,7 +42,7 @@ var shapeFactory = {
 		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
 		label.setAttribute("x", parseFloat(dot.getAttribute("cx")) + labelX);
 		label.setAttribute("y", parseFloat(dot.getAttribute("cy")) + labelY);
-		label.setAttribute("fill", "black");
+		label.setAttribute("fill", dotColor);
 		label.setAttribute("class", "label");
 		label.textContent = "0";
 		label.onmouseup = function(event)
@@ -77,14 +80,14 @@ var shapeFactory = {
 		};
 		dot.highlight = function()
 		{
-			this.setAttribute("stroke", "green");
-			this.label.setAttribute("fill", "green");
+			this.setAttribute("stroke", highlitColor);
+			this.label.setAttribute("fill", highlitColor);
 			addClassToElement(this, "highlit");
 		};
 		dot.lowlight = function()
 		{
-			this.setAttribute("stroke", "black");
-			this.label.setAttribute("fill", "black");
+			this.setAttribute("stroke", dotColor);
+			this.label.setAttribute("fill", dotColor);
 			removeClassFromElement(this, "highlit");
 		};
 		if(event.shiftKey)
@@ -96,10 +99,12 @@ var shapeFactory = {
 	{
 		shape.onmouseenter = function() 
 		{
+			showDots();
 			this.highlight();
 		};
 		shape.onmouseout = function() 
 		{
+			showDots();
 			this.lowlight();
 		};
 		shape.isSelected = function() 
@@ -123,6 +128,7 @@ var shapeFactory = {
 		};
 		shape.onmousedown = function(event) 
 		{
+			showDots();
 			preventDefault(event);
 			if (event.button == 0) 
 			{
@@ -159,6 +165,7 @@ var shapeFactory = {
 		};
 		shape.onmouseup = function(event) 
 		{
+			showDots();
 			if (event.button == 0) 
 			{
 				event.stopPropagation();
@@ -202,8 +209,8 @@ var shapeFactory = {
 		line.setAttribute("y1", dot1.getAttribute("cy"));
 		line.setAttribute("x2", dot2.getAttribute("cx"));
 		line.setAttribute("y2", dot2.getAttribute("cy"));
-		line.color = "black";
-		line.setAttribute("stroke", "black");
+		line.color = lineStartColor;
+		line.setAttribute("stroke", lineStartColor);
 		line.setAttribute("stroke-width", lineThickness);
 		line.setAttribute("class","line");
 		line.dot1 = dot1;
@@ -225,11 +232,13 @@ var shapeFactory = {
 		
 		line.select = function()
 		{
-			this.setAttribute("stroke", "yellow");
+			showDots();
+			this.setAttribute("stroke", selectedColor);
 			addClassToElement(this, "selected");
 		};
 		line.deselect = function()
 		{
+			showDots();
 			this.setAttribute("stroke", this.color);
 			removeClassFromElement(this, "selected");
 			if (this.isHighlit()) 
@@ -239,7 +248,7 @@ var shapeFactory = {
 		};
 		line.highlight = function()
 		{
-			this.setAttribute("stroke", "green");
+			this.setAttribute("stroke", highlitColor);
 			addClassToElement(this, "highlit");
 		};
 		line.lowlight = function()
@@ -247,7 +256,7 @@ var shapeFactory = {
 			removeClassFromElement(this, "highlit");
 			if (this.isSelected()) 
 			{
-				this.setAttribute("stroke", "yellow");
+				this.setAttribute("stroke", selectedColor);
 			} 
 			else
 			{
@@ -286,7 +295,7 @@ var shapeFactory = {
 		clone.setAttribute("y1", line.dot1.getAttribute("cy"));
 		clone.setAttribute("x2", parseFloat(line.dot2.getAttribute("cx")) + IPD + line.dot2.shift*shiftSpeed);
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
-		clone.setAttribute("stroke", "black");
+		clone.setAttribute("stroke", lineStartColor);
 		clone.setAttribute("stroke-width", lineThickness);
 		clone.setAttribute("class","cloneLine");
 		clone.setAttribute("stroke-linecap", "round");
@@ -332,12 +341,14 @@ var shapeFactory = {
 		face.overlaps = [];
 		face.select = function()
 		{
+			showDots();
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
-			this.setAttribute("stroke", "yellow");
+			this.setAttribute("stroke", selectedColor);
 			addClassToElement(this, "selected");
 		};
 		face.deselect = function()
 		{
+			showDots();
 			this.setAttribute("stroke-width", 0);
 			removeClassFromElement(this, "selected");
 			if (this.isHighlit()) 
@@ -347,7 +358,7 @@ var shapeFactory = {
 		};
 		face.highlight = function()
 		{
-			this.setAttribute("stroke", "green");
+			this.setAttribute("stroke", highlitColor);
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
 			addClassToElement(this, "highlit");
 		};
@@ -356,7 +367,7 @@ var shapeFactory = {
 			removeClassFromElement(this, "highlit");
 			if (this.isSelected()) 
 			{
-				this.setAttribute("stroke", "yellow");
+				this.setAttribute("stroke", selectedColor);
 			} 
 			else 
 			{

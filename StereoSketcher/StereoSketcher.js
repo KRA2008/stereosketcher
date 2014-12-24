@@ -249,7 +249,6 @@ function toggleDotsVisible()
 
 function showDots()
 {
-	deselectAll();
 	var label = document.getElementById("modeLabel");
 	label.setAttribute("visibility","visible");
 	var dots = getDots();

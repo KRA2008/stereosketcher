@@ -4,10 +4,12 @@ var imageToSend;
 function upload()
 {
 	hideDots();
-	addWatermark();
-	saveSvgAsPng(document.getElementById("svg"), 1);
-	hideWatermark();
-	showDots();
+	setTimeout(function() { 
+		addWatermark();
+		saveSvgAsPng(document.getElementById("svg"), 1);
+		hideWatermark();
+		showDots();
+	},0);
 }
 
 function sendToImgur() 

@@ -16,8 +16,6 @@ function addOverlaps()
 		var clipPath;
 		var cloneShape;
 		
-		var lines = getLines();
-		var faces = getFaces();
 		var linesAndFaces = getLinesAndFaces();
 		var backgroundColor = getBackgroundColor();
 		

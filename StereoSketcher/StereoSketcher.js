@@ -161,6 +161,17 @@ function keyDown(e) {
 		case 51: //3
 			redCyanMode();
 			break;
+		case 79: //o
+			speedTest();
+			break;
+	}
+}
+
+function speedTest()
+{
+	for(var ii=0;ii<1000;ii++)
+	{
+		var things = getLinesAndFaces();
 	}
 }
 

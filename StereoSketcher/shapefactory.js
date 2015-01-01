@@ -4,7 +4,7 @@ var faceSpaceCorrection = "0.5px";
 var faceActionStrokeWidth = 3.0;
 var labelX = -15.0;
 var labelY = -7.0;
-var lineThickness = 2.0;
+var defaultLineThickness = 2.0;
 var thickenRate = 1.2;
 var thinRate = 1-((thickenRate-1)/thickenRate);
 var dotRadius = 7.0;
@@ -13,6 +13,7 @@ var lineStartColor = "#000000";
 var dotColor = "#000000";
 var selectedColor = "yellow";
 var highlitColor = "green";
+var strokeLinecap = "round";
 
 var shapeFactory = {
 	createCircle : function(event) 
@@ -211,7 +212,7 @@ var shapeFactory = {
 		line.setAttribute("y2", dot2.getAttribute("cy"));
 		line.color = lineStartColor;
 		line.setAttribute("stroke", lineStartColor);
-		line.setAttribute("stroke-width", lineThickness);
+		line.setAttribute("stroke-width", defaultLineThickness);
 		line.setAttribute("class","line");
 		line.dot1 = dot1;
 		line.dot2 = dot2;
@@ -225,7 +226,7 @@ var shapeFactory = {
 			event.stopPropagation();
 			selectDotsOfLine(this, event);
 		};
-		line.setAttribute("stroke-linecap", "round");
+		line.setAttribute("stroke-linecap", strokeLinecap);
 		this.createCloneLine(line);
 		shapeGroup.appendChild(line);
 		line.overlaps = [];
@@ -295,9 +296,9 @@ var shapeFactory = {
 		clone.setAttribute("x2", parseFloat(line.dot2.getAttribute("cx")) + IPD + line.dot2.shift*shiftSpeed);
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke", lineStartColor);
-		clone.setAttribute("stroke-width", lineThickness);
+		clone.setAttribute("stroke-width", defaultLineThickness);
 		clone.setAttribute("class","cloneLine");
-		clone.setAttribute("stroke-linecap", "round");
+		clone.setAttribute("stroke-linecap", strokeLinecap);
 		shapeGroup.appendChild(clone);
 	},
 	createFace : function(dot1, dot2, dot3) 

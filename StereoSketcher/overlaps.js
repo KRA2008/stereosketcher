@@ -15,6 +15,7 @@ function addOverlaps()
 		var overlap;
 		var clipPath;
 		var cloneShape;
+		var lineThickness;
 		
 		var linesAndFaces = getLinesAndFaces();
 		var backgroundColor = getBackgroundColor();
@@ -88,7 +89,8 @@ function addOverlaps()
 					itemOverlap.setAttribute("x2",shape.getAttribute("x2"));
 					itemOverlap.setAttribute("y2",shape.getAttribute("y2"));
 					itemOverlap.setAttribute("stroke",resultColor);
-					itemOverlap.setAttribute("stroke-width",lineThickness);
+					itemOverlap.setAttribute("stroke-linecap", strokeLinecap);
+					itemOverlap.setAttribute("stroke-width",parseFloat(shape.getAttribute("stroke-width")));
 				}
 				itemOverlap.setAttribute("class","itemOverlap");
 				forwardAllMouseEvents(itemOverlap,shape);
@@ -121,7 +123,8 @@ function addOverlaps()
 					cloneOverlap.setAttribute("x2",clone.getAttribute("x2"));
 					cloneOverlap.setAttribute("y2",clone.getAttribute("y2"));
 					cloneOverlap.setAttribute("stroke",resultColor);
-					cloneOverlap.setAttribute("stroke-width",lineThickness);
+					cloneOverlap.setAttribute("stroke-linecap", strokeLinecap);
+					cloneOverlap.setAttribute("stroke-width",parseFloat(clone.getAttribute("stroke-width")));
 				}
 				cloneOverlap.setAttribute("class","cloneOverlap");
 				shapeGroup.appendChild(cloneOverlap);
@@ -153,8 +156,8 @@ function createClipPath(item,clipPath)
 		var x2 = parseFloat(item.getAttribute("x2"));
 		var y2 = parseFloat(item.getAttribute("y2"));
 		var theta = Math.atan((y2-y1)/(x2-x1));
-		var littleX = (lineThickness/2)*Math.sin(theta);
-		var littleY = (lineThickness/2)*Math.cos(theta);
+		var littleX = (parseFloat(item.getAttribute("stroke-width"))/2)*Math.sin(theta);
+		var littleY = (parseFloat(item.getAttribute("stroke-width"))/2)*Math.cos(theta);
 		var path = [(x1-littleX),",",(y1+littleY)," ",(x1+littleX),",",(y1-littleY)," ",(x2+littleX),",",(y2-littleY)," ",(x2-littleX),",",(y2+littleY)].join('');
 		clip.setAttribute("points",path);
 		clipPath.appendChild(clip);
@@ -162,13 +165,13 @@ function createClipPath(item,clipPath)
 		clip = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 		clip.setAttribute("cx",x1);
 		clip.setAttribute("cy",y1);
-		clip.setAttribute("r",lineThickness/2);
+		clip.setAttribute("r",parseFloat(item.getAttribute("stroke-width"))/2);
 		clipPath.appendChild(clip);
 		
 		clip = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 		clip.setAttribute("cx",x2);
 		clip.setAttribute("cy",y2);
-		clip.setAttribute("r",lineThickness/2);
+		clip.setAttribute("r",parseFloat(item.getAttribute("stroke-width"))/2);
 		clipPath.appendChild(clip);
 	}
 	defs.appendChild(clipPath);

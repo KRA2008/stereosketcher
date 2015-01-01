@@ -135,6 +135,7 @@ function addOverlaps()
 				shape.overlaps.push(overlap);
 			}
 		}
+		showClones();
 		hideLoading();
 	},0);
 }
@@ -237,7 +238,6 @@ function removeOverlaps()
 {
 	var item;
 	var linesAndFaces = getLinesAndFaces();
-	var overlap;
 	for(var ii = 0; ii < linesAndFaces.length; ii++)
 	{
 		item = linesAndFaces[ii];
@@ -259,6 +259,10 @@ function removeOverlaps()
 			item.clone.under.setAttribute("stroke",item.color);
 		}
 	}
+	if(mode==2)
+	{
+		hideClones();
+	}
 }
 
 function removeOverlapsOfItem(item)
@@ -271,7 +275,7 @@ function removeOverlapsOfItem(item)
 		defs.removeChild(overlap.cloneClip);
 		shapeGroup.removeChild(overlap.itemOverlap);
 		shapeGroup.removeChild(overlap.cloneOverlap);
-		if(overlap.itemOverlapUnder != null)
+		if(overlap.itemOverlapUnder)
 		{
 			shapeGroup.removeChild(overlap.itemOverlapUnder);
 		}
@@ -281,4 +285,42 @@ function removeOverlapsOfItem(item)
 		}
 	}
 	item.overlaps = [];
+}
+
+function showClones()
+{
+	var shape;
+	var shapes = getLinesAndFaces();
+	for(var ii=0;ii<shapes.length;ii++)
+	{
+		shape = shapes[ii];
+		if(doesElementHaveClass(shape,"line"))
+		{
+			shape.clone.setAttribute("visibility","visible");
+		}
+		else if(doesElementHaveClass(shape,"face"))
+		{
+			shape.clone.setAttribute("visibility","visible");
+			shape.clone.under.setAttribute("visibility","visible");
+		}
+	}
+}
+
+function hideClones()
+{
+	var shape;
+	var shapes = getLinesAndFaces();
+	for(var ii=0;ii<shapes.length;ii++)
+	{
+		shape = shapes[ii];
+		if(doesElementHaveClass(shape,"line"))
+		{
+			shape.clone.setAttribute("visibility","hidden");
+		}
+		else if(doesElementHaveClass(shape,"face"))
+		{
+			shape.clone.setAttribute("visibility","hidden");
+			shape.clone.under.setAttribute("visibility","hidden");
+		}
+	}
 }

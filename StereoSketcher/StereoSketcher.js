@@ -208,6 +208,7 @@ function thinLines()
 function magicEyeMode()
 {
 	showDots();
+	showClones();
 	mode=1;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "parallel";
@@ -218,6 +219,7 @@ function magicEyeMode()
 function redCyanMode()
 {
 	showDots();
+	hideClones();
 	mode=2;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "red/cyan";
@@ -228,6 +230,7 @@ function redCyanMode()
 function crossEyeMode()
 {
 	showDots();
+	showClones();
 	mode=0;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "cross";
@@ -271,10 +274,11 @@ function showDots()
 		dot.label.setAttribute("visibility","visible");
 	}
 	dotsVisible = true;
-	if(mode ==2)
+	if(mode==2)
 	{
 		removeOverlaps();
 	}
+	
 }
 
 function hideDots()

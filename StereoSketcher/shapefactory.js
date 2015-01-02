@@ -11,8 +11,8 @@ var dotRadius = 7.0;
 var faceStartColor = "#777777";
 var lineStartColor = "#000000";
 var dotColor = "#000000";
-var selectedColor = "yellow";
-var highlitColor = "green";
+var selectedColor = "#FFFF00";
+var highlitColor = "#008800";
 var strokeLinecap = "round";
 
 var shapeFactory = {

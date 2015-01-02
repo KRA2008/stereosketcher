@@ -1,7 +1,7 @@
 'use strict';
 
 var svg,dotGroup,labelGroup,shapeGroup,defs;
-var dotsVisible=true;
+var isEditMode=true;
 var mode=0;
 var pressX, pressY;
 var prevX, prevY;
@@ -13,21 +13,20 @@ window.onload=function() {
 	shapeGroup=document.getElementById("shapes");
 	defs=document.getElementById("defs");
 	
-	svg.onmousedown = function(event)
-	{
+	svg.onmousedown = function(event) {
 		pressX = event.clientX;
 		pressY = event.clientY;
 		prevX = pressX;
 		prevY = pressY;
-		if(event.button==0)
-		{
+		if(event.button==0) {
+			editMode();
 			svg.onmousemove = function(event) {
 				preventDefault(event);
 				changeSelectangle(event);
 			};
 		}
-		if(event.button==2)
-		{
+		if(event.button==2) {
+			editMode();
 			var dots = getDots();
 			svg.onmousemove = function(event) {
 				preventDefault(event);
@@ -35,48 +34,16 @@ window.onload=function() {
 			};
 		}
 	};
-	svg.onmouseup = function(event)
-	{
-		if(wasAClick(event))
-		{
-			if(event.button==0)
-			{
+	svg.onmouseup = function(event) {
+		if(wasAClick(event)) {
+			if(event.button==0) {
 				shapeFactory.createCircle(event);
 			}
-			if(event.button==2)
-			{
+			if(event.button==2) {
 				deselectAll();
 			}
-		}
-		else if(event.button==0)
-		{
-			if(selectangle!=null)
-			{
-				var maxx=parseFloat(selectangle.getAttribute("width"))+parseFloat(selectangle.getAttribute("x"));
-				var minx=parseFloat(selectangle.getAttribute("x"));
-				var maxy=parseFloat(selectangle.getAttribute("height"))+parseFloat(selectangle.getAttribute("y"));
-				var miny=parseFloat(selectangle.getAttribute("y"));
-				var dots = getDots();
-				if(!event.shiftKey)
-				{
-					deselectAll();
-				}
-				for(var ik=0;ik<dots.length;ik++)
-				{
-					var dot=dots[ik];
-					var dotx=parseFloat(dot.getAttribute("cx"));
-					var doty=parseFloat(dot.getAttribute("cy"));
-					if(dotx<maxx && dotx>minx)
-					{
-						if(doty<maxy && doty>miny)
-						{
-							dot.select();
-						}
-					}
-				}
-				svg.removeChild(selectangle);
-				selectangle = null;
-			}
+		} else if(event.button==0) {
+			releaseSelectangle(event);
 		}
 		svg.onmousemove = null;
 	};
@@ -86,20 +53,17 @@ window.onload=function() {
 	hideLoading();
 };
 
-function wasAClick(event)
-{
+function wasAClick(event) {
 	return event.clientX == pressX && event.clientY == pressY;
 }
 
-function hideLoading()
-{
+function hideLoading() {
 	var loading = document.getElementById("loading");
 	loading.style.display = "none";
 	loading.clientHeight;
 }
 
-function showLoading()
-{
+function showLoading() {
 	var loading = document.getElementById("loading");
 	loading.style.display = "";
 	loading.clientHeight;
@@ -117,7 +81,7 @@ function keyDown(e) {
 			createLinePressed();
 			break;
 		case 32: //spacebar
-			toggleDotsVisible();
+			toggleEditView();
 			return false;
 		case 83: //s
 			shiftIn();
@@ -161,192 +125,160 @@ function keyDown(e) {
 		case 51: //3
 			redCyanMode();
 			break;
-		case 79: //o
-			speedTest();
-			break;
 	}
 }
 
-function speedTest()
-{
-	for(var ii=0;ii<1000;ii++)
-	{
-		var things = getLinesAndFaces();
-	}
-}
-
-function thickenLines()
-{
+function thickenLines() {
 	var lines = getLines();
 	var line;
-	for(var ii=0;ii<lines.length;ii++)
-	{
+	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
-		if(line.isSelected())
-		{
+		if(line.isSelected()) {
 			line.thicken();
 		}
 	}
 	deselectAll();
 }
 
-function thinLines()
-{
+function thinLines() {
 	var lines = getLines();
 	var line;
-	for(var ii=0;ii<lines.length;ii++)
-	{
+	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
-		if(line.isSelected())
-		{
+		if(line.isSelected()) {
 			line.thin();
 		}
 	}
 	deselectAll();
 }
 
-function magicEyeMode()
-{
-	showDots();
-	showClones();
+function magicEyeMode() {
 	mode=1;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "parallel";
 	IPD=originalIPD*-1.0;
-	refresh();
+	editMode();
 }
 
-function redCyanMode()
-{
-	showDots();
-	hideClones();
+function redCyanMode() {
 	mode=2;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "red/cyan";
 	IPD=0.0;
-	refresh();
+	editMode();
 }
 
-function crossEyeMode()
-{
-	showDots();
-	showClones();
+function crossEyeMode() {
 	mode=0;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "cross";
 	IPD=originalIPD;
-	refresh();
+	editMode();
 }
 
-function changeIPD(direction)
-{
-	if(direction=="right") 
-	{
-		IPD++;
+function editMode() {
+	if(mode==2) {
+		removeOverlaps();
+		hideClones();
+	} else {
+		showClones();
 	}
-	else
-	{
+	showDots();
+	refresh();
+	isEditMode = true;
+}
+
+function viewMode() {
+	if(mode==2) {
+		addOverlaps();
+		showClones();
+	}
+	hideDots();
+	refresh();
+	isEditMode = false;
+}
+
+function changeIPD(direction) {
+	if(direction=="right") {
+		IPD++;
+	} else {
 		IPD--;
 	}
 	refresh();
 }
 
-function toggleDotsVisible()
-{
-	if(dotsVisible)
-	{
-		hideDots();
+function toggleEditView() {
+	if(isEditMode) {
+		viewMode();
 	} else {
-		showDots();
+		editMode();
 	}
 }
 
-function showDots()
-{
+function showDots() {
 	var label = document.getElementById("modeLabel");
 	label.setAttribute("visibility","visible");
 	var dots = getDots();
 	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
+	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		dot.setAttribute("visibility","visible");
 		dot.label.setAttribute("visibility","visible");
 	}
-	dotsVisible = true;
-	if(mode==2)
-	{
-		removeOverlaps();
-	}
-	
 }
 
-function hideDots()
-{
+function hideDots() {
 	deselectAll();
 	var label = document.getElementById("modeLabel");
 	label.setAttribute("visibility","hidden");
 	var dots = getDots();
 	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
+	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		dot.setAttribute("visibility","hidden");
 		dot.label.setAttribute("visibility","hidden");
 	}
-	dotsVisible = false;
-	correctOverlaps();
 }
 
-function getDots()
-{
+function getDots() {
 	return dotGroup.getElementsByClassName("dot");
 }
 
-function getLines()
-{
+function getLines() {
 	return shapeGroup.getElementsByClassName("line");
 }
 
-function getLinesAndFaces()
-{
+function getLinesAndFaces() {
 	var item;
 	var items = shapeGroup.children;
 	var linesAndFaces = [];
-	for(var ii=0;ii<items.length;ii++)
-	{
+	for(var ii=0;ii<items.length;ii++) {
 		item = items[ii];
-		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face"))
-		{
+		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")) {
 			linesAndFaces.push(item);
 		}
 	}
 	return linesAndFaces;
 }
 
-function getFaces()
-{
+function getFaces() {
 	return shapeGroup.getElementsByClassName("face");
 }
 
-function getSelected()
-{
+function getSelected() {
 	return svg.getElementsByClassName("selected");
 }
 
-function getLabels()
-{
+function getLabels() {
 	return labelGroup.getElementsByClassName("label");
 }
 
-function createLinePressed()
-{
+function createLinePressed() {
 	var selectedDots=0;
 	var dot1;
 	var dot2;
 	var dots = getDots();
-	for(var io=0;io<dots.length;io++)
-	{
+	for(var io=0;io<dots.length;io++) {
 		if(dots[io].isSelected())
 		{
 			selectedDots++;
@@ -366,34 +298,28 @@ function createLinePressed()
 			}
 		}
 	}
-	if(selectedDots!=2)
-	{
+	if(selectedDots!=2) {
 		return;
 	}
 	var lines = getLines();
 	var line;
-	for(var ii=0;ii<lines.length;ii++)
-	{
+	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
-		if((line.dot1 == dot1 || line.dot2 == dot1) && (line.dot1 == dot2 || line.dot2 == dot2))
-		{
+		if((line.dot1 == dot1 || line.dot2 == dot1) && (line.dot1 == dot2 || line.dot2 == dot2)) {
 			return;
 		}
 	}
 	shapeFactory.createLine(dot1,dot2);
 }
 
-function createFacePressed()
-{
+function createFacePressed() {
 	var selectedDots=0;
 	var dot1;
 	var dot2;
 	var dot3;
 	var dots = getDots();
-	for(var io=0;io<dots.length;io++)
-	{
-		if(dots[io].isSelected())
-		{
+	for(var io=0;io<dots.length;io++) {
+		if(dots[io].isSelected()) {
 			selectedDots++;
 			if(dot1==null)
 			{
@@ -416,14 +342,12 @@ function createFacePressed()
 			}
 		}
 	}
-	if(selectedDots!=3)
-	{
+	if(selectedDots!=3) {
 		return;
 	}
 	var faces = getFaces();
 	var face;
-	for(var ii=0;ii<faces.length;ii++)
-	{
+	for(var ii=0;ii<faces.length;ii++) {
 		face = faces[ii];
 		if((dot1 == face.dot1 || dot1 == face.dot2 || dot1 == face.dot3) && 
 		(dot2 == face.dot1 || dot2 == face.dot2 || dot2 == face.dot3) && 
@@ -435,42 +359,34 @@ function createFacePressed()
 	shapeFactory.createFace(dot1,dot2,dot3);
 }
 
-function deletePressed()
-{
+function deletePressed() {
 	var dot;
 	var dots = getDots();
-	for(var ii=dots.length-1;ii>=0;ii--)
-	{
+	for(var ii=dots.length-1;ii>=0;ii--) {
 		dot=dots[ii];
-		if(dot.isSelected())
-		{
+		if(dot.isSelected()) {
 			labelGroup.removeChild(dot.label);
 			dotGroup.removeChild(dot);
 		}
 	}
 	var line;
 	var lines=getLines();
-	for(var ii=lines.length-1;ii>=0;ii--)
-	{
+	for(var ii=lines.length-1;ii>=0;ii--) {
 		line=lines[ii];
-		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected())
-		{
+		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected()) {
 			line.remove();
 		}
 	}
 	var face;
 	var faces = getFaces();
-	for (var ii=faces.length-1;ii>=0;ii--)
-	{
+	for (var ii=faces.length-1;ii>=0;ii--) {
 		face=faces[ii];
-		if(face.isSelected() || face.dot1.isSelected() || face.dot2.isSelected() || face.dot3.isSelected())
-		{
+		if(face.isSelected() || face.dot1.isSelected() || face.dot2.isSelected() || face.dot3.isSelected()) {
 			face.remove();
 		}
 	}
 }
 
-function preventDefault(event)
-{
+function preventDefault(event) {
 	event.preventDefault ? event.preventDefault() : event.returnValue=false;
 }

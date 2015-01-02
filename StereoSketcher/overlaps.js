@@ -1,7 +1,6 @@
 'use strict';
 
-function addOverlaps()
-{
+function addOverlaps() {
 	showLoading();
 	setTimeout(function() {
 		var shape;
@@ -20,21 +19,17 @@ function addOverlaps()
 		var linesAndFaces = getLinesAndFaces();
 		var backgroundColor = getBackgroundColor();
 		
-		for(var ii=0;ii<linesAndFaces.length;ii++)
-		{
+		for(var ii=0;ii<linesAndFaces.length;ii++) {
 			shape = linesAndFaces[ii];
 			shapeBBox = shape.getBBox();
 			shape.overlaps = [];
 			shape.deselect();
 			shape.lowlight();
 			
-			if(doesElementHaveClass(shape,"line"))
-			{
+			if(doesElementHaveClass(shape,"line")) {
 				shape.setAttribute("stroke",getAnaglyphedColor(shape.color,backgroundColor));
 				shape.clone.setAttribute("stroke",getAnaglyphedColor(backgroundColor,shape.color));
-			}
-			else if(doesElementHaveClass(shape,"face"))
-			{
+			} else if(doesElementHaveClass(shape,"face")) {
 				shape.setAttribute("fill",getAnaglyphedColor(shape.color,backgroundColor));
 				shape.setAttribute("stroke",getAnaglyphedColor(shape.color,backgroundColor));
 				shape.under.setAttribute("fill",getAnaglyphedColor(shape.color,backgroundColor));
@@ -45,13 +40,14 @@ function addOverlaps()
 				shape.clone.under.setAttribute("stroke",getAnaglyphedColor(backgroundColor,shape.color));
 			}
 			
-			for(var jj=0;jj<linesAndFaces.length;jj++)
-			{
+			for(var jj=0;jj<linesAndFaces.length;jj++) {
 				cloneShape = linesAndFaces[jj];
 				clone = cloneShape.clone;
 				cloneBBox = clone.getBBox();
 				
-				if (!doBoundingBoxesOverlap(shapeBBox,cloneBBox)) continue;
+				if (!doBoundingBoxesOverlap(shapeBBox,cloneBBox)) {
+					continue;
+				}
 				
 				resultColor = getAnaglyphedColor(shape.color,cloneShape.color);
 				overlap = {};
@@ -64,8 +60,7 @@ function addOverlaps()
 				clipPath.setAttribute("id",["cloneClip.",ii,".",jj].join(''));
 				overlap.cloneClip = createClipPath(clone,clipPath);
 	
-				if(doesElementHaveClass(shape,"face"))
-				{
+				if(doesElementHaveClass(shape,"face")) {
 					itemOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 					itemOverlap.setAttribute("fill",resultColor);
 					itemOverlap.setAttribute("points",shape.getAttribute("points"));
@@ -80,9 +75,7 @@ function addOverlaps()
 					forwardAllMouseEvents(itemOverlapUnder,shape);
 					shapeGroup.appendChild(itemOverlapUnder);
 					overlap.itemOverlapUnder = itemOverlapUnder;
-				} 
-				else if (doesElementHaveClass(shape,"line"))
-				{
+				} else if (doesElementHaveClass(shape,"line")) {
 					itemOverlap = document.createElementNS("http://www.w3.org/2000/svg","line");
 					itemOverlap.setAttribute("x1",shape.getAttribute("x1"));
 					itemOverlap.setAttribute("y1",shape.getAttribute("y1"));
@@ -98,8 +91,7 @@ function addOverlaps()
 				itemOverlap.setAttribute("clip-path",["url(#cloneClip.",ii,".",jj,")"].join(''));
 				overlap.itemOverlap = itemOverlap;
 				
-				if(doesElementHaveClass(clone,"cloneFace"))
-				{
+				if(doesElementHaveClass(clone,"cloneFace")) {
 					cloneOverlap = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 					cloneOverlap.setAttribute("fill",resultColor);
 					cloneOverlap.setAttribute("points",clone.getAttribute("points"));
@@ -114,9 +106,7 @@ function addOverlaps()
 					forwardAllMouseEvents(cloneOverlapUnder,shape);
 					shapeGroup.appendChild(cloneOverlapUnder);
 					overlap.cloneOverlapUnder = cloneOverlapUnder;
-				}
-				else if (doesElementHaveClass(clone,"cloneLine"))
-				{
+				} else if (doesElementHaveClass(clone,"cloneLine")) {
 					cloneOverlap = document.createElementNS("http://www.w3.org/2000/svg","line");
 					cloneOverlap.setAttribute("x1",clone.getAttribute("x1"));
 					cloneOverlap.setAttribute("y1",clone.getAttribute("y1"));
@@ -140,17 +130,13 @@ function addOverlaps()
 	},0);
 }
 
-function createClipPath(item,clipPath)
-{			
+function createClipPath(item,clipPath) {			
 	var clip;
-	if(doesElementHaveClass(item,"face")||doesElementHaveClass(item,"cloneFace"))
-	{
+	if(doesElementHaveClass(item,"face")||doesElementHaveClass(item,"cloneFace")) {
 		clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		clip.setAttribute("points",item.getAttribute("points"));
 		clipPath.appendChild(clip);
-	}
-	else if (doesElementHaveClass(item,"line")||doesElementHaveClass(item,"cloneLine"))
-	{
+	} else if (doesElementHaveClass(item,"line")||doesElementHaveClass(item,"cloneLine")) {
 		clip = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var x1 = parseFloat(item.getAttribute("x1"));
 		var y1 = parseFloat(item.getAttribute("y1"));
@@ -179,13 +165,11 @@ function createClipPath(item,clipPath)
 	return clipPath;
 }
 
-function doBoundingBoxesOverlap(bbox1,bbox2)
-{
+function doBoundingBoxesOverlap(bbox1,bbox2) {
 	return (bbox1.x <= bbox2.x+bbox2.width && bbox1.x+bbox1.width >= bbox2.x && bbox1.y <= bbox2.y+bbox2.height && bbox1.y+bbox1.height >= bbox2.y);
 }
 
-function forwardAllMouseEvents(element,recipient)
-{
+function forwardAllMouseEvents(element,recipient) {
 	element.onmouseenter = function()
 	{
 		recipient.onmouseenter();
@@ -208,47 +192,37 @@ function forwardAllMouseEvents(element,recipient)
 	}
 }
 
-function getAnaglyphedColor(cyanInfo,redInfo)
-{
+function getAnaglyphedColor(cyanInfo,redInfo) {
 	return "#"+("000000"+(getCyanComponent(cyanInfo)|getRedComponent(redInfo)).toString(16)).slice(-6);
 }
 
-function getCyanComponent(colorAttr)
-{
+function getCyanComponent(colorAttr) {
 	var hex = parseInt("0x"+colorAttr.slice(1));
 	return hex & 65535;
 }
 
-function getRedComponent(colorAttr)
-{
+function getRedComponent(colorAttr) {
 	var hex = parseInt("0x"+colorAttr.slice(1));
 	return hex & 16711680;
 }
 
-function correctOverlaps()
-{
-	if(mode==2)
-	{
+function correctOverlaps() {
+	if(mode==2) {
 		removeOverlaps();
 		addOverlaps();
 	}
 }
 
-function removeOverlaps()
-{
+function removeOverlaps() {
 	var item;
 	var linesAndFaces = getLinesAndFaces();
-	for(var ii = 0; ii < linesAndFaces.length; ii++)
-	{
+	for(var ii = 0; ii < linesAndFaces.length; ii++) {
 		item = linesAndFaces[ii];
 		removeOverlapsOfItem(item);		
-		if(doesElementHaveClass(item,"line"))
-		{
+		if(doesElementHaveClass(item,"line")) {
 			item.setAttribute("stroke",item.color);
 			item.clone.setAttribute("stroke",item.color);
-		}
-		else if(doesElementHaveClass(item,"face"))
-		{
+		} else if(doesElementHaveClass(item,"face")) {
 			item.setAttribute("fill",item.color);
 			item.setAttribute("stroke",item.color);
 			item.under.setAttribute("fill",item.color);
@@ -259,66 +233,51 @@ function removeOverlaps()
 			item.clone.under.setAttribute("stroke",item.color);
 		}
 	}
-	if(mode==2)
-	{
+	if(mode==2) {
 		hideClones();
 	}
 }
 
-function removeOverlapsOfItem(item)
-{
+function removeOverlapsOfItem(item) {
 	var overlap;
-	for(var jj=0;jj<item.overlaps.length;jj++)
-	{
+	for(var jj=0;jj<item.overlaps.length;jj++) {
 		overlap = item.overlaps[jj];
 		defs.removeChild(overlap.itemClip);
 		defs.removeChild(overlap.cloneClip);
 		shapeGroup.removeChild(overlap.itemOverlap);
 		shapeGroup.removeChild(overlap.cloneOverlap);
-		if(overlap.itemOverlapUnder)
-		{
+		if(overlap.itemOverlapUnder) {
 			shapeGroup.removeChild(overlap.itemOverlapUnder);
-		}
-		if(overlap.cloneOverlapUnder)
-		{
+		} 
+		if(overlap.cloneOverlapUnder) {
 			shapeGroup.removeChild(overlap.cloneOverlapUnder);
 		}
 	}
 	item.overlaps = [];
 }
 
-function showClones()
-{
+function showClones() {
 	var shape;
 	var shapes = getLinesAndFaces();
-	for(var ii=0;ii<shapes.length;ii++)
-	{
+	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];
-		if(doesElementHaveClass(shape,"line"))
-		{
+		if(doesElementHaveClass(shape,"line")) {
 			shape.clone.setAttribute("visibility","visible");
-		}
-		else if(doesElementHaveClass(shape,"face"))
-		{
+		} else if(doesElementHaveClass(shape,"face")) {
 			shape.clone.setAttribute("visibility","visible");
 			shape.clone.under.setAttribute("visibility","visible");
 		}
 	}
 }
 
-function hideClones()
-{
+function hideClones() {
 	var shape;
 	var shapes = getLinesAndFaces();
-	for(var ii=0;ii<shapes.length;ii++)
-	{
+	for(var ii=0;ii<shapes.length;ii++)	{
 		shape = shapes[ii];
-		if(doesElementHaveClass(shape,"line"))
-		{
+		if(doesElementHaveClass(shape,"line")) {
 			shape.clone.setAttribute("visibility","hidden");
-		}
-		else if(doesElementHaveClass(shape,"face"))
-		{
+		} else if(doesElementHaveClass(shape,"face")) {
 			shape.clone.setAttribute("visibility","hidden");
 			shape.clone.under.setAttribute("visibility","hidden");
 		}

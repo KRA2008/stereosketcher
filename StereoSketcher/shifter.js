@@ -4,15 +4,12 @@ var shiftSpeed = 0.5;
 var originalIPD=250.0;
 var IPD=originalIPD;
 
-function shiftIn()
-{
+function shiftIn() {
 	var dots = getDots();
 	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
+	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		if(dot.isSelected())
-		{
+		if(dot.isSelected()) {
 			dot.shift++;
 			dot.label.textContent = dot.shift;
 		}
@@ -20,15 +17,12 @@ function shiftIn()
 	refresh();
 }
 
-function shiftOut()
-{
+function shiftOut() {
 	var dots = getDots();
 	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
+	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		if(dot.isSelected())
-		{
+		if(dot.isSelected()) {
 			dot.shift--;
 			dot.label.textContent = dot.shift;
 		}
@@ -36,18 +30,15 @@ function shiftOut()
 	refresh();
 }
 
-function moveSelectedToBack()
-{
+function moveSelectedToBack() {
 	deselectAllDots();
     var selected = getSelected();
-    while(selected.length>0)
-    {
+    while(selected.length>0) {
 	    var element = selected[0];
 	    element.remove();
 	    shapeGroup.insertBefore(element,shapeGroup.firstChild);
 	    shapeGroup.insertBefore(element.clone,shapeGroup.firstChild);
-	    if(element.under != null)
-	    {
+	    if(element.under) {
 	            shapeGroup.insertBefore(element.under,shapeGroup.firstChild);
 	            shapeGroup.insertBefore(element.clone.under,shapeGroup.firstChild);
 	    }
@@ -57,12 +48,10 @@ function moveSelectedToBack()
     }
 }
 
-function moveSelectedToFront()
-{		
+function moveSelectedToFront() {		
 	deselectAllDots();
     var selected = getSelected();
-    while(selected.length>0)
-    {
+    while(selected.length>0) {
 	    var element = selected[0];
 	    element.remove();
 	    element.add();
@@ -72,8 +61,7 @@ function moveSelectedToFront()
     }
 }
 
-function moveSelectedThroughLayers(forward)
-{
+function moveSelectedThroughLayers(forward) {
 	deselectAllDots();
 	var selected = getSelected();
 	var thingToMove;
@@ -81,27 +69,20 @@ function moveSelectedThroughLayers(forward)
 	var marker;
 	var remainder = [];
 	var temp;
-	while(selected.length>0)
-	{
+	while(selected.length>0) {
 		thingToMove = selected[0];
 		remainder = [];
 		linesAndFaces = getLinesAndFaces();
-		for(var ii=0;ii<linesAndFaces.length;ii++)
-		{
+		for(var ii=0;ii<linesAndFaces.length;ii++) {
 			marker = linesAndFaces[ii];
-			if(marker === thingToMove)
-			{
-				if(forward)
-				{
-					if(linesAndFaces.length==ii) 
-					{
+			if(marker === thingToMove) {
+				if(forward) {
+					if(linesAndFaces.length==ii) {
 						thingToMove.deselect();
 						return;
 					}
 					marker = linesAndFaces[ii+1];
-				}
-				else
-				{
+				} else {
 					if(0==ii) {
 						thingToMove.deselect();
 						return;
@@ -109,18 +90,15 @@ function moveSelectedThroughLayers(forward)
 					marker = linesAndFaces[ii-1];
 					remainder.push(marker);
 				}
-				for(;ii<linesAndFaces.length;ii++)
-				{
+				for(;ii<linesAndFaces.length;ii++) {
 					remainder.push(linesAndFaces[ii]);
 				}
-				if(remainder.length>1)
-				{
+				if(remainder.length>1) {
 					temp = remainder[0];
 					remainder[0] = remainder[1];
 					remainder[1] = temp;
 					var restacked;
-					for(var jj=0;jj<remainder.length;jj++)
-					{
+					for(var jj=0;jj<remainder.length;jj++) {
 						restacked = remainder[jj];
 						restacked.remove();
 						restacked.add();
@@ -129,8 +107,7 @@ function moveSelectedThroughLayers(forward)
 				break;
 			}
 		}
-		if(!forward)
-		{
+		if(!forward) {
 			thingToMove.lowlight();
 		}
 		thingToMove.deselect();

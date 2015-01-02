@@ -1,37 +1,32 @@
 'use strict';
 
-function sampleColor()
-{
+function sampleColor() {
 	var selectedItem = null;
 	var items = getLinesAndFaces();
 	var item;
-	for(var ii=0;ii<items.length;ii++)
-	{
+	for(var ii=0;ii<items.length;ii++) {
 		item = items[ii];
-		if(item.isSelected())
-		{
-			if(selectedItem != null)
-			{
+		if(item.isSelected()) {
+			if(selectedItem) {
 				return;
 			} else {
 				selectedItem = item;
 			}
 		}
 	}
-	if(selectedItem == null) return;
+	if(selectedItem == null) {
+		return;
+	}
 	document.getElementById('colorPicker').color.fromString(selectedItem.color);
 }
 
-function setColor()
-{			
+function setColor() {			
 	var color = document.getElementById('colorPicker').value;
 	var faces = getFaces();
 	var face;
-	for(var ii = 0;ii<faces.length;ii++)
-	{
+	for(var ii = 0;ii<faces.length;ii++) {
 		face = faces[ii];
-		if(face.isSelected())
-		{
+		if(face.isSelected()) {
 			face.color=color;
 			face.setAttribute("fill",color);
 			face.clone.setAttribute("fill",color);
@@ -44,11 +39,9 @@ function setColor()
 	}
 	var lines = getLines();
 	var line;
-	for(var ii=0;ii<lines.length;ii++)
-	{
+	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
-		if(line.isSelected())
-		{
+		if(line.isSelected()) {
 			line.color=color;
 			line.setAttribute("stroke",color);
 			line.clone.setAttribute("stroke",color);
@@ -57,32 +50,27 @@ function setColor()
 	}
 }
 
-function setBackground()
-{
+function setBackground() {
 	var color = document.getElementById('colorPicker').value;
 	svg.setAttribute("style","background: "+color);
 }
 
-function sampleBackground()
-{
+function sampleBackground() {
 	document.getElementById('colorPicker').color.fromString(getBackgroundColor());
 }
 
-function getBackgroundColor()
-{
+function getBackgroundColor() {
 	var style=svg.getAttribute("style");
 	return style.substr(style.indexOf("#"));
 }
 
-function hideColorPicker()
-{
+function hideColorPicker() {
 	var picker = document.getElementById('colorPicker');
 	picker.color.hidePicker();
 	picker.blur();
 }
 
-function showColorPicker()
-{
+function showColorPicker() {
 	var picker = document.getElementById('colorPicker');
 	picker.color.showPicker();
 }

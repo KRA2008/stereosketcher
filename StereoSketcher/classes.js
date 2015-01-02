@@ -1,35 +1,29 @@
 'use strict';
 
-function addClassToElement(element,className)
-{
+function addClassToElement(element,className) {
 	var old = element.getAttribute("class");
 	if(old == null) {
 		element.setAttribute("class","");
 		old == "";
 	}
-	if(!doesElementHaveClass(element,className))
-	{
+	if(!doesElementHaveClass(element,className)) {
 		element.setAttribute("class",old+" "+className);
 	}
 }
 
-function removeClassFromElement(element,className)
-{
+function removeClassFromElement(element,className) {
 	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","g");
 	element.setAttribute("class",element.getAttribute("class").replace(re,''));
 }
 
-function doesElementHaveClass(element,className)
-{
+function doesElementHaveClass(element,className) {
 	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","");
 	var currentClass = element.getAttribute("class");
-	if(currentClass == null || currentClass == "")
-	{
+	if(currentClass == null || currentClass == "") {
 		return false;
 	}
 	var matched = element.getAttribute("class").match(re);
-	if(matched == null)
-	{
+	if(matched == null)	{
 		return false;
 	} else {
 		return true;

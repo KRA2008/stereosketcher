@@ -4,8 +4,7 @@ function dragDots(event,dots) {
 	var dx=event.clientX-prevX;
 	var dy=event.clientY-prevY;
 	var dot;
-	for(var ii=0;ii<dots.length;ii++)
-	{
+	for(var ii=0;ii<dots.length;ii++) {
 		dot=dots[ii];
 		moveDot(dot,dx,dy);
 	}
@@ -34,18 +33,14 @@ function moveDot(dot,dx,dy)
 	dot.setAttribute("cx",x);
 	dot.setAttribute("cy",y);
 	lines=dot.lines;
-	for(var ij=0;ij<lines.length;ij++)
-	{
+	for(var ij=0;ij<lines.length;ij++) {
 		line = lines[ij];
-		if(line.dot1 == dot)
-		{
+		if(line.dot1 == dot) {
 			line.setAttribute("x1",x);
 			line.setAttribute("y1",y);
 			line.clone.setAttribute("x1",x+IPD+dot.shift*shiftSpeed);
 			line.clone.setAttribute("y1",y);
-		}
-		else if(line.dot2 == dot)
-		{
+		} else if(line.dot2 == dot) {
 			line.setAttribute("x2",x);
 			line.setAttribute("y2",y);
 			line.clone.setAttribute("x2",x+IPD+dot.shift*shiftSpeed);
@@ -53,11 +48,9 @@ function moveDot(dot,dx,dy)
 		}
 	}
 	faces = dot.faces;
-	for(var ik=0;ik<faces.length;ik++)
-	{
+	for(var ik=0;ik<faces.length;ik++) {
 		face = faces[ik];
-		if(face.dot1 == dot)
-		{
+		if(face.dot1 == dot) {
 			facex1 = x;
 			facey1 = y;
 			facex2 = face.dot2.getAttribute("cx");
@@ -71,8 +64,7 @@ function moveDot(dot,dx,dy)
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
-		if(face.dot2 == dot)
-		{
+		if(face.dot2 == dot) {
 			facex1 = face.dot1.getAttribute("cx");
 			facey1 = face.dot1.getAttribute("cy");
 			facex2 = x;
@@ -86,8 +78,7 @@ function moveDot(dot,dx,dy)
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
 		}
-		if(face.dot3 == dot)
-		{
+		if(face.dot3 == dot) {
 			facex1 = face.dot1.getAttribute("cx");
 			facey1 = face.dot1.getAttribute("cy");
 			facex2 = face.dot2.getAttribute("cx");

@@ -16,8 +16,7 @@ var highlitColor = "green";
 var strokeLinecap = "round";
 
 var shapeFactory = {
-	createCircle : function(event) 
-	{
+	createCircle : function(event) {
 		var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 		dot.setAttribute("cx", event.clientX);
 		dot.setAttribute("cy", event.clientY);
@@ -29,12 +28,12 @@ var shapeFactory = {
 		dot.setAttribute("class","dot");
 		addClassToElement(dot, "highlit");
 		this.attachCommonHandlers(dot);
-		dot.ondblclick = function(event) 
-		{
+		dot.ondblclick = function(event) {
 			event.stopPropagation();
-			showDots();
-			if (wasAClick(event)) 
-			{
+			if(!isEditMode) {
+				editMode();
+			}
+			if (wasAClick(event)) {
 				selectAllContiguous(this, event);
 			}
 		};
@@ -46,18 +45,15 @@ var shapeFactory = {
 		label.setAttribute("fill", dotColor);
 		label.setAttribute("class", "label");
 		label.textContent = "0";
-		label.onmouseup = function(event)
-		{
+		label.onmouseup = function(event) {
 			dot.onmouseup(event);
 			event.stopPropagation();
 		};
-		label.onmouseenter = function(event)
-		{
+		label.onmouseenter = function(event) {
 			dot.onmouseenter(event);
 			event.stopPropagation();
 		};
-		label.onmouseout = function(event)
-		{
+		label.onmouseout = function(event) {
 			dot.onmouseout(event);
 			event.stopPropagation();
 		};
@@ -65,146 +61,120 @@ var shapeFactory = {
 		dot.faces = [];
 		labelGroup.appendChild(label);
 		dotGroup.appendChild(dot);
-		dot.select = function()
-		{
+		dot.select = function() {
 			this.setAttribute("fill-opacity", 0.5);
 			addClassToElement(this, "selected");
 		};
-		dot.deselect = function()
-		{
+		dot.deselect = function() {
 			this.setAttribute("fill-opacity", 0);
 			removeClassFromElement(this, "selected");
-			if (this.isHighlit()) 
-			{
+			if (this.isHighlit()) {
 				this.highlight();
 			}
 		};
-		dot.highlight = function()
-		{
+		dot.highlight = function() {
 			this.setAttribute("stroke", highlitColor);
 			this.label.setAttribute("fill", highlitColor);
 			addClassToElement(this, "highlit");
 		};
-		dot.lowlight = function()
-		{
+		dot.lowlight = function() {
 			this.setAttribute("stroke", dotColor);
 			this.label.setAttribute("fill", dotColor);
 			removeClassFromElement(this, "highlit");
 		};
-		if(event.shiftKey)
-		{
+		if(event.shiftKey) {
 			dot.select();
 		}
 	},
-	attachCommonHandlers : function(shape) 
-	{
-		shape.onmouseenter = function() 
-		{
-			showDots();
+	attachCommonHandlers : function(shape) {
+		shape.onmouseenter = function() {
+			if(!isEditMode) {
+				editMode();
+			}
 			this.highlight();
 		};
-		shape.onmouseout = function() 
-		{
-			showDots();
+		shape.onmouseout = function() {
+			if(!isEditMode) {
+				editMode();
+			}
 			this.lowlight();
 		};
-		shape.isSelected = function() 
-		{
+		shape.isSelected = function() {
 			return doesElementHaveClass(this, "selected");
 		};
-		shape.isHighlit = function()
-		{
+		shape.isHighlit = function() {
 			return doesElementHaveClass(this,"highlit");
 		};
-		shape.toggleSelect = function() 
-		{
-			if (this.isSelected()) 
-			{
+		shape.toggleSelect = function() {
+			if (this.isSelected()) {
 				this.deselect();
-			} 
-			else 
-			{
+			} else {
 				this.select();
 			}
 		};
-		shape.onmousedown = function(event) 
-		{
-			showDots();
+		shape.onmousedown = function(event) {
+			if(!isEditMode) {
+				editMode();
+			}
 			preventDefault(event);
-			if (event.button == 0) 
-			{
+			if (event.button == 0) {
 				pressX=event.clientX;
 				pressY=event.clientY;
 				prevX = pressX;
 				prevY = pressY;
-				if(doesElementHaveClass(this,"dot") && this.isSelected())
-				{
+				if(doesElementHaveClass(this,"dot") && this.isSelected()) {
 					event.stopPropagation();
 					var dot;
 					var dots = getDots();
 					var selectedDots = [];
-					for(var ii=0;ii<dots.length;ii++)
-					{
+					for(var ii=0;ii<dots.length;ii++) {
 						dot = dots[ii];
-						if(dot.isSelected())
-						{
+						if(dot.isSelected()) {
 							selectedDots.push(dot);
 						}
 					}
-					this.onmousemove = function(event) 
-					{
+					this.onmousemove = function(event) {
 						event.stopPropagation();
 						dragDots(event,selectedDots);
 					};
-					svg.onmousemove = function(event)
-					{
+					svg.onmousemove = function(event) {
 						event.stopPropagation();
 						dragDots(event,selectedDots);
 					};
 				}
 			}
 		};
-		shape.onmouseup = function(event) 
-		{
-			showDots();
-			if (event.button == 0) 
-			{
+		shape.onmouseup = function(event) {
+			if(!isEditMode) {
+				editMode();
+			}
+			if (event.button == 0) {
 				event.stopPropagation();
-				if(wasAClick(event))
-				{
-					if(event.shiftKey)
-					{
+				if(wasAClick(event)) {
+					if(event.shiftKey) {
 						this.toggleSelect();
-					}
-					else
-					{
+					} else {
 						var wasSelected;
-						if(this.isSelected())
-						{
+						if(this.isSelected()) {
 							wasSelected=true;
 						}
 						deselectAll();
-						if(wasSelected)
-						{
+						if(wasSelected) {
 							this.deselect();
-						} 
-						else 
-						{
+						} else {
 							this.select();
 						}
 					}
 				}
 				svg.onmousemove = null;
 				this.onmousemove = null;
-				this.onmouseout = function() 
-				{
+				this.onmouseout = function() {
 					this.lowlight();
 				};
 			}
 		};
 	},
-	createLine : function(dot1, dot2) 
-	{
+	createLine : function(dot1, dot2) {
 		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.setAttribute("x1", dot1.getAttribute("cx"));
 		line.setAttribute("y1", dot1.getAttribute("cy"));
@@ -221,8 +191,7 @@ var shapeFactory = {
 		this.attachCommonHandlers(line);
 		dot1.deselect();
 		dot2.deselect();
-		line.ondblclick = function(event) 
-		{
+		line.ondblclick = function(event) {
 			event.stopPropagation();
 			selectDotsOfLine(this, event);
 		};
@@ -231,64 +200,53 @@ var shapeFactory = {
 		shapeGroup.appendChild(line);
 		line.overlaps = [];
 		
-		line.select = function()
-		{
-			showDots();
+		line.select = function() {
+			if(!isEditMode) {
+				editMode();
+			}
 			this.setAttribute("stroke", selectedColor);
 			addClassToElement(this, "selected");
 		};
-		line.deselect = function()
-		{
+		line.deselect = function() {
 			this.setAttribute("stroke", this.color);
 			removeClassFromElement(this, "selected");
-			if (this.isHighlit()) 
-			{
+			if (this.isHighlit()) {
 				this.highlight();
 			}
 		};
-		line.highlight = function()
-		{
+		line.highlight = function() {
 			this.setAttribute("stroke", highlitColor);
 			addClassToElement(this, "highlit");
 		};
-		line.lowlight = function()
-		{
+		line.lowlight = function() {
 			removeClassFromElement(this, "highlit");
-			if (this.isSelected()) 
-			{
+			if (this.isSelected()) {
 				this.setAttribute("stroke", selectedColor);
-			} 
-			else
-			{
+			} else {
 				this.setAttribute("stroke", this.color);
 			}
 		};
-		line.thicken = function()
-		{
+		line.thicken = function() {
 			var thickness = parseFloat(this.getAttribute("stroke-width"));
 			this.setAttribute("stroke-width",thickness*thickenRate);
 			this.clone.setAttribute("stroke-width",thickness*thickenRate);
 		};
-		line.thin = function()
-		{
+		line.thin = function() {
 			var thickness = parseFloat(this.getAttribute("stroke-width"));
 			this.setAttribute("stroke-width",thickness*thinRate);
 			this.clone.setAttribute("stroke-width",thickness*thinRate);
 		};
-		line.add = function()
-		{
+		line.add = function() {
 			shapeGroup.appendChild(this.clone);
 			shapeGroup.appendChild(this);
 		};
-		line.remove = function()
-		{
+		line.remove = function() {
 			shapeGroup.removeChild(this);
 			shapeGroup.removeChild(this.clone);
 			removeOverlapsOfItem(this);
 		};
 	},
-	createCloneLine : function(line) 
-	{
+	createCloneLine : function(line) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.clone = clone;
 		clone.setAttribute("x1", parseFloat(line.dot1.getAttribute("cx")) + IPD + line.dot1.shift*shiftSpeed);
@@ -301,8 +259,7 @@ var shapeFactory = {
 		clone.setAttribute("stroke-linecap", strokeLinecap);
 		shapeGroup.appendChild(clone);
 	},
-	createFace : function(dot1, dot2, dot3) 
-	{
+	createFace : function(dot1, dot2, dot3) {
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var coords = "";
@@ -330,58 +287,52 @@ var shapeFactory = {
 		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "faceUnder");
 		this.attachCommonHandlers(face);
-		face.ondblclick = function(event) 
-		{
+		face.ondblclick = function(event) {
 			event.stopPropagation();
+			if(!isEditMode) {
+				editMode();
+			}
 			selectDotsOfFace(this, event);
 		};
 		this.createCloneFace(face);
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(face);
 		face.overlaps = [];
-		face.select = function()
-		{
-			showDots();
+		face.select = function() {
+			if(!isEditMode) {
+				editMode();
+			}
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
 			this.setAttribute("stroke", selectedColor);
 			addClassToElement(this, "selected");
 		};
-		face.deselect = function()
-		{
+		face.deselect = function() {
 			this.setAttribute("stroke-width", 0);
 			removeClassFromElement(this, "selected");
-			if (this.isHighlit()) 
-			{
+			if (this.isHighlit()) {
 				this.highlight();
 			}
 		};
-		face.highlight = function()
-		{
+		face.highlight = function() {
 			this.setAttribute("stroke", highlitColor);
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
 			addClassToElement(this, "highlit");
 		};
-		face.lowlight = function()
-		{
+		face.lowlight = function() {
 			removeClassFromElement(this, "highlit");
-			if (this.isSelected()) 
-			{
+			if (this.isSelected()) {
 				this.setAttribute("stroke", selectedColor);
-			} 
-			else 
-			{
+			} else {
 				this.setAttribute("stroke-width", 0);
 			}
 		};
-		face.add = function()
-		{
+		face.add = function() {
 			shapeGroup.appendChild(this.clone.under);
 			shapeGroup.appendChild(this.clone);
 			shapeGroup.appendChild(this.under);
 			shapeGroup.appendChild(this);
 		};
-		face.remove = function()
-		{
+		face.remove = function() {
 			shapeGroup.removeChild(this.clone.under);
 			shapeGroup.removeChild(this.clone);
 			shapeGroup.removeChild(this.under);
@@ -389,8 +340,7 @@ var shapeFactory = {
 			removeOverlapsOfItem(this);
 		};
 	},
-	createCloneFace : function(face) 
-	{
+	createCloneFace : function(face) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		face.clone = clone;

@@ -3,43 +3,33 @@
 var selectangle;
 
 function changeSelectangle(event) {
-	if(selectangle!=null)
-	{
+	if(selectangle) {
 		var x=parseFloat(selectangle.getAttribute("x"));
 		var y=parseFloat(selectangle.getAttribute("y"));
 		var width=parseFloat(selectangle.getAttribute("width"));
 		var height=parseFloat(selectangle.getAttribute("height"));
 		var ex=event.clientX;
 		var ey=event.clientY;
-		if(selectangle.originalX<ex)
-		{
+		if(selectangle.originalX<ex) {
 			selectangle.setAttribute("width",ex-x);
 			selectangle.setAttribute("x",selectangle.originalX);
-		}
-		else
-		{
+		} else {
 			selectangle.setAttribute("width",selectangle.originalX-ex);
 			selectangle.setAttribute("x",ex);
 		}
-		if(selectangle.originalY<ey)
-		{
+		if(selectangle.originalY<ey) {
 			selectangle.setAttribute("height",ey-y);
 			selectangle.setAttribute("y",selectangle.originalY);
-		}
-		else
-		{
+		} else {
 			selectangle.setAttribute("height",selectangle.originalY-ey);
 			selectangle.setAttribute("y",ey);
 		}
-	}
-	else
-	{
+	} else {
 		createSelectangle(event);
 	}
 }
 
-function createSelectangle(event)
-{
+function createSelectangle(event) {
 	selectangle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 	selectangle.setAttribute("x",event.clientX);
 	selectangle.setAttribute("y",event.clientY);
@@ -52,4 +42,29 @@ function createSelectangle(event)
 	selectangle.originalX=event.clientX;
 	selectangle.originalY=event.clientY;
 	svg.appendChild(selectangle);
+}
+
+function releaseSelectangle(event) {
+	if(selectangle) {
+		var maxx=parseFloat(selectangle.getAttribute("width"))+parseFloat(selectangle.getAttribute("x"));
+		var minx=parseFloat(selectangle.getAttribute("x"));
+		var maxy=parseFloat(selectangle.getAttribute("height"))+parseFloat(selectangle.getAttribute("y"));
+		var miny=parseFloat(selectangle.getAttribute("y"));
+		var dots = getDots();
+		if(!event.shiftKey) {
+			deselectAll();
+		}
+		for(var ik=0;ik<dots.length;ik++) {
+			var dot=dots[ik];
+			var dotx=parseFloat(dot.getAttribute("cx"));
+			var doty=parseFloat(dot.getAttribute("cy"));
+			if(dotx<maxx && dotx>minx) {
+				if(doty<maxy && doty>miny) {
+					dot.select();
+				}
+			}
+		}
+		svg.removeChild(selectangle);
+		selectangle = null;
+	}
 }

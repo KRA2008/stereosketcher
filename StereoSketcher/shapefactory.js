@@ -193,6 +193,9 @@ var shapeFactory = {
 		dot2.deselect();
 		line.ondblclick = function(event) {
 			event.stopPropagation();
+			if(!isEditMode) {
+				editMode();
+			}
 			selectDotsOfLine(this, event);
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);

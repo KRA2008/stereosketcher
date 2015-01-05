@@ -30,9 +30,7 @@ var shapeFactory = {
 		this.attachCommonHandlers(dot);
 		dot.ondblclick = function(event) {
 			event.stopPropagation();
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			if (wasAClick(event)) {
 				selectAllContiguous(this, event);
 			}
@@ -88,15 +86,11 @@ var shapeFactory = {
 	},
 	attachCommonHandlers : function(shape) {
 		shape.onmouseenter = function() {
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			this.highlight();
 		};
 		shape.onmouseout = function() {
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			this.lowlight();
 		};
 		shape.isSelected = function() {
@@ -113,9 +107,7 @@ var shapeFactory = {
 			}
 		};
 		shape.onmousedown = function(event) {
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			preventDefault(event);
 			if (event.button == 0) {
 				pressX=event.clientX;
@@ -145,9 +137,7 @@ var shapeFactory = {
 			}
 		};
 		shape.onmouseup = function(event) {
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			if (event.button == 0) {
 				event.stopPropagation();
 				if(wasAClick(event)) {
@@ -193,9 +183,7 @@ var shapeFactory = {
 		dot2.deselect();
 		line.ondblclick = function(event) {
 			event.stopPropagation();
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			selectDotsOfLine(this, event);
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);
@@ -204,9 +192,7 @@ var shapeFactory = {
 		line.overlaps = [];
 		
 		line.select = function() {
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			this.setAttribute("stroke", selectedColor);
 			addClassToElement(this, "selected");
 		};
@@ -261,6 +247,10 @@ var shapeFactory = {
 		clone.setAttribute("class","cloneLine");
 		clone.setAttribute("stroke-linecap", strokeLinecap);
 		shapeGroup.appendChild(clone);
+		if(mode==2)
+		{
+			clone.setAttribute("visibility","hidden");
+		}
 	},
 	createFace : function(dot1, dot2, dot3) {
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -292,9 +282,7 @@ var shapeFactory = {
 		this.attachCommonHandlers(face);
 		face.ondblclick = function(event) {
 			event.stopPropagation();
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			selectDotsOfFace(this, event);
 		};
 		this.createCloneFace(face);
@@ -302,9 +290,7 @@ var shapeFactory = {
 		shapeGroup.appendChild(face);
 		face.overlaps = [];
 		face.select = function() {
-			if(!isEditMode) {
-				editMode();
-			}
+			editMode();
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
 			this.setAttribute("stroke", selectedColor);
 			addClassToElement(this, "selected");
@@ -364,5 +350,10 @@ var shapeFactory = {
 		under.setAttribute("class", "cloneUnder");
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);
+		if(mode==2)
+		{
+			clone.setAttribute("visibility","hidden");
+			clone.under.setAttribute("visibility","hidden");
+		}
 	}
 }

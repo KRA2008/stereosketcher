@@ -157,7 +157,7 @@ function magicEyeMode() {
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "parallel";
 	IPD=originalIPD*-1.0;
-	editMode();
+	editMode(true);
 }
 
 function redCyanMode() {
@@ -165,7 +165,7 @@ function redCyanMode() {
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "red/cyan";
 	IPD=0.0;
-	editMode();
+	editMode(true);
 }
 
 function crossEyeMode() {
@@ -173,19 +173,21 @@ function crossEyeMode() {
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "cross";
 	IPD=originalIPD;
-	editMode();
+	editMode(true);
 }
 
-function editMode() {
-	if(mode==2) {
+function editMode(force) {
+	if(!isEditMode || force)	{
+		if(mode==2) {
+			hideClones();
+		} else {
+			showClones();
+		}
 		removeOverlaps();
-		hideClones();
-	} else {
-		showClones();
+		showDots();
+		isEditMode = true;
+		refresh();
 	}
-	showDots();
-	refresh();
-	isEditMode = true;
 }
 
 function viewMode() {
@@ -194,8 +196,8 @@ function viewMode() {
 		showClones();
 	}
 	hideDots();
-	refresh();
 	isEditMode = false;
+	refresh();
 }
 
 function changeIPD(direction) {

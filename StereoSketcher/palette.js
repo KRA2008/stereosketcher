@@ -35,7 +35,6 @@ function setColor() {
 			face.under.setAttribute("stroke",color);
 			face.clone.under.setAttribute("stroke",color);
 		}
-		face.deselect();
 	}
 	var lines = getLines();
 	var line;
@@ -46,7 +45,6 @@ function setColor() {
 			line.setAttribute("stroke",color);
 			line.clone.setAttribute("stroke",color);
 		}
-		line.deselect();
 	}
 }
 

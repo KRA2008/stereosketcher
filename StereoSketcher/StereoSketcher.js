@@ -137,7 +137,6 @@ function thickenLines() {
 			line.thicken();
 		}
 	}
-	deselectAll();
 }
 
 function thinLines() {
@@ -149,7 +148,6 @@ function thinLines() {
 			line.thin();
 		}
 	}
-	deselectAll();
 }
 
 function magicEyeMode() {

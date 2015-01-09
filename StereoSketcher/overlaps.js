@@ -22,6 +22,13 @@ function addOverlaps() {
 		for(var ii=0;ii<linesAndFaces.length;ii++) {
 			shape = linesAndFaces[ii];
 			shapeBBox = shape.getBBox();
+			if(doesElementHaveClass(shape,"line"))
+			{
+				shapeBBox.x-=shape.getAttribute("stroke-width");
+				shapeBBox.y-=shape.getAttribute("stroke-width");
+				shapeBBox.width+=2*shape.getAttribute("stroke-width");
+				shapeBBox.height+=2*shape.getAttribute("stroke-width");
+			}
 			shape.overlaps = [];
 			shape.deselect();
 			shape.lowlight();
@@ -44,6 +51,13 @@ function addOverlaps() {
 				cloneShape = linesAndFaces[jj];
 				clone = cloneShape.clone;
 				cloneBBox = clone.getBBox();
+				if(doesElementHaveClass(clone,"line"))
+				{
+					cloneBBox.x-=clone.getAttribute("stroke-width");
+					cloneBBox.y-=clone.getAttribute("stroke-width");
+					cloneBBox.width+=2*clone.getAttribute("stroke-width");
+					cloneBBox.height+=2*clone.getAttribute("stroke-width");
+				}
 				
 				if (!doBoundingBoxesOverlap(shapeBBox,cloneBBox)) {
 					continue;

@@ -125,6 +125,11 @@ var shapeFactory = {
 							selectedDots.push(dot);
 						}
 					}
+					for(var jj=0;jj<selectedDots.length;jj++) {
+						dot = selectedDots[jj];
+						dotGroup.removeChild(dot);
+						dotGroup.appendChild(dot);
+					}
 					this.onmousemove = function(event) {
 						event.stopPropagation();
 						dragDots(event,selectedDots);

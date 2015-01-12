@@ -129,6 +129,12 @@ function keyDown(e) {
 		case 51: //3
 			redCyanMode();
 			break;
+		case 71: //g;
+			changeOpacity(false);
+			break;
+		case 72: //h;
+			changeOpacity(true);
+			break;
 	}
 }
 

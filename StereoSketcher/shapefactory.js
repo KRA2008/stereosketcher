@@ -1,6 +1,6 @@
 'use strict';
 
-var faceSpaceCorrection = "0.5px";
+var faceSpaceCorrection = "0.565px";
 var faceActionStrokeWidth = 3.0;
 var labelX = -15.0;
 var labelY = -7.0;
@@ -8,6 +8,7 @@ var defaultLineThickness = 2.0;
 var thickenRate = 1.2;
 var thinRate = 1-((thickenRate-1)/thickenRate);
 var dotRadius = 7.0;
+var startOpacity = 1.0;
 var faceStartColor = "#777777";
 var lineStartColor = "#000000";
 var dotColor = "#000000";
@@ -178,6 +179,8 @@ var shapeFactory = {
 		line.color = lineStartColor;
 		line.setAttribute("stroke", lineStartColor);
 		line.setAttribute("stroke-width", defaultLineThickness);
+		line.opacity = startOpacity;
+		line.setAttribute("stroke-opacity",startOpacity);
 		line.setAttribute("class","line");
 		line.dot1 = dot1;
 		line.dot2 = dot2;
@@ -249,6 +252,7 @@ var shapeFactory = {
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke", lineStartColor);
 		clone.setAttribute("stroke-width", defaultLineThickness);
+		clone.setAttribute("stroke-opacity",startOpacity);
 		clone.setAttribute("class","cloneLine");
 		clone.setAttribute("stroke-linecap", strokeLinecap);
 		shapeGroup.appendChild(clone);
@@ -276,13 +280,16 @@ var shapeFactory = {
 		face.setAttribute("points", coords);
 		under.setAttribute("points", coords);
 		face.under = under;
-		face.setAttribute("fill", faceStartColor);
-		face.setAttribute("class", "face");
 		face.color = faceStartColor;
+		face.setAttribute("fill", faceStartColor);
+		face.opacity = startOpacity;
+		face.setAttribute("fill-opacity",startOpacity);
+		face.setAttribute("class", "face");
 		under.setAttribute("fill", faceStartColor);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
-		under.setAttribute("stroke-opacity", 1.0);
+		under.setAttribute("stroke-opacity", startOpacity);
+		under.setAttribute("fill-opacity",startOpacity);
 		under.setAttribute("class", "faceUnder");
 		this.attachCommonHandlers(face);
 		face.ondblclick = function(event) {
@@ -348,10 +355,12 @@ var shapeFactory = {
 		clone.setAttribute("class", "cloneFace");
 		clone.setAttribute("stroke-width", 0);
 		clone.setAttribute("fill", faceStartColor);
+		clone.setAttribute("fill-opacity",startOpacity);
 		under.setAttribute("fill", faceStartColor);
+		under.setAttribute("fill-opacity",startOpacity);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
-		under.setAttribute("stroke-opacity", 1.0);
+		under.setAttribute("stroke-opacity", startOpacity);
 		under.setAttribute("class", "cloneUnder");
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);

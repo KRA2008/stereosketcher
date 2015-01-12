@@ -1,4 +1,6 @@
 'use strict';
+var opacityStep=0.05;
+
 
 function sampleColor() {
 	var selectedItem = null;
@@ -71,4 +73,54 @@ function hideColorPicker() {
 function showColorPicker() {
 	var picker = document.getElementById('colorPicker');
 	picker.color.showPicker();
+}
+
+function changeOpacity(increase) {
+	var shape;
+	var opacity;
+	var shapes = getLinesAndFaces();
+	for(var ii=0;ii<shapes.length;ii++) {
+		shape = shapes[ii];
+		if(shape.isSelected()) {
+			if(doesElementHaveClass(shape,"line")) {
+				opacity = parseFloat(shape.getAttribute("stroke-opacity"));
+			} else if (doesElementHaveClass(shape,"face")) {
+				opacity = parseFloat(shape.getAttribute("fill-opacity"));
+			}
+			opacity = Math.round((1/opacityStep)*opacity)*opacityStep;
+			if(increase) {
+				if(opacity<1.0)
+				{
+					opacity+=opacityStep;
+				}
+			} else {
+				if(opacity>0+opacityStep)
+				{
+					opacity-=opacityStep;
+				}
+			}
+			if(doesElementHaveClass(shape,"line")) {
+				shape.setAttribute("stroke-opacity",opacity);
+				shape.clone.setAttribute("stroke-opacity",opacity);
+			} else if (doesElementHaveClass(shape,"face")) {
+				shape.setAttribute("fill-opacity",opacity);
+				shape.under.setAttribute("fill-opacity",opacity);
+				shape.clone.setAttribute("fill-opacity",opacity);
+				shape.clone.under.setAttribute("fill-opacity",opacity);
+				
+				opacity = 1.2*opacity*opacity-0.2*opacity;
+				shape.under.setAttribute("stroke-opacity",opacity);
+				shape.clone.under.setAttribute("stroke-opacity",opacity);
+			}
+		}
+	}
+}
+
+function setOpaque() {
+	var shape;
+	var shapes = getLinesAndFaces();
+	for(var ii=0;ii<shapes.length;ii++) {
+		shape = shapes[ii];
+		shape.setAttribute("opacity",1.0);
+	}
 }

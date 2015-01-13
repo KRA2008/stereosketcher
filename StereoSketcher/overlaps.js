@@ -19,6 +19,8 @@ function addOverlaps() {
 		var linesAndFaces = getLinesAndFaces();
 		var backgroundColor = getBackgroundColor();
 		
+		stowAllOpacity();
+		
 		for(var ii=0;ii<linesAndFaces.length;ii++) {
 			shape = linesAndFaces[ii];
 			shapeBBox = shape.getBBox();
@@ -221,7 +223,7 @@ function getRedComponent(colorAttr) {
 }
 
 function correctOverlaps() {
-	if(mode==2) {
+	if(mode==3) {
 		removeOverlaps();
 		addOverlaps();
 	}
@@ -247,7 +249,7 @@ function removeOverlaps() {
 			item.clone.under.setAttribute("stroke",item.color);
 		}
 	}
-	if(mode==2) {
+	if(mode==3) {
 		hideClones();
 	}
 }

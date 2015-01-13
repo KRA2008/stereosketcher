@@ -76,51 +76,79 @@ function showColorPicker() {
 }
 
 function changeOpacity(increase) {
-	var shape;
-	var opacity;
-	var shapes = getLinesAndFaces();
-	for(var ii=0;ii<shapes.length;ii++) {
-		shape = shapes[ii];
-		if(shape.isSelected()) {
-			if(doesElementHaveClass(shape,"line")) {
-				opacity = parseFloat(shape.getAttribute("stroke-opacity"));
-			} else if (doesElementHaveClass(shape,"face")) {
-				opacity = parseFloat(shape.getAttribute("fill-opacity"));
-			}
-			opacity = Math.round((1/opacityStep)*opacity)*opacityStep;
-			if(increase) {
-				if(opacity<1.0)
-				{
-					opacity+=opacityStep;
+	if(mode!==3) {
+		var shape;
+		var opacity;
+		var shapes = getLinesAndFaces();
+		for(var ii=0;ii<shapes.length;ii++) {
+			shape = shapes[ii];
+			if(shape.isSelected()) {
+				if(doesElementHaveClass(shape,"line")) {
+					opacity = parseFloat(shape.getAttribute("stroke-opacity"));
+				} else if (doesElementHaveClass(shape,"face")) {
+					opacity = parseFloat(shape.getAttribute("fill-opacity"));
 				}
-			} else {
-				if(opacity>0+opacityStep)
-				{
-					opacity-=opacityStep;
+				opacity = Math.round((1/opacityStep)*opacity)*opacityStep;
+				if(increase) {
+					if(opacity<1.0)
+					{
+						opacity+=opacityStep;
+					}
+				} else {
+					if(opacity>0+opacityStep)
+					{
+						opacity-=opacityStep;
+					}
 				}
-			}
-			if(doesElementHaveClass(shape,"line")) {
-				shape.setAttribute("stroke-opacity",opacity);
-				shape.clone.setAttribute("stroke-opacity",opacity);
-			} else if (doesElementHaveClass(shape,"face")) {
-				shape.setAttribute("fill-opacity",opacity);
-				shape.under.setAttribute("fill-opacity",opacity);
-				shape.clone.setAttribute("fill-opacity",opacity);
-				shape.clone.under.setAttribute("fill-opacity",opacity);
-				
-				opacity = 1.2*opacity*opacity-0.2*opacity;
-				shape.under.setAttribute("stroke-opacity",opacity);
-				shape.clone.under.setAttribute("stroke-opacity",opacity);
+				shape.opacity = opacity;
+				if(doesElementHaveClass(shape,"line")) {
+					setLineOpacity(shape,opacity);
+				} else if (doesElementHaveClass(shape,"face")) {
+					setFaceOpacity(shape,opacity);
+				}
 			}
 		}
 	}
 }
 
-function setOpaque() {
+function restoreAllOpacity() {
 	var shape;
 	var shapes = getLinesAndFaces();
 	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];
-		shape.setAttribute("opacity",1.0);
+		if(doesElementHaveClass(shape,"line")) {
+			setLineOpacity(shape,shape.opacity);
+		} else if (doesElementHaveClass(shape,"face")) {
+			setFaceOpacity(shape,shape.opacity);
+		}
 	}
+}
+
+function stowAllOpacity() {
+	var shape;
+	var shapes = getLinesAndFaces();
+	for(var ii=0;ii<shapes.length;ii++) {
+		shape = shapes[ii];
+		if(doesElementHaveClass(shape,"line")) {
+			setLineOpacity(shape,1.0);
+		} else if (doesElementHaveClass(shape,"face")) {
+			setFaceOpacity(shape,1.0);
+		}
+	}
+}
+
+function setLineOpacity(line,opacity) {
+	line.setAttribute("stroke-opacity",opacity);
+	line.clone.setAttribute("stroke-opacity",opacity);
+}
+
+function setFaceOpacity(face,opacity) {
+	face.setAttribute("fill-opacity",opacity);
+	face.under.setAttribute("fill-opacity",opacity);
+	face.clone.setAttribute("fill-opacity",opacity);
+	face.clone.under.setAttribute("fill-opacity",opacity);
+	
+	var mathedOpacity = 1.2*opacity*opacity-0.2*opacity;
+	face.under.setAttribute("stroke-opacity",mathedOpacity);
+	face.clone.under.setAttribute("stroke-opacity",mathedOpacity);
 }

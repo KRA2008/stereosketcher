@@ -8,7 +8,6 @@ var defaultLineThickness = 2.0;
 var thickenRate = 1.2;
 var thinRate = 1-((thickenRate-1)/thickenRate);
 var dotRadius = 7.0;
-var startOpacity = 1.0;
 var faceStartColor = "#777777";
 var lineStartColor = "#000000";
 var dotColor = "#000000";
@@ -179,7 +178,8 @@ var shapeFactory = {
 		line.color = lineStartColor;
 		line.setAttribute("stroke", lineStartColor);
 		line.setAttribute("stroke-width", defaultLineThickness);
-		line.setAttribute("stroke-opacity",startOpacity);
+		line.opacity = 1.0;
+		line.setAttribute("stroke-opacity",1.0);
 		line.setAttribute("class","line");
 		line.dot1 = dot1;
 		line.dot2 = dot2;
@@ -251,11 +251,11 @@ var shapeFactory = {
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke", lineStartColor);
 		clone.setAttribute("stroke-width", defaultLineThickness);
-		clone.setAttribute("stroke-opacity",startOpacity);
+		clone.setAttribute("stroke-opacity",1.0);
 		clone.setAttribute("class","cloneLine");
 		clone.setAttribute("stroke-linecap", strokeLinecap);
 		shapeGroup.appendChild(clone);
-		if(mode==2)
+		if(mode==3)
 		{
 			clone.setAttribute("visibility","hidden");
 		}
@@ -281,13 +281,14 @@ var shapeFactory = {
 		face.under = under;
 		face.color = faceStartColor;
 		face.setAttribute("fill", faceStartColor);
-		face.setAttribute("fill-opacity",startOpacity);
+		face.opacity = 1.0;
+		face.setAttribute("fill-opacity",1.0);
 		face.setAttribute("class", "face");
 		under.setAttribute("fill", faceStartColor);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
-		under.setAttribute("stroke-opacity", startOpacity);
-		under.setAttribute("fill-opacity",startOpacity);
+		under.setAttribute("stroke-opacity", 1.0);
+		under.setAttribute("fill-opacity",1.0);
 		under.setAttribute("class", "faceUnder");
 		this.attachCommonHandlers(face);
 		face.ondblclick = function(event) {
@@ -353,16 +354,16 @@ var shapeFactory = {
 		clone.setAttribute("class", "cloneFace");
 		clone.setAttribute("stroke-width", 0);
 		clone.setAttribute("fill", faceStartColor);
-		clone.setAttribute("fill-opacity",startOpacity);
+		clone.setAttribute("fill-opacity",1.0);
 		under.setAttribute("fill", faceStartColor);
-		under.setAttribute("fill-opacity",startOpacity);
+		under.setAttribute("fill-opacity",1.0);
 		under.setAttribute("stroke", faceStartColor);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
-		under.setAttribute("stroke-opacity", startOpacity);
+		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "cloneUnder");
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(clone);
-		if(mode==2)
+		if(mode==3)
 		{
 			clone.setAttribute("visibility","hidden");
 			clone.under.setAttribute("visibility","hidden");

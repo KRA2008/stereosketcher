@@ -1,32 +1,35 @@
 'use strict';
 
 function magicEyeMode() {
-	mode=1;
+	mode=2;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "parallel";
 	IPD=originalIPD*-1.0;
 	editMode(true);
+	restoreAllOpacity();
 }
 
 function redCyanMode() {
-	mode=2;
+	mode=3;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "red/cyan";
 	IPD=0.0;
 	editMode(true);
+	stowAllOpacity();
 }
 
 function crossEyeMode() {
-	mode=0;
+	mode=1;
 	var label=document.getElementById("modeLabel");
 	label.innerHTML = "cross";
 	IPD=originalIPD;
 	editMode(true);
+	restoreAllOpacity();
 }
 
 function editMode(force) {
 	if(!isEditMode || force)	{
-		if(mode==2) {
+		if(mode==3) {
 			hideClones();
 		} else {
 			showClones();
@@ -39,7 +42,7 @@ function editMode(force) {
 }
 
 function viewMode() {
-	if(mode==2) {
+	if(mode==3) {
 		addOverlaps();
 		showClones();
 	}

@@ -50,11 +50,11 @@ function addWatermark() {
 	watermark.setAttribute("fill", "black");
 	watermark.textContent="StereoSketcher.com";
 	switch(mode) {
-		case 0:
+		case 1:
 			watermark.textContent+=" X";
 			watermark.setAttribute("x", window.innerWidth-155);
 			break;
-		case 1:
+		case 2:
 			watermark.textContent+=" ||";
 			watermark.setAttribute("x", window.innerWidth-155);
 			break;

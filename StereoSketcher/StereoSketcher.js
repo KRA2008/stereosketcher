@@ -2,7 +2,7 @@
 
 var svg,dotGroup,labelGroup,shapeGroup,defs;
 var isEditMode=true;
-var mode=0;
+var mode=1;
 var pressX, pressY;
 var prevX, prevY;
 

@@ -108,10 +108,10 @@ function keyDown(e) {
 		case 87: //w
 			moveSelectedThroughLayers(false);
 			break;
-		case 67: //c
+		case 84: //t
 			changeIPD("left");
 			break;
-		case 86: //v
+		case 89: //y
 			changeIPD("right");
 			break;
 		case 88: //x
@@ -129,10 +129,10 @@ function keyDown(e) {
 		case 51: //3
 			redCyanMode();
 			break;
-		case 71: //g;
+		case 67: //c
 			changeOpacity(false);
 			break;
-		case 72: //h;
+		case 86: //v
 			changeOpacity(true);
 			break;
 	}

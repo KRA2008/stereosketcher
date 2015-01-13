@@ -1,6 +1,6 @@
 'use strict';
 
-var faceSpaceCorrection = "0.565px";
+var faceSpaceCorrection = "0.56px";
 var faceActionStrokeWidth = 3.0;
 var labelX = -15.0;
 var labelY = -7.0;
@@ -179,7 +179,6 @@ var shapeFactory = {
 		line.color = lineStartColor;
 		line.setAttribute("stroke", lineStartColor);
 		line.setAttribute("stroke-width", defaultLineThickness);
-		line.opacity = startOpacity;
 		line.setAttribute("stroke-opacity",startOpacity);
 		line.setAttribute("class","line");
 		line.dot1 = dot1;
@@ -282,7 +281,6 @@ var shapeFactory = {
 		face.under = under;
 		face.color = faceStartColor;
 		face.setAttribute("fill", faceStartColor);
-		face.opacity = startOpacity;
 		face.setAttribute("fill-opacity",startOpacity);
 		face.setAttribute("class", "face");
 		under.setAttribute("fill", faceStartColor);

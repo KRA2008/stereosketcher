@@ -5,11 +5,8 @@ var faceActionStrokeWidth = 3.0;
 var labelX = -15.0;
 var labelY = -7.0;
 var defaultLineThickness = 2.0;
-var thickenRate = 1.2;
-var thinRate = 1-((thickenRate-1)/thickenRate);
+var thickenRate = 0.5;
 var dotRadius = 7.0;
-var faceStartColor = "#777777";
-var lineStartColor = "#000000";
 var dotColor = "#000000";
 var selectedColor = "#FFFF00";
 var highlitColor = "#008800";
@@ -41,20 +38,8 @@ var shapeFactory = {
 		label.setAttribute("x", parseFloat(dot.getAttribute("cx")) + labelX);
 		label.setAttribute("y", parseFloat(dot.getAttribute("cy")) + labelY);
 		label.setAttribute("fill", dotColor);
-		label.setAttribute("class", "label");
+		label.setAttribute("class", "label forwardEvents");
 		label.textContent = "0";
-		label.onmouseup = function(event) {
-			dot.onmouseup(event);
-			event.stopPropagation();
-		};
-		label.onmouseenter = function(event) {
-			dot.onmouseenter(event);
-			event.stopPropagation();
-		};
-		label.onmouseout = function(event) {
-			dot.onmouseout(event);
-			event.stopPropagation();
-		};
 		dot.label = label;
 		dot.faces = [];
 		labelGroup.appendChild(label);
@@ -175,8 +160,8 @@ var shapeFactory = {
 		line.setAttribute("y1", dot1.getAttribute("cy"));
 		line.setAttribute("x2", dot2.getAttribute("cx"));
 		line.setAttribute("y2", dot2.getAttribute("cy"));
-		line.color = lineStartColor;
-		line.setAttribute("stroke", lineStartColor);
+		line.color = picker.value;
+		line.setAttribute("stroke", picker.value);
 		line.setAttribute("stroke-width", defaultLineThickness);
 		line.opacity = 1.0;
 		line.setAttribute("stroke-opacity",1.0);
@@ -224,13 +209,15 @@ var shapeFactory = {
 		};
 		line.thicken = function() {
 			var thickness = parseFloat(this.getAttribute("stroke-width"));
-			this.setAttribute("stroke-width",thickness*thickenRate);
-			this.clone.setAttribute("stroke-width",thickness*thickenRate);
+			this.setAttribute("stroke-width",thickness+thickenRate);
+			this.clone.setAttribute("stroke-width",thickness+thickenRate);
 		};
 		line.thin = function() {
 			var thickness = parseFloat(this.getAttribute("stroke-width"));
-			this.setAttribute("stroke-width",thickness*thinRate);
-			this.clone.setAttribute("stroke-width",thickness*thinRate);
+			if(thickness>thickenRate) {
+				this.setAttribute("stroke-width",thickness-thickenRate);
+				this.clone.setAttribute("stroke-width",thickness-thickenRate);
+			}
 		};
 		line.add = function() {
 			shapeGroup.appendChild(this.clone);
@@ -249,7 +236,7 @@ var shapeFactory = {
 		clone.setAttribute("y1", line.dot1.getAttribute("cy"));
 		clone.setAttribute("x2", parseFloat(line.dot2.getAttribute("cx")) + IPD + line.dot2.shift*shiftSpeed);
 		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
-		clone.setAttribute("stroke", lineStartColor);
+		clone.setAttribute("stroke", picker.value);
 		clone.setAttribute("stroke-width", defaultLineThickness);
 		clone.setAttribute("stroke-opacity",1.0);
 		clone.setAttribute("class","cloneLine");
@@ -279,13 +266,13 @@ var shapeFactory = {
 		face.setAttribute("points", coords);
 		under.setAttribute("points", coords);
 		face.under = under;
-		face.color = faceStartColor;
-		face.setAttribute("fill", faceStartColor);
+		face.color = picker.value;
+		face.setAttribute("fill", picker.value);
 		face.opacity = 1.0;
 		face.setAttribute("fill-opacity",1.0);
 		face.setAttribute("class", "face");
-		under.setAttribute("fill", faceStartColor);
-		under.setAttribute("stroke", faceStartColor);
+		under.setAttribute("fill", picker.value);
+		under.setAttribute("stroke", picker.value);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
 		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("fill-opacity",1.0);
@@ -353,11 +340,11 @@ var shapeFactory = {
 		clone.under = under;
 		clone.setAttribute("class", "cloneFace");
 		clone.setAttribute("stroke-width", 0);
-		clone.setAttribute("fill", faceStartColor);
+		clone.setAttribute("fill", picker.value);
 		clone.setAttribute("fill-opacity",1.0);
-		under.setAttribute("fill", faceStartColor);
+		under.setAttribute("fill", picker.value);
 		under.setAttribute("fill-opacity",1.0);
-		under.setAttribute("stroke", faceStartColor);
+		under.setAttribute("stroke", picker.value);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
 		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "cloneUnder");

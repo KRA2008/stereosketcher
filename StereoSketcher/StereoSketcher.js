@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -12,6 +12,7 @@ window.onload=function() {
 	labelGroup=document.getElementById("labels");
 	shapeGroup=document.getElementById("shapes");
 	defs=document.getElementById("defs");
+	picker = document.getElementById('colorPicker');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -51,6 +52,7 @@ window.onload=function() {
 	svg.addEventListener("DOMMouseScroll",zoom,false);
 	crossEyeMode();
 	hideLoading();
+	picker.color.fromString("#000000");
 };
 
 window.onbeforeunload = function(e) {
@@ -109,10 +111,10 @@ function keyDown(e) {
 			moveSelectedThroughLayers(false);
 			break;
 		case 84: //t
-			changeIPD("left");
+			changeIPD(false);
 			break;
 		case 89: //y
-			changeIPD("right");
+			changeIPD(true);
 			break;
 		case 88: //x
 			thickenLines();
@@ -138,13 +140,15 @@ function keyDown(e) {
 	}
 }
 
-function changeIPD(direction) {
-	if(direction=="right") {
-		IPD++;
-	} else {
-		IPD--;
+function changeIPD(right) {
+	if(mode!=3) {
+		if(right) {
+			IPD++;
+		} else {
+			IPD--;
+		}
+		refresh();
 	}
-	refresh();
 }
 
 function getDots() {

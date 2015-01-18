@@ -50,7 +50,6 @@ function zoom(event) {
 		line.setAttribute("stroke-width",thickness*zoom);
 		line.clone.setAttribute("stroke-width",thickness*zoom);
 	}
-	faceActionStrokeWidth*=zoom;
 	var face;
 	var faces = getFaces();
 	for (var ii=0;ii<faces.length;ii++) {

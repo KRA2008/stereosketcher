@@ -1,7 +1,6 @@
 'use strict';
 var opacityStep=0.05;
 
-
 function sampleColor() {
 	var selectedItem = null;
 	var items = getLinesAndFaces();
@@ -19,11 +18,11 @@ function sampleColor() {
 	if(selectedItem == null) {
 		return;
 	}
-	document.getElementById('colorPicker').color.fromString(selectedItem.color);
+	picker.color.fromString(selectedItem.color);
 }
 
 function setColor() {			
-	var color = document.getElementById('colorPicker').value;
+	var color = picker.value;
 	var faces = getFaces();
 	var face;
 	for(var ii = 0;ii<faces.length;ii++) {
@@ -51,12 +50,11 @@ function setColor() {
 }
 
 function setBackground() {
-	var color = document.getElementById('colorPicker').value;
-	svg.setAttribute("style","background: "+color);
+	svg.setAttribute("style","background: "+picker.value);
 }
 
 function sampleBackground() {
-	document.getElementById('colorPicker').color.fromString(getBackgroundColor());
+	picker.color.fromString(getBackgroundColor());
 }
 
 function getBackgroundColor() {
@@ -65,13 +63,11 @@ function getBackgroundColor() {
 }
 
 function hideColorPicker() {
-	var picker = document.getElementById('colorPicker');
 	picker.color.hidePicker();
 	picker.blur();
 }
 
 function showColorPicker() {
-	var picker = document.getElementById('colorPicker');
 	picker.color.showPicker();
 }
 

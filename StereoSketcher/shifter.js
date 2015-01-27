@@ -31,33 +31,45 @@ function shiftOut() {
 }
 
 function moveSelectedToBack() {
-	deselectAllDots();
-    var selected = getSelected();
-    while(selected.length>0) {
-	    var element = selected[0];
-	    element.remove();
-	    shapeGroup.insertBefore(element,shapeGroup.firstChild);
-	    shapeGroup.insertBefore(element.clone,shapeGroup.firstChild);
-	    if(element.under) {
-	            shapeGroup.insertBefore(element.under,shapeGroup.firstChild);
-	            shapeGroup.insertBefore(element.clone.under,shapeGroup.firstChild);
+    var linesAndFaces = getLinesAndFaces();
+    var removed = [];
+    var item;
+    var startLength = linesAndFaces.length;
+    for(var ii=startLength-1;ii>=0;ii--) {
+	    item = linesAndFaces[ii];
+	    if(item.isSelected()) {
+		    item.remove();
+		    removed.push(item);
 	    }
-	    element.lowlight();
-	    element.deselect();
-	    selected = getSelected();
+    }
+    for(var jj=0;jj<removed.length;jj++) {
+    	item = removed[jj];
+	    shapeGroup.insertBefore(item,shapeGroup.firstChild);
+	    shapeGroup.insertBefore(item.clone,shapeGroup.firstChild);
+	    if(item.under) {
+	            shapeGroup.insertBefore(item.under,shapeGroup.firstChild);
+	            shapeGroup.insertBefore(item.clone.under,shapeGroup.firstChild);
+	    }
+	    item.lowlight();
     }
 }
 
-function moveSelectedToFront() {		
-	deselectAllDots();
-    var selected = getSelected();
-    while(selected.length>0) {
-	    var element = selected[0];
-	    element.remove();
-	    element.add();
-	    element.lowlight();
-	    element.deselect();
-	    selected = getSelected();
+function moveSelectedToFront() {
+    var linesAndFaces = getLinesAndFaces();
+    var removed = [];
+    var item;
+    var startLength = linesAndFaces.length;
+    for(var ii=startLength-1;ii>=0;ii--) {
+    	item = linesAndFaces[ii];
+    	if(item.isSelected()) {
+		    item.remove();
+		    removed.push(item);
+    	}
+    }
+    for(var jj=removed.length-1;jj>=0;jj--) {
+    	item = removed[jj];
+    	item.add();
+    	item.lowlight();
     }
 }
 

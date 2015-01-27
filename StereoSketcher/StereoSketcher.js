@@ -285,7 +285,7 @@ function deletePressed() {
 	for(var ii=lines.length-1;ii>=0;ii--) {
 		line=lines[ii];
 		if(line.isSelected() || line.dot1.isSelected() || line.dot2.isSelected()) {
-			line.remove();
+			line.delete();
 		}
 	}
 	var face;
@@ -293,7 +293,7 @@ function deletePressed() {
 	for (var ii=faces.length-1;ii>=0;ii--) {
 		face=faces[ii];
 		if(face.isSelected() || face.dot1.isSelected() || face.dot2.isSelected() || face.dot3.isSelected()) {
-			face.remove();
+			face.delete();
 		}
 	}
 }

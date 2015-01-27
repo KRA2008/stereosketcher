@@ -224,12 +224,15 @@ var shapeFactory = {
 			shapeGroup.appendChild(this);
 		};
 		line.remove = function() {
-			this.dot1.lines.splice(this.dot1.lines.indexOf(this),1);
-			this.dot2.lines.splice(this.dot2.lines.indexOf(this),1);
 			shapeGroup.removeChild(this);
 			shapeGroup.removeChild(this.clone);
 			removeOverlapsOfItem(this);
 		};
+		line.delete = function() {
+			this.dot1.lines.splice(this.dot1.lines.indexOf(this),1);
+			this.dot2.lines.splice(this.dot2.lines.indexOf(this),1);
+			this.remove();
+		}
 	},
 	createCloneLine : function(line) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -322,14 +325,17 @@ var shapeFactory = {
 			shapeGroup.appendChild(this);
 		};
 		face.remove = function() {
-			this.dot1.faces.splice(this.dot1.faces.indexOf(this),1);
-			this.dot2.faces.splice(this.dot2.faces.indexOf(this),1);
-			this.dot3.faces.splice(this.dot3.faces.indexOf(this),1);
 			shapeGroup.removeChild(this.clone.under);
 			shapeGroup.removeChild(this.clone);
 			shapeGroup.removeChild(this.under);
 			shapeGroup.removeChild(this);
 			removeOverlapsOfItem(this);
+		};
+		face.delete = function() {
+			this.dot1.faces.splice(this.dot1.faces.indexOf(this),1);
+			this.dot2.faces.splice(this.dot2.faces.indexOf(this),1);
+			this.dot3.faces.splice(this.dot3.faces.indexOf(this),1);
+			this.remove();
 		};
 	},
 	createCloneFace : function(face) {

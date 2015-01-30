@@ -105,10 +105,10 @@ function keyDown(e) {
 			moveSelectedToFront();
 			break;
 		case 69: //e
-			moveSelectedThroughLayers(true);
+			moveSelectedOneLayer(true);
 			break;
 		case 87: //w
-			moveSelectedThroughLayers(false);
+			moveSelectedOneLayer(false);
 			break;
 		case 84: //t
 			changeIPD(false);

@@ -1,30 +1,5 @@
 'use strict';
 
-function selectAllContiguous(sourceDot,event) {
-	var dots = getDots();
-	var dot;
-	if(!event.shiftKey) {
-		deselectAll();
-	} else {
-		for(var ii=0;ii<dots.length;ii++) {
-			dot = dots[ii];
-			if(dot.isSelected()) {
-				dot.deselect();
-				addClassToElement(dot,"tempSelect");
-			}
-		}
-	}
-	sourceDot.select();
-	recursiveSelectDots(sourceDot);
-	dots = getDots();
-	for(var ii=0;ii<dots.length;ii++) {
-		dot = dots[ii];
-		if(doesElementHaveClass(dot,"tempSelect")) {
-			dot.select();
-			removeClassFromElement(dot,"tempSelect");
-		}
-	}
-}
 
 function lowlightAll() {
 	var highlit = shapeGroup.getElementsByClassName("highlit");
@@ -48,6 +23,100 @@ function selectDotsOfFace(face,event) {
 	face.dot1.select();
 	face.dot2.select();
 	face.dot3.select();
+}
+
+function selectShapesOfDot(dot,event) {
+	if(!event.shiftKey) {
+		deselectAll();
+	}
+	var lines = dot.lines;
+	var faces = dot.faces;
+	for(var ii=0;ii<lines.length;ii++) {
+		lines[ii].select();
+	}
+	for(var ii=0;ii<faces.length;ii++) {
+		faces[ii].select();
+	}
+}
+
+function selectAllContiguousShapes(sourceShape,event) {
+	var shapes = getLinesAndFaces();
+	var shape;
+	if(!event.shiftKey) {
+		deselectAll();
+	} else {
+		for(var ii=0;ii<shapes.length;ii++) {
+			shape = shapes[ii];
+			if(shape.isSelected()) {
+				shape.deselect();
+				addClassToElement(shape,"tempSelect");
+			}
+		}
+	}
+	sourceShape.select();
+	recursiveSelectShapes(sourceShape);
+	for(var ii=0;ii<shapes.length;ii++) {
+		shape = shapes[ii];
+		if(doesElementHaveClass(shape,"tempSelect")) {
+			shape.select();
+			removeClassFromElement(shape,"tempSelect");
+		}
+	}
+}
+
+function recursiveSelectShapes(sourceShape) {
+	recursiveSelectShapesDotStepper(sourceShape.dot1);
+	recursiveSelectShapesDotStepper(sourceShape.dot2);
+	if(doesElementHaveClass(sourceShape,"face")) {
+		recursiveSelectShapesDotStepper(sourceShape.dot3);
+	}
+}
+
+function recursiveSelectShapesDotStepper(dot) {
+	var shape;
+	for(var ii=0;ii<dot.lines.length;ii++) {
+		shape = dot.lines[ii];
+		if(shape.isSelected()) {
+			continue;
+		} else {
+			shape.select();
+			recursiveSelectShapes(shape);
+		}
+	}
+	for(var jj=0;jj<dot.faces.length;jj++) {
+		shape = dot.faces[jj];
+		if(shape.isSelected()) {
+			continue;
+		} else {
+			shape.select();
+			recursiveSelectShapes(shape);
+		}
+	}
+}
+
+function selectAllContiguousDots(sourceDot,event) {
+	var dots = getDots();
+	var dot;
+	if(!event.shiftKey) {
+		deselectAll();
+	} else {
+		for(var ii=0;ii<dots.length;ii++) {
+			dot = dots[ii];
+			if(dot.isSelected()) {
+				dot.deselect();
+				addClassToElement(dot,"tempSelect");
+			}
+		}
+	}
+	sourceDot.select();
+	recursiveSelectDots(sourceDot);
+	for(var ii=0;ii<dots.length;ii++) {
+		dot = dots[ii];
+		if(doesElementHaveClass(dot,"tempSelect")) {
+			dot.select();
+			removeClassFromElement(dot,"tempSelect");
+		}
+	}
 }
 
 function recursiveSelectDots(dot) {

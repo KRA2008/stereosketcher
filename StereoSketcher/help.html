@@ -10,6 +10,9 @@
 			text-align:left;
 			vertical-align:text-top;
 		} 
+		.center, th {
+			text-align:center;
+		}
 		</style>
 		<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-56107665-1', 'auto');ga('send', 'pageview');
@@ -26,17 +29,17 @@
 		<table>
 			<tr text-align="top">
 				<td>
-				<h3>KEYS</h3>
+				<h3>KEYBOARD</h3>
 					<table>
 						<tr><th>Key</th><th>Function</th></tr>
 						<tr><td>1</td><td>Cross eye view mode</td></tr>
 						<tr><td>2</td><td>Parallel eye view mode</td></tr>
 						<tr><td>3</td><td>Red/Cyan view mode</td></tr>
 						<tr><td>Spacebar</td><td>Hide dots/switch to display-only mode</td></tr>
-						<tr><td>q</td><td>move selected shapes to back layer</td></tr>
-						<tr><td>w</td><td>move selected shapes one layer backward</td></tr>
-						<tr><td>e</td><td>move selected shapes one layer forward</td></tr>
-						<tr><td>r</td><td>move selected shapes to front layer</td></tr>
+						<tr><td>q</td><td>move selected lines and faces to back layer</td></tr>
+						<tr><td>w</td><td>move selected lines and faces one layer backward</td></tr>
+						<tr><td>e</td><td>move selected lines and faces one layer forward</td></tr>
+						<tr><td>r</td><td>move selected lines and faces to front layer</td></tr>
 						<tr><td>t</td><td>move clones left</td></tr>
 						<tr><td>y</td><td>move clones right</td></tr>
 						<tr><td>a</td><td>shift dots into screen</td></tr>
@@ -53,13 +56,20 @@
 					<h3>MOUSE</h3>
 					<table>
 						<tr><th>Button</th><th>Gesture</th><th>Modifier</th><th>Target</th><th>Function</th></tr>
+						<tr><td colspan="5" class="center">Create Dots</td></tr>
 						<tr><td>left</td><td>click</td><td></td><td>open space</td><td>create dot</td></tr>
-						<tr><td>left</td><td>click</td><td>shift</td><td>open space</td><td>create dot and select it (cumulative select)</td></tr>
+						<tr><td>left</td><td>click</td><td>shift</td><td>open space</td><td>create dot and select it</td></tr>
+						<tr><td colspan="5" class="center">Item Selection</td></tr>
+						<tr><td colspan="2">any selection gesture</td><td>shift</td><td>item</td><td>cumulative select</td></tr>
 						<tr><td>left</td><td>click</td><td></td><td>item</td><td>toggle select item and deselect all others</td></tr>
-						<tr><td>left</td><td>click</td><td>shift</td><td>item</td><td>toggle select item (cumulative select)</td></tr>
-						<tr><td>left</td><td>click and drag</td><td></td><td>selected dot</td><td>move selected dots</td></tr>
-						<tr><td>left</td><td>click and drag</td><td></td><td>anywhere</td><td>select dots contained in rectangle</td></tr>
+						<tr><td>left</td><td>click and drag</td><td></td><td>open space</td><td>select dots contained in selectangle</td></tr>
 						<tr><td>right</td><td>click</td><td></td><td>anywhere</td><td>deselect all</td></tr>
+						<tr><td>left</td><td>double click</td><td></td><td>dot</td><td>select all contiguous dots</td></tr>
+						<tr><td>left</td><td>double click</td><td></td><td>line or face</td><td>select all contiguous lines and faces</td></tr>
+						<tr><td>left</td><td>click</td><td>control</td><td>dot</td><td>select all lines and faces of dot</td></tr>
+						<tr><td>left</td><td>click</td><td>control</td><td>line or face</td><td>select all dots of line or face</td></tr>
+						<tr><td colspan="5" class="center">Movement</td></tr>
+						<tr><td>left</td><td>click and drag</td><td></td><td>selected dot</td><td>move selected dots</td></tr>
 						<tr><td>right</td><td>click and drag</td><td></td><td>anywhere</td><td>pan</td></tr>
 						<tr><td>wheel</td><td>roll</td><td></td><td>anywhere</td><td>zoom</td></tr>
 					</table>

@@ -29,7 +29,7 @@ var shapeFactory = {
 			event.stopPropagation();
 			editMode();
 			if (wasAClick(event)) {
-				selectAllContiguous(this, event);
+				selectAllContiguousDots(this, event);
 			}
 		};
 		dot.lines = [];
@@ -131,18 +131,28 @@ var shapeFactory = {
 			if (event.button == 0) {
 				event.stopPropagation();
 				if(wasAClick(event)) {
-					if(event.shiftKey) {
-						this.toggleSelect();
-					} else {
-						var wasSelected;
-						if(this.isSelected()) {
-							wasSelected=true;
+					if(event.ctrlKey) {
+						if(doesElementHaveClass(this,"dot")) {
+							selectShapesOfDot(this,event);
+						} else if (doesElementHaveClass(this,"face")) {
+							selectDotsOfFace(this,event);
+						} else if (doesElementHaveClass(this,"line")) {
+							selectDotsOfLine(this,event);
 						}
-						deselectAll();
-						if(wasSelected) {
-							this.deselect();
+					} else {
+						if(event.shiftKey) {
+							this.toggleSelect();
 						} else {
-							this.select();
+							var wasSelected;
+							if(this.isSelected()) {
+								wasSelected=true;
+							}
+							deselectAll();
+							if(wasSelected) {
+								this.deselect();
+							} else {
+								this.select();
+							}
 						}
 					}
 				}
@@ -176,7 +186,7 @@ var shapeFactory = {
 		line.ondblclick = function(event) {
 			event.stopPropagation();
 			editMode();
-			selectDotsOfLine(this, event);
+			selectAllContiguousShapes(this,event);
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);
 		this.createCloneLine(line);
@@ -286,7 +296,7 @@ var shapeFactory = {
 		face.ondblclick = function(event) {
 			event.stopPropagation();
 			editMode();
-			selectDotsOfFace(this, event);
+			selectAllContiguousShapes(this,event);
 		};
 		this.createCloneFace(face);
 		shapeGroup.appendChild(under);

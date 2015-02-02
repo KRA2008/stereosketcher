@@ -58,6 +58,12 @@
 		.forwardEvents { 
 			pointer-events: none;
 		}
+		.gray {
+			color: #bbb;
+		}
+		.black {
+			color: black;
+		}
 		</style>
 		<script type="text/javascript" src="jscolor.js"></script>
 		<script type="text/javascript" src="palette.js"></script>
@@ -89,7 +95,10 @@
 			<input id="setBackground" type="button" value="Set Background" onclick="setBackground()" /><br/>
 			<input id="sampleBackground" type="button" value="Sample Background" onclick="sampleBackground()" /><br/>
 			<br/>
-			<span>View mode: <span id="modeLabel"></span></span>
+			View mode:<br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
+			&nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: red/cyan</span>
 		</div>
 		<div class="topright" id="senderDiv">
 			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>

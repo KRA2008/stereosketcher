@@ -2,8 +2,7 @@
 
 function magicEyeMode() {
 	mode=2;
-	var label=document.getElementById("modeLabel");
-	label.innerHTML = "parallel";
+	setViewModeIndicator();
 	IPD=originalIPD*-1.0;
 	editMode(true);
 	restoreAllOpacity();
@@ -11,8 +10,7 @@ function magicEyeMode() {
 
 function redCyanMode() {
 	mode=3;
-	var label=document.getElementById("modeLabel");
-	label.innerHTML = "red/cyan";
+	setViewModeIndicator();
 	IPD=0.0;
 	editMode(true);
 	stowAllOpacity();
@@ -20,8 +18,7 @@ function redCyanMode() {
 
 function crossEyeMode() {
 	mode=1;
-	var label=document.getElementById("modeLabel");
-	label.innerHTML = "cross";
+	setViewModeIndicator();
 	IPD=originalIPD;
 	editMode(true);
 	restoreAllOpacity();
@@ -38,6 +35,26 @@ function editMode(force) {
 		showDots();
 		isEditMode = true;
 		refresh();
+	}
+}
+
+function setViewModeIndicator() {
+	var cross=document.getElementById("cross");
+	var parallel=document.getElementById("parallel");
+	var redcyan=document.getElementById("redcyan");
+	cross.setAttribute("class","gray");
+	parallel.setAttribute("class","gray");
+	redcyan.setAttribute("class","gray");
+	switch(mode) {
+		case 1:
+			cross.setAttribute("class","black");
+			break;
+		case 2:
+			parallel.setAttribute("class","black");
+			break;
+		case 3:
+			redcyan.setAttribute("class","black");
+			break;
 	}
 }
 
@@ -60,8 +77,6 @@ function toggleEditView() {
 }
 
 function showDots() {
-	var label = document.getElementById("modeLabel");
-	label.setAttribute("visibility","visible");
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++) {
@@ -73,8 +88,6 @@ function showDots() {
 
 function hideDots() {
 	deselectAll();
-	var label = document.getElementById("modeLabel");
-	label.setAttribute("visibility","hidden");
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++) {

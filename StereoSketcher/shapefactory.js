@@ -1,6 +1,6 @@
 'use strict';
 
-var faceSpaceCorrection = "0.56px";
+var faceSpaceCorrection = "0.5px";
 var faceActionStrokeWidth = 3.0;
 var labelX = -15.0;
 var labelY = -7.0;

@@ -32,7 +32,7 @@ window.onload=function() {
 			var dots = getDots();
 			svg.onmousemove = function(event) {
 				preventDefault(event);
-				dragDots(event,dots);
+				snapDots(dots,event);
 			};
 		}
 	};
@@ -150,7 +150,7 @@ function changeIPD(right) {
 		} else {
 			IPD--;
 		}
-		refresh();
+		snapDots(getDots());
 	}
 }
 

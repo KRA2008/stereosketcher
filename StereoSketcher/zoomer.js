@@ -57,5 +57,5 @@ function zoom(event) {
 		face.under.setAttribute("stroke-width", faceSpaceCorrection);
 		face.clone.under.setAttribute("stroke-width", faceSpaceCorrection);
 	}
-	refresh();
+	snapDots(getDots());
 }

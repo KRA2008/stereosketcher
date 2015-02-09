@@ -34,7 +34,7 @@ function editMode(force) {
 		removeOverlaps();
 		showDots();
 		isEditMode = true;
-		refresh();
+		snapDots(getDots());
 	}
 }
 
@@ -65,7 +65,7 @@ function viewMode() {
 	}
 	hideDots();
 	isEditMode = false;
-	refresh();
+	snapDots(getDots());
 }
 
 function toggleEditView() {

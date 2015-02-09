@@ -1,25 +1,30 @@
 'use strict';
 
-function dragDots(event,dots) {
-	var dx=event.clientX-prevX;
-	var dy=event.clientY-prevY;
+function snapDots(dots,event) {
+	var dx = 0;
+	var dy = 0;
+	if(event) {
+		dx=event.clientX-prevX;
+		dy=event.clientY-prevY;
+	}
 	var dot;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot=dots[ii];
 		moveDot(dot,dx,dy);
 	}
-	prevX=event.clientX;
-	prevY=event.clientY;
+	moveShapes();
+	if(event) {
+		prevX=event.clientX;
+		prevY=event.clientY;
+	}
 }
 
-function moveDot(dot,dx,dy)
-{
+function moveShapes() {
+	var lines = getLines();
 	var line;
+	var faces = getFaces();
 	var face;
-	var x=0.0;
-	var y=0.0;
-	var lines = [];
-	var faces = [];
+	var x,y;
 	var facex1 = 0.0;
 	var facey1 = 0.0;
 	var facex2 = 0.0;
@@ -28,71 +33,63 @@ function moveDot(dot,dx,dy)
 	var facey3 = 0.0;
 	var faceCoord = "";
 	var cloneCoord = "";
-	x=parseFloat(dot.getAttribute("cx"))+dx;
-	y=parseFloat(dot.getAttribute("cy"))+dy;
-	dot.setAttribute("cx",x);
-	dot.setAttribute("cy",y);
-	lines=dot.lines;
-	for(var ij=0;ij<lines.length;ij++) {
-		line = lines[ij];
-		if(line.dot1 == dot) {
+	for(var ii=0;ii<lines.length;ii++) {
+		line = lines[ii];
+		if(doesElementHaveClass(line,"tempMoving")) {
+			x=parseFloat(line.dot1.getAttribute("cx"));
+			y=parseFloat(line.dot1.getAttribute("cy"));
 			line.setAttribute("x1",x);
 			line.setAttribute("y1",y);
-			line.clone.setAttribute("x1",x+IPD+dot.shift*shiftSpeed);
+			line.clone.setAttribute("x1",x+IPD+line.dot1.shift*shiftSpeed);
 			line.clone.setAttribute("y1",y);
-		} else if(line.dot2 == dot) {
+			
+			x=parseFloat(line.dot2.getAttribute("cx"));
+			y=parseFloat(line.dot2.getAttribute("cy"));
 			line.setAttribute("x2",x);
 			line.setAttribute("y2",y);
-			line.clone.setAttribute("x2",x+IPD+dot.shift*shiftSpeed);
+			line.clone.setAttribute("x2",x+IPD+line.dot2.shift*shiftSpeed);
 			line.clone.setAttribute("y2",y);
+			
+			removeClassFromElement(line,"tempMoving");
 		}
 	}
-	faces = dot.faces;
-	for(var ik=0;ik<faces.length;ik++) {
-		face = faces[ik];
-		if(face.dot1 == dot) {
-			facex1 = x;
-			facey1 = y;
-			facex2 = face.dot2.getAttribute("cx");
-			facey2 = face.dot2.getAttribute("cy");
-			facex3 = face.dot3.getAttribute("cx");
-			facey3 = face.dot3.getAttribute("cy");
-			faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
-			face.setAttribute("points",faceCoord);
-			face.under.setAttribute("points",faceCoord);
-			cloneCoord = [(x+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
-			face.clone.setAttribute("points",cloneCoord);
-			face.clone.under.setAttribute("points",cloneCoord);
-		}
-		if(face.dot2 == dot) {
-			facex1 = face.dot1.getAttribute("cx");
-			facey1 = face.dot1.getAttribute("cy");
-			facex2 = x;
-			facey2 = y;
-			facex3 = face.dot3.getAttribute("cx");
-			facey3 = face.dot3.getAttribute("cy");
-			faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
-			face.setAttribute("points",faceCoord);
-			face.under.setAttribute("points",faceCoord);
-			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(x+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
-			face.clone.setAttribute("points",cloneCoord);
-			face.clone.under.setAttribute("points",cloneCoord);
-		}
-		if(face.dot3 == dot) {
+	for(var ii=0;ii<faces.length;ii++) {
+		face = faces[ii];
+		if(doesElementHaveClass(face,"tempMoving")) {
 			facex1 = face.dot1.getAttribute("cx");
 			facey1 = face.dot1.getAttribute("cy");
 			facex2 = face.dot2.getAttribute("cx");
 			facey2 = face.dot2.getAttribute("cy");
-			facex3 = x;
-			facey3 = y;
+			facex3 = face.dot3.getAttribute("cx");
+			facey3 = face.dot3.getAttribute("cy");
+			
 			faceCoord = [facex1,",",facey1," ",facex2,",",facey2," ",facex3,",",facey3].join('');
 			face.setAttribute("points",faceCoord);
 			face.under.setAttribute("points",faceCoord);
-			cloneCoord = [(parseFloat(facex1)+IPD+face.dot1.shift*shiftSpeed),",",facey1," ",(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",(x+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
+			
+			cloneCoord = [
+			(parseFloat(facex1)+face.dot1.shift*shiftSpeed+IPD),",",facey1," ",
+			(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",
+			(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
 			face.clone.setAttribute("points",cloneCoord);
 			face.clone.under.setAttribute("points",cloneCoord);
+			
+			removeClassFromElement(face,"tempMoving");
 		}
 	}
+}
+
+function moveDot(dot,dx,dy) {
+	var x=parseFloat(dot.getAttribute("cx"))+dx;
+	var y=parseFloat(dot.getAttribute("cy"))+dy;
+	dot.setAttribute("cx",x);
+	dot.setAttribute("cy",y);
 	dot.label.setAttribute("x",parseFloat(dot.getAttribute("cx"))+labelX);
 	dot.label.setAttribute("y",parseFloat(dot.getAttribute("cy"))+labelY);
+	for(var ii=0;ii<dot.lines.length;ii++) {
+		addClassToElement(dot.lines[ii],"tempMoving");
+	}
+	for(var ii=0;ii<dot.faces.length;ii++) {
+		addClassToElement(dot.faces[ii],"tempMoving");
+	}
 }

@@ -7,25 +7,29 @@ var IPD=originalIPD;
 function shiftIn() {
 	var dots = getDots();
 	var dot;
+	var moved = [];
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		if(dot.isSelected()) {
 			dot.shift++;
 			dot.label.textContent = dot.shift;
+			moved.push(dot);
 		}
 	}
-	refresh();
+	snapDots(moved);
 }
 
 function shiftOut() {
 	var dots = getDots();
 	var dot;
+	var moved = [];
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		if(dot.isSelected()) {
 			dot.shift--;
 			dot.label.textContent = dot.shift;
+			moved.push(dot);
 		}
 	}
-	refresh();
+	snapDots(moved);
 }

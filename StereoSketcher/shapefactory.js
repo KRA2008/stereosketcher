@@ -117,11 +117,11 @@ var shapeFactory = {
 					}
 					this.onmousemove = function(event) {
 						event.stopPropagation();
-						dragDots(event,selectedDots);
+						snapDots(selectedDots,event);
 					};
 					svg.onmousemove = function(event) {
 						event.stopPropagation();
-						dragDots(event,selectedDots);
+						snapDots(selectedDots,event);
 					};
 				}
 			}

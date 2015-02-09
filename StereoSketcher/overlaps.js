@@ -143,7 +143,7 @@ function addOverlaps() {
 		}
 		showClones();
 		hideLoading();
-	},0);
+	},100);
 }
 
 function createClipPath(item,clipPath) {			

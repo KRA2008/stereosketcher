@@ -5,6 +5,7 @@ var isEditMode=true;
 var mode=1;
 var pressX, pressY;
 var prevX, prevY;
+var loading=false;
 
 window.onload=function() {
 	svg=document.getElementById("svg");
@@ -64,15 +65,17 @@ function wasAClick(event) {
 }
 
 function hideLoading() {
-	var loading = document.getElementById("loading");
-	loading.style.display = "none";
-	loading.clientHeight;
+	loading = false;
+	var loadingDiv = document.getElementById("loading");
+	loadingDiv.style.display = "none";
+	loadingDiv.clientHeight;
 }
 
 function showLoading() {
-	var loading = document.getElementById("loading");
-	loading.style.display = "";
-	loading.clientHeight;
+	loading = true;
+	var loadingDiv = document.getElementById("loading");
+	loadingDiv.style.display = "";
+	loadingDiv.clientHeight;
 }
 
 document.addEventListener("keydown", keyDown, false);

@@ -69,10 +69,12 @@ function viewMode() {
 }
 
 function toggleEditView() {
-	if(isEditMode) {
-		viewMode();
-	} else {
-		editMode();
+	if(!loading) {
+		if(isEditMode) {
+			viewMode();
+		} else {
+			editMode();
+		}
 	}
 }
 

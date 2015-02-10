@@ -2,12 +2,13 @@
 var imageToSend;
 
 function upload() {
+	editMode(true);
 	viewMode();
-	setTimeout(function() { 
+	setTimeout(function() {
 		addWatermark();
 		saveSvgAsPng(document.getElementById("svg"), 1);
 		hideWatermark();
-	},0);
+	},100);
 }
 
 function sendToImgur() {

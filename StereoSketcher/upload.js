@@ -13,11 +13,11 @@ function upload() {
 
 function sendToImgur() {
 	setSuccessDisplay("Uploading image...");
-	var params="image="+encodeURIComponent(imageToSend)+"&album=HTD2v8UUS3zApIz";
+	var params="image="+encodeURIComponent(imageToSend)+"&album=MciDbSPWF44zMaA";
 	
 	var ajax = new XMLHttpRequest();
 	ajax.open("POST","https://api.imgur.com/3/image",true);
-	ajax.setRequestHeader("Authorization", "Client-ID 1070461d2c44f9f");
+	ajax.setRequestHeader("Authorization", "Client-ID aa408da70b6d569");
 	ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	ajax.onload = function(e) {
 		if(ajax.readyState === 4) {

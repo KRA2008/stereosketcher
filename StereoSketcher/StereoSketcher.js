@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -14,6 +14,7 @@ window.onload=function() {
 	shapeGroup=document.getElementById("shapes");
 	defs=document.getElementById("defs");
 	picker = document.getElementById('colorPicker');
+	zoomLabel = document.getElementById('zoomLabel');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -52,8 +53,9 @@ window.onload=function() {
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);
 	crossEyeMode();
-	hideLoading();
 	picker.color.fromString("#000000");
+	zoomLabel.innerHTML = zoomLevel;
+	hideLoading();
 };
 
 window.onbeforeunload = function(e) {

@@ -1,7 +1,7 @@
 'use strict';
 
 var zoomLevel = 0.0;
-var zoomSpeed = 1.5;
+var zoomSpeed = 1.25;
 var zoomLimit = 15.0;
 
 function zoom(event) {
@@ -58,4 +58,5 @@ function zoom(event) {
 		face.clone.under.setAttribute("stroke-width", faceSpaceCorrection);
 	}
 	snapDots(getDots());
+	document.getElementById("zoomLabel").innerHTML = zoomLevel;
 }

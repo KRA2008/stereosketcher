@@ -43,6 +43,14 @@ function moveSelectedToFront() {
     }
 }
 
+function moveSelectedOneForward() {
+	moveSelectedOneLayer(true);
+}
+
+function moveSelectedOneBack() {
+	moveSelectedOneLayer(false);
+}
+
 function moveSelectedOneLayer(forward) {
 	var linesAndFaces = getLinesAndFaces();
 	var item;

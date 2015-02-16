@@ -14,15 +14,15 @@ html, body, svg
 	z-index: 9999;
 }
 
-.topleft
+.bottomleft
 {
 	position: absolute;
-	top:0;
+	bottom:0;
 	left:0;
 	z-index: 9999;
 	background-color:white;
     border-style: solid;
-    border-color: grey;
+    border-color: black;
     border-width: 1px;
 	border-top:none;
 	border-left:none;
@@ -43,7 +43,6 @@ html, body, svg
 	right:50%;
 	z-index:9999;
 	padding:60px;
-	background-color: gray;
 }
 
 .hidden

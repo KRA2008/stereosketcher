@@ -71,6 +71,14 @@ function showColorPicker() {
 	picker.color.showPicker();
 }
 
+function opace() {
+	changeOpacity(true);
+}
+
+function transluce() {
+	changeOpacity(false);
+}
+
 function changeOpacity(increase) {
 	if(mode!==3) {
 		var shape;

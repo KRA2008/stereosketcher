@@ -4,7 +4,7 @@ var shiftSpeed = 0.5;
 var originalIPD=250.0;
 var IPD=originalIPD;
 
-function shiftIn() {
+function shiftOut() {
 	var dots = getDots();
 	var dot;
 	var moved = [];
@@ -19,7 +19,7 @@ function shiftIn() {
 	snapDots(moved);
 }
 
-function shiftOut() {
+function shiftIn() {
 	var dots = getDots();
 	var dot;
 	var moved = [];
@@ -32,4 +32,23 @@ function shiftOut() {
 		}
 	}
 	snapDots(moved);
+}
+
+function clonesRight() {
+	moveClones(true);
+}
+
+function clonesLeft() {
+	moveClones(false)
+}
+
+function moveClones(right) {
+	if(mode!=3) {
+		if(right) {
+			IPD++;
+		} else {
+			IPD--;
+		}
+		snapDots(getDots());
+	}
 }

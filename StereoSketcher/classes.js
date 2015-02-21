@@ -4,7 +4,7 @@ function addClassToElement(element,className) {
 	var old = element.getAttribute("class");
 	if(old == null) {
 		element.setAttribute("class","");
-		old == "";
+		old = "";
 	}
 	if(!doesElementHaveClass(element,className)) {
 		element.setAttribute("class",old+" "+className);
@@ -13,7 +13,12 @@ function addClassToElement(element,className) {
 
 function removeClassFromElement(element,className) {
 	var re = new RegExp("(?:^|\\s)"+className+"(?!\\S)","g");
-	element.setAttribute("class",element.getAttribute("class").replace(re,''));
+	var old = element.getAttribute("class");
+	if(old == null) {
+		element.setAttribute("class","");
+		return;
+	}
+	element.setAttribute("class",old.replace(re,''));
 }
 
 function doesElementHaveClass(element,className) {

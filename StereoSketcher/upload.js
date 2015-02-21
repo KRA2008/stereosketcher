@@ -3,11 +3,13 @@ var imageToSend;
 
 function upload() {
 	editMode(true);
+	hideToolbar();
 	viewMode();
 	setTimeout(function() {
 		addWatermark();
 		saveSvgAsPng(document.getElementById("svg"), 1);
 		hideWatermark();
+		showToolbar();
 	},100);
 }
 

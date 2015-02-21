@@ -3,6 +3,9 @@ var barY = 300;
 var toolBorder = 2;
 var toolMargin = 5;
 
+var cycleTool;
+var toolTimer;
+
 var toolSets = [
 	new toolSet(
 		[
@@ -127,16 +130,28 @@ function buildToolBar() {
 			toolButton.onmouseout = function() {
 				this.setAttribute("stroke","black");
 				addClassToElement(this.tip,"hidden");
+				window.clearTimeout(toolTimer);
+				window.clearInterval(cycleTool);
 			}
 			toolButton.onmousedown = function(event) {
 				event.stopPropagation();
+				var tool = this.tool;
+				toolTimer = setTimeout(function() {
+					cycleTool = setInterval(function() {
+						tool.action();
+					},80);
+				},500);
 			}
 			toolButton.onmouseup = function(event) {
 				event.stopPropagation();
+				window.clearTimeout(toolTimer);
+				window.clearInterval(cycleTool);
 			}
 			toolButton.onclick = function(event) {
 				event.stopPropagation();
 				this.tool.action();
+				window.clearTimeout(toolTimer);
+				window.clearInterval(cycleTool);
 			}
 		}
 	}
@@ -170,4 +185,12 @@ function keyReleased() {
 			toolSet[jj].toolButton.setAttribute("stroke","black");
 		}
 	}
+}
+
+function showToolbar() {
+	removeClassFromElement(toolGroup,"hidden");
+}
+
+function hideToolbar() {
+	addClassToElement(toolGroup,"hidden");
 }

@@ -188,9 +188,9 @@ function keyReleased() {
 }
 
 function showToolbar() {
-	removeClassFromElement(toolGroup,"hidden");
+	svg.appendChild(toolGroup);
 }
 
 function hideToolbar() {
-	addClassToElement(toolGroup,"hidden");
+	svg.removeChild(toolGroup);
 }

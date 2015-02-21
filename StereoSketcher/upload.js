@@ -8,9 +8,11 @@ function upload() {
 	setTimeout(function() {
 		addWatermark();
 		saveSvgAsPng(document.getElementById("svg"), 1);
-		hideWatermark();
-		showToolbar();
-	},100);
+		setTimeout(function() {
+			hideWatermark();
+			showToolbar();
+		},50);
+	},50);
 }
 
 function sendToImgur() {

@@ -41,10 +41,13 @@ window.onload=function() {
 	svg.onmouseup = function(event) {
 		if(wasAClick(event)) {
 			if(event.button==0) {
-				shapeFactory.createCircle(event);
+				if(!event.shiftKey)
+				{
+					deselectAll();
+				}
 			}
 			if(event.button==2) {
-				deselectAll();
+				shapeFactory.createCircle(event);
 			}
 		} else if(event.button==0) {
 			releaseSelectangle(event);
@@ -61,7 +64,7 @@ window.onload=function() {
 };
 
 window.onbeforeunload = function(e) {
-	e.preventDefault();
+	preventDefault(e);
 }
 
 function wasAClick(event) {
@@ -84,6 +87,7 @@ function showLoading() {
 
 document.addEventListener("keydown", mapKeyPress, false);
 document.addEventListener("keyup", keyReleased, false);
+document.onclick = function(e) { if(e.button == 2 || e.button == 3) { e.preventDefault(); e.stopPropagation(); return(false); } };
 
 function getDots() {
 	return dotGroup.getElementsByClassName("dot");

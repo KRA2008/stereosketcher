@@ -170,7 +170,7 @@ function mapKeyPress(event) {
 			tool = toolSet[jj];
 			if(tool.key === character) {
 				tool.toolButton.setAttribute("stroke","green");
-				tool.action();
+				tool.action(event);
 			}
 		}
 	}

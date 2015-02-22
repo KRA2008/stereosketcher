@@ -143,16 +143,8 @@ var shapeFactory = {
 						if(event.shiftKey) {
 							this.toggleSelect();
 						} else {
-							var wasSelected;
-							if(this.isSelected()) {
-								wasSelected=true;
-							}
 							deselectAll();
-							if(wasSelected) {
-								this.deselect();
-							} else {
-								this.select();
-							}
+							this.select();
 						}
 					}
 				}
@@ -164,7 +156,7 @@ var shapeFactory = {
 			}
 		};
 	},
-	createLine : function(dot1, dot2) {
+	createLine : function(dot1, dot2, event) {
 		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.setAttribute("x1", dot1.getAttribute("cx"));
 		line.setAttribute("y1", dot1.getAttribute("cy"));
@@ -181,8 +173,6 @@ var shapeFactory = {
 		dot1.lines.push(line);
 		dot2.lines.push(line);
 		this.attachCommonHandlers(line);
-		dot1.deselect();
-		dot2.deselect();
 		line.ondblclick = function(event) {
 			event.stopPropagation();
 			editMode();
@@ -243,6 +233,9 @@ var shapeFactory = {
 			this.dot2.lines.splice(this.dot2.lines.indexOf(this),1);
 			this.remove();
 		}
+		if(event.shiftKey) {
+			line.select();
+		}
 	},
 	createCloneLine : function(line) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -262,7 +255,7 @@ var shapeFactory = {
 			clone.setAttribute("visibility","hidden");
 		}
 	},
-	createFace : function(dot1, dot2, dot3) {
+	createFace : function(dot1, dot2, dot3, event) {
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var coords = "";
@@ -272,9 +265,6 @@ var shapeFactory = {
 		coords += dot1.getAttribute("cx") + "," + dot1.getAttribute("cy") + " ";
 		coords += dot2.getAttribute("cx") + "," + dot2.getAttribute("cy") + " ";
 		coords += dot3.getAttribute("cx") + "," + dot3.getAttribute("cy") + " ";
-		dot1.deselect();
-		dot2.deselect();
-		dot3.deselect();
 		face.dot1 = dot1;
 		face.dot2 = dot2;
 		face.dot3 = dot3;
@@ -347,6 +337,9 @@ var shapeFactory = {
 			this.dot3.faces.splice(this.dot3.faces.indexOf(this),1);
 			this.remove();
 		};
+		if(event.shiftKey) {
+			face.select();
+		}
 	},
 	createCloneFace : function(face) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -379,7 +372,7 @@ var shapeFactory = {
 	}
 }
 
-function createLinePressed() {
+function createLinePressed(event) {
 	var selectedDots=0;
 	var dot1;
 	var dot2;
@@ -415,10 +408,10 @@ function createLinePressed() {
 			return;
 		}
 	}
-	shapeFactory.createLine(dot1,dot2);
+	shapeFactory.createLine(dot1,dot2,event);
 }
 
-function createFacePressed() {
+function createFacePressed(event) {
 	var selectedDots=0;
 	var dot1;
 	var dot2;
@@ -462,7 +455,7 @@ function createFacePressed() {
 			return;
 		}
 	}
-	shapeFactory.createFace(dot1,dot2,dot3);
+	shapeFactory.createFace(dot1,dot2,dot3,event);
 }
 
 function deletePressed() {

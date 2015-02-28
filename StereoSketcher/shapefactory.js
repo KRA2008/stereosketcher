@@ -157,6 +157,8 @@ var shapeFactory = {
 		};
 	},
 	createLine : function(dot1, dot2, event) {
+		dot1.deselect();
+		dot2.deselect();
 		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.setAttribute("x1", dot1.getAttribute("cx"));
 		line.setAttribute("y1", dot1.getAttribute("cy"));
@@ -233,9 +235,6 @@ var shapeFactory = {
 			this.dot2.lines.splice(this.dot2.lines.indexOf(this),1);
 			this.remove();
 		}
-		if(event.shiftKey) {
-			line.select();
-		}
 	},
 	createCloneLine : function(line) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -256,6 +255,9 @@ var shapeFactory = {
 		}
 	},
 	createFace : function(dot1, dot2, dot3, event) {
+		dot1.deselect();
+		dot2.deselect();
+		dot3.deselect();
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var coords = "";
@@ -337,9 +339,6 @@ var shapeFactory = {
 			this.dot3.faces.splice(this.dot3.faces.indexOf(this),1);
 			this.remove();
 		};
-		if(event.shiftKey) {
-			face.select();
-		}
 	},
 	createCloneFace : function(face) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "polygon");

@@ -30,8 +30,8 @@ var toolSets = [
 	),
 	new toolSet(
 		[
-			new tool('a',shiftOut,'shiftout.png','shift dots out of screen'),
-			new tool('s',shiftIn,'shiftin.png','shift dots into screen'),
+			new tool('a',shiftIn,'shiftin.png','shift dots into screen'),
+			new tool('s',shiftOut,'shiftout.png','shift dots out of screen')
 		]
 	),
 	new toolSet(

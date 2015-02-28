@@ -31,6 +31,7 @@ function editMode(force) {
 		} else {
 			showClones();
 		}
+		deselectAll();
 		removeOverlaps();
 		showDots();
 		isEditMode = true;

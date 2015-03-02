@@ -83,7 +83,7 @@ function buildToolBar() {
 	var toolPattern;
 	var toolImage;
 	for(var ii=0;ii<toolSets.length;ii++) {
-		var toolSet = toolSets[ii].tools;
+		toolSet = toolSets[ii].tools;
 		for(var jj=0;jj<toolSet.length;jj++) {
 			tool = toolSet[jj];
 						
@@ -193,4 +193,36 @@ function showToolbar() {
 
 function hideToolbar() {
 	svg.removeChild(toolGroup);
+}
+
+function buildTable() {
+	var tool;
+	var toolSet;
+	var cell;
+	var keyTable = document.getElementById("keyTable");
+	
+	var row = document.createElement("TR");
+	var header = document.createElement("TH");
+	header.innerHTML = "Key";
+	row.appendChild(header);
+	header = document.createElement("TH");
+	header.innerHTML = "Function";
+	row.appendChild(header);
+	keyTable.appendChild(row);
+	
+	for(var ii=0;ii<toolSets.length;ii++) {
+		toolSet = toolSets[ii].tools;
+		for(var jj=0;jj<toolSet.length;jj++) {
+			tool = toolSet[jj];
+			
+			row = document.createElement("TR");
+			cell = document.createElement("TD");
+			cell.innerHTML = tool.key;
+			row.appendChild(cell);
+			cell = document.createElement("TD");
+			cell.innerHTML = tool.description;
+			row.appendChild(cell);
+			keyTable.appendChild(row);
+		}
+	}
 }

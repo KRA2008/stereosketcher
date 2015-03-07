@@ -3,3 +3,5 @@ TAGS
 _*
 .DS_Store
 *.zip
+web.config
+*.ini

@@ -49,24 +49,17 @@ function setSuccessDisplay(text,id) {
 }
 
 function addWatermark() {
+	var size = 15
+	var height = 10;
+	var width = 145;
 	var watermark = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	watermark.setAttribute("id", "waterMark");
-	watermark.setAttribute("y", window.innerHeight-10);
+	watermark.setAttribute("y", window.innerHeight-height);
+	watermark.setAttribute("x", window.innerWidth-width);
+	watermark.setAttribute("font-size",size);
+	watermark.setAttribute("font-family","Arial");
 	watermark.setAttribute("fill", "black");
 	watermark.textContent="StereoSketcher.com";
-	switch(mode) {
-		case 1:
-			watermark.textContent+=" X";
-			watermark.setAttribute("x", window.innerWidth-155);
-			break;
-		case 2:
-			watermark.textContent+=" ||";
-			watermark.setAttribute("x", window.innerWidth-155);
-			break;
-		default:
-			watermark.setAttribute("x", window.innerWidth-140);
-			break;
-	}
 	svg.appendChild(watermark);
 }
 

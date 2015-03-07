@@ -25,9 +25,7 @@ var shapeFactory = {
 		dot.setAttribute("class","dot");
 		addClassToElement(dot, "highlit");
 		this.attachCommonHandlers(dot);
-		dot.ondblclick = function(event) {
-			event.stopPropagation();
-			editMode();
+		dot.doubleHandler = function(event) {
 			if (wasAClick(event)) {
 				selectAllContiguousDots(this, event);
 			}
@@ -129,8 +127,9 @@ var shapeFactory = {
 		shape.onmouseup = function(event) {
 			editMode();
 			if (event.button == 0) {
-				event.stopPropagation();
-				if(wasAClick(event)) {
+				if(event.detail == 2) {
+					shape.doubleHandler(event);
+				} else if(wasAClick(event)) {
 					if(event.ctrlKey) {
 						if(doesElementHaveClass(this,"dot")) {
 							selectShapesOfDot(this,event);
@@ -148,6 +147,7 @@ var shapeFactory = {
 						}
 					}
 				}
+				event.stopPropagation();
 				svg.onmousemove = null;
 				this.onmousemove = null;
 				this.onmouseout = function() {
@@ -175,9 +175,7 @@ var shapeFactory = {
 		dot1.lines.push(line);
 		dot2.lines.push(line);
 		this.attachCommonHandlers(line);
-		line.ondblclick = function(event) {
-			event.stopPropagation();
-			editMode();
+		line.doubleHandler = function(event) {
 			selectAllContiguousShapes(this,event);
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);
@@ -285,9 +283,7 @@ var shapeFactory = {
 		under.setAttribute("fill-opacity",1.0);
 		under.setAttribute("class", "faceUnder");
 		this.attachCommonHandlers(face);
-		face.ondblclick = function(event) {
-			event.stopPropagation();
-			editMode();
+		face.doubleHandler = function(event) {
 			selectAllContiguousShapes(this,event);
 		};
 		this.createCloneFace(face);

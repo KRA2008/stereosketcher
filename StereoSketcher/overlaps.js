@@ -202,10 +202,6 @@ function forwardAllMouseEvents(element,recipient) {
 	{
 		recipient.onmouseup(event);
 	}
-	element.ondblclick = function(event)
-	{
-		recipient.ondblclick(event);
-	}
 }
 
 function getAnaglyphedColor(cyanInfo,redInfo) {

@@ -11,8 +11,8 @@ function upload() {
 		setTimeout(function() {
 			hideWatermark();
 			showToolbar();
-		},100);
-	},100);
+		},200);
+	},200);
 }
 
 function sendToImgur() {

@@ -3,6 +3,7 @@
 var shiftSpeed = 0.5;
 var originalIPD=250.0;
 var IPD=originalIPD;
+var cloneSpeed = 5;
 
 function shiftOut() {
 	var dots = getDots();
@@ -45,9 +46,9 @@ function clonesLeft() {
 function moveClones(right) {
 	if(mode!=3) {
 		if(right) {
-			IPD++;
+			IPD+=cloneSpeed;
 		} else {
-			IPD--;
+			IPD-=cloneSpeed;
 		}
 		snapDots(getDots());
 	}

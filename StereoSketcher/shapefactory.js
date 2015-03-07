@@ -160,10 +160,6 @@ var shapeFactory = {
 		dot1.deselect();
 		dot2.deselect();
 		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		line.setAttribute("x1", dot1.getAttribute("cx"));
-		line.setAttribute("y1", dot1.getAttribute("cy"));
-		line.setAttribute("x2", dot2.getAttribute("cx"));
-		line.setAttribute("y2", dot2.getAttribute("cy"));
 		line.color = picker.value;
 		line.setAttribute("stroke", picker.value);
 		line.setAttribute("stroke-width", defaultLineThickness);
@@ -180,6 +176,7 @@ var shapeFactory = {
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);
 		this.createCloneLine(line);
+		snapLine(line);
 		shapeGroup.appendChild(line);
 		line.overlaps = [];
 		
@@ -237,10 +234,6 @@ var shapeFactory = {
 	createCloneLine : function(line) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.clone = clone;
-		clone.setAttribute("x1", parseFloat(line.dot1.getAttribute("cx")) + IPD + line.dot1.shift*shiftSpeed);
-		clone.setAttribute("y1", line.dot1.getAttribute("cy"));
-		clone.setAttribute("x2", parseFloat(line.dot2.getAttribute("cx")) + IPD + line.dot2.shift*shiftSpeed);
-		clone.setAttribute("y2", line.dot2.getAttribute("cy"));
 		clone.setAttribute("stroke", picker.value);
 		clone.setAttribute("stroke-width", defaultLineThickness);
 		clone.setAttribute("stroke-opacity",1.0);
@@ -258,18 +251,12 @@ var shapeFactory = {
 		dot3.deselect();
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-		var coords = "";
 		dot1.faces.push(face);
 		dot2.faces.push(face);
 		dot3.faces.push(face);
-		coords += dot1.getAttribute("cx") + "," + dot1.getAttribute("cy") + " ";
-		coords += dot2.getAttribute("cx") + "," + dot2.getAttribute("cy") + " ";
-		coords += dot3.getAttribute("cx") + "," + dot3.getAttribute("cy") + " ";
 		face.dot1 = dot1;
 		face.dot2 = dot2;
 		face.dot3 = dot3;
-		face.setAttribute("points", coords);
-		under.setAttribute("points", coords);
 		face.under = under;
 		face.color = picker.value;
 		face.setAttribute("fill", picker.value);
@@ -287,6 +274,7 @@ var shapeFactory = {
 			selectAllContiguousShapes(this,event);
 		};
 		this.createCloneFace(face);
+		snapFace(face);
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(face);
 		face.overlaps = [];
@@ -340,12 +328,6 @@ var shapeFactory = {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		face.clone = clone;
-		var coords = "";
-		coords += parseFloat(face.dot1.getAttribute("cx")) + IPD + face.dot1.shift*shiftSpeed + "," + face.dot1.getAttribute("cy") + " ";
-		coords += parseFloat(face.dot2.getAttribute("cx")) + IPD + face.dot2.shift*shiftSpeed + "," + face.dot2.getAttribute("cy") + " ";
-		coords += parseFloat(face.dot3.getAttribute("cx")) + IPD + face.dot3.shift*shiftSpeed + "," + face.dot3.getAttribute("cy") + " ";
-		clone.setAttribute("points", coords);
-		under.setAttribute("points", coords);
 		clone.under = under;
 		clone.setAttribute("class", "cloneFace");
 		clone.setAttribute("stroke-width", 0);

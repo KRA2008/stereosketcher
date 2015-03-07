@@ -102,7 +102,7 @@ function addOverlaps() {
 					itemOverlap.setAttribute("stroke-width",parseFloat(shape.getAttribute("stroke-width")));
 				}
 				itemOverlap.setAttribute("class","itemOverlap");
-				forwardAllMouseEvents(itemOverlap,shape);
+				//forwardAllMouseEvents(itemOverlap,shape);
 				shapeGroup.appendChild(itemOverlap);
 				itemOverlap.setAttribute("clip-path",["url(#cloneClip.",ii,".",jj,")"].join(''));
 				overlap.itemOverlap = itemOverlap;
@@ -134,7 +134,7 @@ function addOverlaps() {
 				}
 				cloneOverlap.setAttribute("class","cloneOverlap");
 				shapeGroup.appendChild(cloneOverlap);
-				forwardAllMouseEvents(cloneOverlap,shape);	
+				//forwardAllMouseEvents(cloneOverlap,shape);	
 				cloneOverlap.setAttribute("clip-path",["url(#itemClip.",ii,".",jj,")"].join(''));
 				overlap.cloneOverlap = cloneOverlap;
 				
@@ -226,28 +226,32 @@ function correctOverlaps() {
 }
 
 function removeOverlaps() {
-	var item;
-	var linesAndFaces = getLinesAndFaces();
-	for(var ii = 0; ii < linesAndFaces.length; ii++) {
-		item = linesAndFaces[ii];
-		removeOverlapsOfItem(item);		
-		if(doesElementHaveClass(item,"line")) {
-			item.setAttribute("stroke",item.color);
-			item.clone.setAttribute("stroke",item.color);
-		} else if(doesElementHaveClass(item,"face")) {
-			item.setAttribute("fill",item.color);
-			item.setAttribute("stroke",item.color);
-			item.under.setAttribute("fill",item.color);
-			item.under.setAttribute("stroke",item.color);
-			item.clone.setAttribute("fill",item.color);
-			item.clone.setAttribute("stroke",item.color);
-			item.clone.under.setAttribute("fill",item.color);
-			item.clone.under.setAttribute("stroke",item.color);
+	showLoading();
+	setTimeout(function() {
+		var item;
+		var linesAndFaces = getLinesAndFaces();
+		for(var ii = 0; ii < linesAndFaces.length; ii++) {
+			item = linesAndFaces[ii];
+			removeOverlapsOfItem(item);		
+			if(doesElementHaveClass(item,"line")) {
+				item.setAttribute("stroke",item.color);
+				item.clone.setAttribute("stroke",item.color);
+			} else if(doesElementHaveClass(item,"face")) {
+				item.setAttribute("fill",item.color);
+				item.setAttribute("stroke",item.color);
+				item.under.setAttribute("fill",item.color);
+				item.under.setAttribute("stroke",item.color);
+				item.clone.setAttribute("fill",item.color);
+				item.clone.setAttribute("stroke",item.color);
+				item.clone.under.setAttribute("fill",item.color);
+				item.clone.under.setAttribute("stroke",item.color);
+			}
 		}
-	}
-	if(mode==3) {
-		hideClones();
-	}
+		if(mode==3) {
+			hideClones();
+		}
+		hideLoading();
+	}, 100);
 }
 
 function removeOverlapsOfItem(item) {

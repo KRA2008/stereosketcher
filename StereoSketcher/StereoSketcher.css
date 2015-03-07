@@ -38,11 +38,10 @@ html, body, svg
 
 .loading
 {
-	position: absolute; 
+	position: absolute;
 	bottom:50%;
 	right:50%;
 	z-index:9999;
-	padding:60px;
 }
 
 .hidden

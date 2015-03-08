@@ -6,6 +6,12 @@ html, body, svg
 	height:100%;
 }
 
+.center
+{
+	margin:0 auto;
+	width:67%;
+}
+
 .topright
 {
 	position: absolute;
@@ -32,8 +38,14 @@ html, body, svg
 {
 	position: absolute; 
 	top:0; 
-	right:50%; 
+	left:50%; 
 	z-index: 9999;
+}
+
+.innermiddle
+{
+	position: relative; 
+	left: -50%;
 }
 
 .loading
@@ -71,6 +83,6 @@ table, th, td {
 	vertical-align:text-top;
 }
 
-.center, th {
+.centerText, th {
 	text-align:center;
 }

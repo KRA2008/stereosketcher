@@ -34,7 +34,7 @@ window.onload=function() {
 			var dots = getDots();
 			svg.onmousemove = function(event) {
 				preventDefault(event);
-				snapDots(dots,event);
+				snapDots(dots,false,event);
 			};
 		}
 	};

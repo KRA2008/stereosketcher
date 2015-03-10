@@ -115,11 +115,13 @@ var shapeFactory = {
 					}
 					this.onmousemove = function(event) {
 						event.stopPropagation();
-						snapDots(selectedDots,event);
+						snapDots(selectedDots,false,event);
+						snapDots(dots,true);
 					};
 					svg.onmousemove = function(event) {
 						event.stopPropagation();
-						snapDots(selectedDots,event);
+						snapDots(selectedDots,false,event);
+						snapDots(dots,true);
 					};
 				}
 			}
@@ -176,8 +178,8 @@ var shapeFactory = {
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);
 		this.createCloneLine(line);
-		snapLine(line);
 		shapeGroup.appendChild(line);
+		snapDots(getDots(),true);
 		line.overlaps = [];
 		
 		line.select = function() {
@@ -274,9 +276,9 @@ var shapeFactory = {
 			selectAllContiguousShapes(this,event);
 		};
 		this.createCloneFace(face);
-		snapFace(face);
 		shapeGroup.appendChild(under);
 		shapeGroup.appendChild(face);
+		snapDots(getDots(),true);
 		face.overlaps = [];
 		face.select = function() {
 			editMode();
@@ -461,4 +463,5 @@ function deletePressed() {
 			face.delete();
 		}
 	}
+	snapDots(getDots(),true);
 }

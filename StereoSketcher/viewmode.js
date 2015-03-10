@@ -3,7 +3,7 @@
 function magicEyeMode() {
 	mode=2;
 	setViewModeIndicator();
-	IPD=originalIPD*-1.0;
+	findIPD();
 	editMode(true);
 	restoreAllOpacity();
 }
@@ -11,7 +11,7 @@ function magicEyeMode() {
 function redCyanMode() {
 	mode=3;
 	setViewModeIndicator();
-	IPD=0.0;
+	findIPD();
 	editMode(true);
 	stowAllOpacity();
 }
@@ -19,7 +19,7 @@ function redCyanMode() {
 function crossEyeMode() {
 	mode=1;
 	setViewModeIndicator();
-	IPD=originalIPD;
+	findIPD();
 	editMode(true);
 	restoreAllOpacity();
 }
@@ -35,7 +35,7 @@ function editMode(force) {
 		removeOverlaps();
 		showDots();
 		isEditMode = true;
-		snapDots(getDots());
+		snapDots(getDots(),true);
 	}
 }
 
@@ -66,7 +66,7 @@ function viewMode() {
 	}
 	hideDots();
 	isEditMode = false;
-	snapDots(getDots());
+	snapDots(getDots(),true);
 }
 
 function toggleEditView() {

@@ -1,8 +1,8 @@
 'use strict';
 
 var shiftSpeed = 0.5;
-var originalIPD=250.0;
-var IPD=originalIPD;
+var IPD=0;
+var buffer=30;
 var cloneSpeed = 5;
 
 function shiftOut() {
@@ -17,7 +17,7 @@ function shiftOut() {
 			moved.push(dot);
 		}
 	}
-	snapDots(moved);
+	snapDots(moved,false);
 }
 
 function shiftIn() {
@@ -32,7 +32,7 @@ function shiftIn() {
 			moved.push(dot);
 		}
 	}
-	snapDots(moved);
+	snapDots(moved,false);
 }
 
 function clonesRight() {
@@ -46,10 +46,51 @@ function clonesLeft() {
 function moveClones(right) {
 	if(mode!=3) {
 		if(right) {
-			IPD+=cloneSpeed;
+			buffer+=cloneSpeed;
 		} else {
-			IPD-=cloneSpeed;
+			buffer-=cloneSpeed;
 		}
 		snapDots(getDots());
+	}
+}
+
+function findSketchWidth() {
+	var dots = getDots();
+	var dot;
+	var maxX;
+	var minX;
+	var width;
+	var dotX;
+	var dot;
+	if(dots[0]) {
+		maxX = parseFloat(dots[0].getAttribute("cx"));
+		minX = maxX;
+		for(var ii=1;ii<dots.length;ii++) {
+			dot = dots[ii];
+			if(dot.lines.length===0 && dot.faces.length===0) continue;
+			dotX = parseFloat(dot.getAttribute("cx"));
+			if(dotX>maxX) {
+				maxX = dotX;
+			} else if(dotX<minX) {
+				minX = dotX;
+			}
+		}
+		return maxX-minX;
+	} else {
+		return 0;
+	}
+}
+
+function findIPD() {
+	switch(mode) {
+		case 1:
+			IPD = findSketchWidth()+buffer;
+			return;
+		case 2:
+			IPD = (findSketchWidth()+buffer)*-1;
+			return;
+		case 3:
+			IPD = 0;
+			return;
 	}
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-function snapDots(dots,event) {
+function snapDots(dots,IPDchanging,event) {
 	var dx = 0;
 	var dy = 0;
 	if(event) {
@@ -11,6 +11,9 @@ function snapDots(dots,event) {
 	for(var ii=0;ii<dots.length;ii++) {
 		dot=dots[ii];
 		moveDot(dot,dx,dy);
+	}
+	if(IPDchanging) {
+		findIPD();
 	}
 	moveShapes();
 	if(event) {

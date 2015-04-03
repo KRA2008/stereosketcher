@@ -50,7 +50,7 @@ function moveClones(right) {
 		} else {
 			buffer-=cloneSpeed;
 		}
-		snapDots(getDots());
+		snapDots(getDots(),true);
 	}
 }
 

@@ -30,7 +30,7 @@ html, body, svg
     border-style: solid;
     border-color: black;
     border-width: 1px;
-	border-top:none;
+	border-bottom:none;
 	border-left:none;
 }
 

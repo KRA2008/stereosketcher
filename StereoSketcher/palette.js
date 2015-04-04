@@ -28,13 +28,7 @@ function setColor() {
 	for(var ii = 0;ii<faces.length;ii++) {
 		face = faces[ii];
 		if(face.isSelected()) {
-			face.color=color;
-			face.setAttribute("fill",color);
-			face.clone.setAttribute("fill",color);
-			face.under.setAttribute("fill",color);
-			face.clone.under.setAttribute("fill",color);
-			face.under.setAttribute("stroke",color);
-			face.clone.under.setAttribute("stroke",color);
+			face.setColor(color);
 		}
 	}
 	var lines = getLines();
@@ -42,9 +36,7 @@ function setColor() {
 	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
 		if(line.isSelected()) {
-			line.color=color;
-			line.setAttribute("stroke",color);
-			line.clone.setAttribute("stroke",color);
+			line.setColor(color);
 		}
 	}
 }
@@ -104,12 +96,8 @@ function changeOpacity(increase) {
 						opacity-=opacityStep;
 					}
 				}
-				shape.opacity = opacity;
-				if(doesElementHaveClass(shape,"line")) {
-					setLineOpacity(shape,opacity);
-				} else if (doesElementHaveClass(shape,"face")) {
-					setFaceOpacity(shape,opacity);
-				}
+				shape.storedOpacity = opacity;
+				shape.setOpacity(opacity);
 			}
 		}
 	}
@@ -120,11 +108,7 @@ function restoreAllOpacity() {
 	var shapes = getLinesAndFaces();
 	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];
-		if(doesElementHaveClass(shape,"line")) {
-			setLineOpacity(shape,shape.opacity);
-		} else if (doesElementHaveClass(shape,"face")) {
-			setFaceOpacity(shape,shape.opacity);
-		}
+		shape.setOpacity(shape.storedOpacity);
 	}
 }
 
@@ -132,27 +116,6 @@ function stowAllOpacity() {
 	var shape;
 	var shapes = getLinesAndFaces();
 	for(var ii=0;ii<shapes.length;ii++) {
-		shape = shapes[ii];
-		if(doesElementHaveClass(shape,"line")) {
-			setLineOpacity(shape,1.0);
-		} else if (doesElementHaveClass(shape,"face")) {
-			setFaceOpacity(shape,1.0);
-		}
+		shapes[ii].setOpacity(1.0);
 	}
-}
-
-function setLineOpacity(line,opacity) {
-	line.setAttribute("stroke-opacity",opacity);
-	line.clone.setAttribute("stroke-opacity",opacity);
-}
-
-function setFaceOpacity(face,opacity) {
-	face.setAttribute("fill-opacity",opacity);
-	face.under.setAttribute("fill-opacity",opacity);
-	face.clone.setAttribute("fill-opacity",opacity);
-	face.clone.under.setAttribute("fill-opacity",opacity);
-	
-	var mathedOpacity = 1.2*opacity*opacity-0.2*opacity;
-	face.under.setAttribute("stroke-opacity",mathedOpacity);
-	face.clone.under.setAttribute("stroke-opacity",mathedOpacity);
 }

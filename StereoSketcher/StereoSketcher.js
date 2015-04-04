@@ -6,6 +6,7 @@ var mode=1;
 var pressX, pressY;
 var prevX, prevY;
 var loading=false;
+var middleMouseButtonLock=false;
 
 window.onload=function() {
 	svg = document.getElementById("svg");
@@ -29,6 +30,15 @@ window.onload=function() {
 				changeSelectangle(event);
 			};
 		}
+		if(event.button==1) {
+			if(!middleMouseButtonLock) {
+				copyAndPasteSelectedShapes(event.clientX,event.clientY);
+				middleMouseButtonLock = true;
+				setTimeout(function() {
+					middleMouseButtonLock = false;
+				},200);
+			}
+		}
 		if(event.button==2) {
 			editMode();
 			var dots = getDots();
@@ -47,7 +57,10 @@ window.onload=function() {
 				}
 			}
 			if(event.button==2) {
-				shapeFactory.createCircle(event);
+				var dot=shapeFactory.createDot(event.clientX,event.clientY);
+				if(event.shiftKey) {
+					dot.select();
+				}
 			}
 		} else if(event.button==0) {
 			releaseSelectangle(event);

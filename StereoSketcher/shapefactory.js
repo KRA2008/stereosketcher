@@ -13,10 +13,10 @@ var highlitColor = "#008800";
 var strokeLinecap = "round";
 
 var shapeFactory = {
-	createCircle : function(event) {
+	createDot : function(x,y) {
 		var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-		dot.setAttribute("cx", event.clientX);
-		dot.setAttribute("cy", event.clientY);
+		dot.setAttribute("cx", x);
+		dot.setAttribute("cy", y);
 		dot.setAttribute("r", dotRadius);
 		dot.setAttribute("stroke", dotColor);
 		dot.setAttribute("stroke-width", 1.0);
@@ -63,9 +63,7 @@ var shapeFactory = {
 			this.label.setAttribute("fill", dotColor);
 			removeClassFromElement(this, "highlit");
 		};
-		if(event.shiftKey) {
-			dot.select();
-		}
+		return dot;
 	},
 	attachCommonHandlers : function(shape) {
 		shape.onmouseenter = function() {
@@ -158,14 +156,14 @@ var shapeFactory = {
 			}
 		};
 	},
-	createLine : function(dot1, dot2, event) {
+	createLine : function(dot1, dot2) {
 		dot1.deselect();
 		dot2.deselect();
 		var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		line.color = picker.value;
 		line.setAttribute("stroke", picker.value);
 		line.setAttribute("stroke-width", defaultLineThickness);
-		line.opacity = 1.0;
+		line.storedOpacity = 1.0;
 		line.setAttribute("stroke-opacity",1.0);
 		line.setAttribute("class","line");
 		line.dot1 = dot1;
@@ -208,15 +206,17 @@ var shapeFactory = {
 		};
 		line.thicken = function() {
 			var thickness = parseFloat(this.getAttribute("stroke-width"));
-			this.setAttribute("stroke-width",thickness+thickenRate);
-			this.clone.setAttribute("stroke-width",thickness+thickenRate);
+			this.setThickness(thickness+thickenRate);
 		};
 		line.thin = function() {
 			var thickness = parseFloat(this.getAttribute("stroke-width"));
 			if(thickness>thickenRate) {
-				this.setAttribute("stroke-width",thickness-thickenRate);
-				this.clone.setAttribute("stroke-width",thickness-thickenRate);
+				this.setThickness(thickness-thickenRate);
 			}
+		};
+		line.setThickness = function(thickness) {
+			this.setAttribute("stroke-width",thickness);
+			this.clone.setAttribute("stroke-width",thickness);
 		};
 		line.add = function() {
 			shapeGroup.appendChild(this.clone);
@@ -231,7 +231,20 @@ var shapeFactory = {
 			this.dot1.lines.splice(this.dot1.lines.indexOf(this),1);
 			this.dot2.lines.splice(this.dot2.lines.indexOf(this),1);
 			this.remove();
-		}
+		};
+		line.setColor = function(color) {
+			this.color=color;
+			this.setAttribute("stroke",color);
+			this.clone.setAttribute("stroke",color);
+		};
+		line.getOpacity = function() {
+			return this.getAttribute("stroke-opacity");
+		};
+		line.setOpacity = function(opacity) {
+			this.setAttribute("stroke-opacity",opacity);
+			this.clone.setAttribute("stroke-opacity",opacity);
+		};
+		return line;
 	},
 	createCloneLine : function(line) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -247,7 +260,7 @@ var shapeFactory = {
 			clone.setAttribute("visibility","hidden");
 		}
 	},
-	createFace : function(dot1, dot2, dot3, event) {
+	createFace : function(dot1, dot2, dot3) {
 		dot1.deselect();
 		dot2.deselect();
 		dot3.deselect();
@@ -262,7 +275,7 @@ var shapeFactory = {
 		face.under = under;
 		face.color = picker.value;
 		face.setAttribute("fill", picker.value);
-		face.opacity = 1.0;
+		face.storedOpacity = 1.0;
 		face.setAttribute("fill-opacity",1.0);
 		face.setAttribute("class", "face");
 		under.setAttribute("fill", picker.value);
@@ -325,6 +338,29 @@ var shapeFactory = {
 			this.dot3.faces.splice(this.dot3.faces.indexOf(this),1);
 			this.remove();
 		};
+		face.setColor = function(color) {
+			this.color=color;
+			this.setAttribute("fill",color);
+			this.clone.setAttribute("fill",color);
+			this.under.setAttribute("fill",color);
+			this.clone.under.setAttribute("fill",color);
+			this.under.setAttribute("stroke",color);
+			this.clone.under.setAttribute("stroke",color);
+		};
+		face.getOpacity = function() {
+			return this.getAttribute("fill-opacity");
+		};
+		face.setOpacity = function(opacity) {
+			this.setAttribute("fill-opacity",opacity);
+			this.under.setAttribute("fill-opacity",opacity);
+			this.clone.setAttribute("fill-opacity",opacity);
+			this.clone.under.setAttribute("fill-opacity",opacity);
+			
+			var mathedOpacity = 1.2*opacity*opacity-0.2*opacity;
+			this.under.setAttribute("stroke-opacity",mathedOpacity);
+			this.clone.under.setAttribute("stroke-opacity",mathedOpacity);
+		};
+		return face;
 	},
 	createCloneFace : function(face) {
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "polygon");

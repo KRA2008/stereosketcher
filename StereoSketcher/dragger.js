@@ -56,9 +56,9 @@ function snapFace(face) {
 	face.under.setAttribute("points",faceCoord);
 	
 	var cloneCoord = [
-	(parseFloat(facex1)+face.dot1.shift*shiftSpeed+IPD),",",facey1," ",
-	(parseFloat(facex2)+face.dot2.shift*shiftSpeed+IPD),",",facey2," ",
-	(parseFloat(facex3)+face.dot3.shift*shiftSpeed+IPD),",",facey3].join('');
+	(parseFloat(facex1)+face.dot1.getShift()*shiftSpeed+IPD),",",facey1," ",
+	(parseFloat(facex2)+face.dot2.getShift()*shiftSpeed+IPD),",",facey2," ",
+	(parseFloat(facex3)+face.dot3.getShift()*shiftSpeed+IPD),",",facey3].join('');
 	face.clone.setAttribute("points",cloneCoord);
 	face.clone.under.setAttribute("points",cloneCoord);
 }
@@ -68,14 +68,14 @@ function snapLine(line) {
 	var y=parseFloat(line.dot1.getAttribute("cy"));
 	line.setAttribute("x1",x);
 	line.setAttribute("y1",y);
-	line.clone.setAttribute("x1",x+IPD+line.dot1.shift*shiftSpeed);
+	line.clone.setAttribute("x1",x+IPD+line.dot1.getShift()*shiftSpeed);
 	line.clone.setAttribute("y1",y);
 	
 	x=parseFloat(line.dot2.getAttribute("cx"));
 	y=parseFloat(line.dot2.getAttribute("cy"));
 	line.setAttribute("x2",x);
 	line.setAttribute("y2",y);
-	line.clone.setAttribute("x2",x+IPD+line.dot2.shift*shiftSpeed);
+	line.clone.setAttribute("x2",x+IPD+line.dot2.getShift()*shiftSpeed);
 	line.clone.setAttribute("y2",y);
 }
 

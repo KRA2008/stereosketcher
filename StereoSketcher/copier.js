@@ -128,6 +128,7 @@ function copyDot(dot,x,y,mid) {
 	var newY = y + parseFloat(dot.getAttribute("cy"))-mid.midCopyY;
 	var newDot = shapeFactory.createDot(newX,newY);
 	dot.copy = newDot;
+	newDot.setShift(dot.getShift());
 	newDot.lowlight();
 }
 

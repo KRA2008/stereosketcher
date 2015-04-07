@@ -12,8 +12,7 @@ function shiftOut() {
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		if(dot.isSelected()) {
-			dot.shift++;
-			dot.label.textContent = dot.shift;
+			dot.setShift(dot.getShift()+1);
 			moved.push(dot);
 		}
 	}
@@ -27,8 +26,7 @@ function shiftIn() {
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		if(dot.isSelected()) {
-			dot.shift--;
-			dot.label.textContent = dot.shift;
+			dot.setShift(dot.getShift()-1);
 			moved.push(dot);
 		}
 	}

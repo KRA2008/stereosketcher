@@ -31,7 +31,7 @@ var shapeFactory = {
 			}
 		};
 		dot.lines = [];
-		dot.shift = 0.0;
+		var shift = 0.0;
 		var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
 		label.setAttribute("x", parseFloat(dot.getAttribute("cx")) + labelX);
 		label.setAttribute("y", parseFloat(dot.getAttribute("cy")) + labelY);
@@ -62,6 +62,14 @@ var shapeFactory = {
 			this.setAttribute("stroke", dotColor);
 			this.label.setAttribute("fill", dotColor);
 			removeClassFromElement(this, "highlit");
+		};
+		dot.getShift = function() {
+			return shift;
+		}
+		dot.setShift = function(newShift) {
+			shift = newShift;
+			this.label.textContent = newShift;
+			return this;
 		};
 		return dot;
 	},

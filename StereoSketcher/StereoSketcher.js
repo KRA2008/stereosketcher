@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;

@@ -20,6 +20,11 @@ html, body, svg
 	z-index: 9999;
 }
 
+.fileButton
+{
+	float:right;
+}
+
 .bottomleft
 {
 	position: absolute;

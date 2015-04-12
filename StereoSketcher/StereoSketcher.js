@@ -17,6 +17,7 @@ window.onload=function() {
 	picker = document.getElementById('colorPicker');
 	zoomLabel = document.getElementById('zoomLabel');
 	toolGroup = document.getElementById('toolGroup');
+	fileInput = document.getElementById('fileInput');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -73,6 +74,9 @@ window.onload=function() {
 	picker.color.fromString("#000000");
 	zoomLabel.innerHTML = zoomLevel;
 	buildToolBar();
+	fileInput.addEventListener('change', function() {
+		load();
+    });
 	hideLoading();
 };
 

@@ -22,6 +22,8 @@
 		<script type="text/javascript" src="viewmode.js"></script>
 		<script type="text/javascript" src="layers.js"></script>
 		<script type="text/javascript" src="copier.js"></script>
+		<script type="text/javascript" src="saveandload.js"></script>
+		<script type="text/javascript" src="FileSaver.min.js"></script>
 		<script type="text/javascript" src="toolbar.js"></script>
 		<script type="text/javascript" src="StereoSketcher.js"></script>
 		<script>
@@ -44,9 +46,15 @@
 			<br/>
 			Zoom: <span id="zoomLabel"></span>
 		</div>
-		<div class="topright" id="senderDiv">
-			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>
-			<span id="uploadResult"></span>
+		<div class="topright">
+			<div class="fileButton">
+				Load project: <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/><br/>
+				<input type="button" onclick="save()" value="Save project"/>
+			</div>
+			<br/>
+			<br/>
+			<span class="fileButton"><input type="button" onclick="upload()" value="Upload to imgur"/></span><br/>
+			<span class="fileButton" id="uploadResult"></span><br/>
 		</div>
 		<div class="topmiddle">
 			<div class="innermiddle">

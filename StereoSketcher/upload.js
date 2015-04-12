@@ -2,21 +2,20 @@
 var imageToSend;
 
 function upload() {
-	editMode(true);
+	setSuccessDisplay("Uploading image...");
 	hideToolbar();
-	viewMode();
+	if(isEditMode) {
+		viewMode();
+	}
 	setTimeout(function() {
 		addWatermark();
 		saveSvgAsPng(document.getElementById("svg"), 1);
-		setTimeout(function() {
-			hideWatermark();
-			showToolbar();
-		},200);
 	},200);
 }
 
 function sendToImgur() {
-	setSuccessDisplay("Uploading image...");
+	hideWatermark();
+	showToolbar();
 	var params="image="+encodeURIComponent(imageToSend)+"&album=MciDbSPWF44zMaA";
 	
 	var ajax = new XMLHttpRequest();

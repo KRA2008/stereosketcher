@@ -13,12 +13,14 @@
 		<script type="text/javascript" src="viewmode.js"></script>
 		<script type="text/javascript" src="layers.js"></script>
 		<script type="text/javascript" src="toolbar.js"></script>
+		<script type="text/javascript" src="version.js"></script>
 		<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-56107665-1', 'auto');ga('send', 'pageview');
 		</script>
 		<script>
 			window.onload = function() {
 				buildTable();
+				document.getElementById("version").textContent = version;
 			}
 		</script>
 	</head>
@@ -27,7 +29,7 @@
 		StereoSketcher is a stereoscopic 3D drawing toy.<br/>
 		Example drawings: <a href="http://imgur.com/a/TrxA3">cross eye</a> and <a href="http://imgur.com/a/UjYZ5">red/cyan</a>.<br/>
 		<br/>
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/KsdLkdkHs1g" frameborder="0" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/KsdLkdkHs1g?html5=1" frameborder="0" allowfullscreen></iframe>
 	</p>
 		<table>
 			<tr text-align="top">
@@ -110,7 +112,7 @@
 	</a>
 	</body>
 	<footer>
-		v1.3.2
+		v<span id="version"></span>
 	</footer>
 </html>
 

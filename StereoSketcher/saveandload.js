@@ -12,7 +12,7 @@ function save() {
 
 function collectDrawing() {
 	var stereosketch = {
-		version:"",
+		version:version,
 		dots:[],
 		shapes:[]
 	}

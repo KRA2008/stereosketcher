@@ -30,6 +30,7 @@ function zoom(event) {
 		zoomLevel--;
 	}		
 	IPD*=zoom;
+	buffer*=zoom;
 	shiftSpeed*=zoom;
 	defaultLineThickness*=zoom;
 	for(var ii=0;ii<dots.length;ii++) {

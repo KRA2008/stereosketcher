@@ -4,3 +4,5 @@ _*
 .DS_Store
 *.zip
 *.ini
+node_modules/**
+.idea

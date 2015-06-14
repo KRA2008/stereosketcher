@@ -1,5 +1,7 @@
 'use strict';
 
+var cx, cy, transmogrifyMarker;
+
 function snapDots(dots,IPDchanging,event) {
 	var dx = 0;
 	var dy = 0;
@@ -7,10 +9,14 @@ function snapDots(dots,IPDchanging,event) {
 		dx=event.clientX-prevX;
 		dy=event.clientY-prevY;
 	}
-	var dot;
-	for(var ii=0;ii<dots.length;ii++) {
-		dot=dots[ii];
-		moveDot(dot,dx,dy);
+	if(event && event.ctrlKey) {
+		transmogrify(dots,event,dx,dy);
+	} else {
+		var dot;
+		for (var ii = 0; ii < dots.length; ii++) {
+			dot = dots[ii];
+			moveDot(dot, dx, dy);
+		}
 	}
 	if(IPDchanging) {
 		findIPD();
@@ -91,5 +97,80 @@ function moveDot(dot,dx,dy) {
 	}
 	for(var ii=0;ii<dot.faces.length;ii++) {
 		addClassToElement(dot.faces[ii],"tempMoving");
+	}
+}
+
+function transmogrify(dots,event,dx,dy) {
+	if(!transmogrifyMarker) {
+		addMarker(dots);	
+	}
+	
+	var x,y;
+	var dot;
+	var mx = cx-event.clientX;
+	var my = cy-event.clientY;
+	
+	var oldX, oldY, newX, newY, fx, fy;
+	var a, b, c, d;
+	a = Math.atan2(mx,my);
+	for(var ii=0;ii<dots.length;ii++) {
+		dot = dots[ii];
+		oldX=parseFloat(dot.getAttribute("cx"));
+		oldY=parseFloat(dot.getAttribute("cy"));
+		
+		fx = cx-oldX;
+		fy = cy-oldY;
+		b = Math.atan2(fx,fy);
+		c = Math.cos(b-a);
+		newX = oldX + dx*c;
+		newY = oldY + dy*c;
+		
+		dot.setAttribute("cx",newX);
+		dot.setAttribute("cy",newY);
+		dot.label.setAttribute("x",newX+labelX);
+		dot.label.setAttribute("y",newY+labelY);
+		for(var jj=0;jj<dot.lines.length;jj++) {
+			addClassToElement(dot.lines[jj],"tempMoving");
+		}
+		for(var jj=0;jj<dot.faces.length;jj++) {
+			addClassToElement(dot.faces[jj],"tempMoving");
+		}
+	}
+}
+
+function addMarker(dots) {
+	var maxX=parseFloat(dots[0].getAttribute("cx"));
+	var minX=maxX;
+	var maxY=parseFloat(dots[0].getAttribute("cy"));
+	var minY=maxY;
+	var dot;
+	var x, y;
+	for(var ii=1;ii<dots.length;ii++) {
+		dot = dots[ii];
+		x = parseFloat(dot.getAttribute("cx"));
+		y = parseFloat(dot.getAttribute("cy"));
+		maxX = Math.max(maxX,x);
+		minX = Math.min(minX,x);
+		maxY = Math.max(maxY,y);
+		minY = Math.min(minY,y);
+	}
+	cx = (maxX + minX) / 2;
+	cy = (maxY + minY) / 2;
+	transmogrifyMarker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	transmogrifyMarker.setAttribute("cx",cx);
+	transmogrifyMarker.setAttribute("cy",cy);
+	transmogrifyMarker.setAttribute("r", 5);
+	transmogrifyMarker.setAttribute("stroke", "green");
+	transmogrifyMarker.setAttribute("stroke-width", 5.0);
+	transmogrifyMarker.setAttribute("fill", "red");
+	transmogrifyMarker.setAttribute("fill-opacity", 1);
+	transmogrifyMarker.setAttribute("id","transmogrifyMarker");
+	shapeGroup.appendChild(transmogrifyMarker);
+}
+
+function removeMarker() {
+	if(transmogrifyMarker) {
+		transmogrifyMarker = null;
+		shapeGroup.removeChild(document.getElementById("transmogrifyMarker"));
 	}
 }

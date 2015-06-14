@@ -161,6 +161,7 @@ var shapeFactory = {
 				this.onmouseout = function() {
 					this.lowlight();
 				};
+				removeMarker();
 			}
 		};
 	},

@@ -107,12 +107,13 @@ function transmogrify(dots,event,dx,dy) {
 	
 	var x,y;
 	var dot;
-	var mx = cx-event.clientX;
-	var my = cy-event.clientY;
+	var mx = cx-event.clientX-dx;
+	var my = cy-event.clientY-dy;
+	var magM = magnitude(mx,my);
+	var dotProd = dotProduct(dx,dy,mx,my);
+	var crossProd = crossProduct(dx,dy,mx,my);
 	
-	var oldX, oldY, newX, newY, fx, fy;
-	var a, b, c, d;
-	a = Math.atan2(mx,my);
+	var oldX, oldY, newX, newY, fx, fy, magRatio, denom,numer,thing;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		oldX=parseFloat(dot.getAttribute("cx"));
@@ -120,10 +121,12 @@ function transmogrify(dots,event,dx,dy) {
 		
 		fx = cx-oldX;
 		fy = cy-oldY;
-		b = Math.atan2(fx,fy);
-		c = Math.cos(b-a);
-		newX = oldX + dx*c;
-		newY = oldY + dy*c;
+		magRatio = magnitude(fx,fy)/magM;
+		thing = dotProd*magRatio;
+		denom = (thing-fy-Math.pow(fx,2));
+		numer = fx*crossProd*magRatio;
+		newX = oldX+(thing-fy*numer/denom)/fx;
+		newY = oldY+numer/denom;
 		
 		dot.setAttribute("cx",newX);
 		dot.setAttribute("cy",newY);
@@ -136,6 +139,18 @@ function transmogrify(dots,event,dx,dy) {
 			addClassToElement(dot.faces[jj],"tempMoving");
 		}
 	}
+}
+
+function magnitude(x,y) {
+	return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+}
+
+function dotProduct(x1,y1,x2,y2) {
+	return x1*x2+y1*y2;
+}
+
+function crossProduct(x1,y1,x2,y2) {
+	return x1*y2-x2*y1;
 }
 
 function addMarker(dots) {

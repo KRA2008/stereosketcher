@@ -107,26 +107,33 @@ function transmogrify(dots,event,dx,dy) {
 	
 	var x,y;
 	var dot;
-	var mx = cx-event.clientX-dx;
-	var my = cy-event.clientY-dy;
-	var magM = magnitude(mx,my);
-	var dotProd = dotProduct(dx,dy,mx,my);
-	var crossProd = crossProduct(dx,dy,mx,my);
+	var ax = cx-event.clientX-dx;
+	var ay = cy-event.clientY-dy;
+	var magA = magnitude(ax,ay);
+	var magD = magnitude(dx,dy);
+	var arctanA = Math.atan2(ay,ax);
+	var arctanADeg = (arctanA*180)/Math.PI;
+	var arctanD = Math.atan2(dy,dx);
+	var arctanDDeg = (arctanD*180)/Math.PI;
+	var arcsum1 = arctanA+arctanD;
 	
-	var oldX, oldY, newX, newY, fx, fy, magRatio, denom,numer,thing;
+	var oldX, oldY, newX, newY, bx, by, magRatio, arctanB, arcsum2;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		oldX=parseFloat(dot.getAttribute("cx"));
 		oldY=parseFloat(dot.getAttribute("cy"));
 		
-		fx = cx-oldX;
-		fy = cy-oldY;
-		magRatio = magnitude(fx,fy)/magM;
-		thing = dotProd*magRatio;
-		denom = (thing-fy-Math.pow(fx,2));
-		numer = fx*crossProd*magRatio;
-		newX = oldX+(thing-fy*numer/denom)/fx;
-		newY = oldY+numer/denom;
+		bx = cx-oldX;
+		by = cy-oldY;
+		
+		arctanB = Math.atan2(bx,by);
+		var arctanBDeg = (arctanB*180)/Math.PI;
+		arcsum2 = arcsum1-arctanB;
+		
+		magRatio = magnitude(bx,by)/magA;
+		
+		newX = oldX+magRatio*Math.sin(arcsum2)*magD;
+		newY = oldY+magRatio*Math.cos(arcsum2)*magD;
 		
 		dot.setAttribute("cx",newX);
 		dot.setAttribute("cy",newY);
@@ -143,14 +150,6 @@ function transmogrify(dots,event,dx,dy) {
 
 function magnitude(x,y) {
 	return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-}
-
-function dotProduct(x1,y1,x2,y2) {
-	return x1*x2+y1*y2;
-}
-
-function crossProduct(x1,y1,x2,y2) {
-	return x1*y2-x2*y1;
 }
 
 function addMarker(dots) {

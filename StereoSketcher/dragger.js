@@ -111,9 +111,9 @@ function transmogrify(dots,event,dx,dy) {
 	var ay = cy-event.clientY-dy;
 	var magA = magnitude(ax,ay);
 	var magD = magnitude(dx,dy);
-	var arctanA = Math.atan2(ay,ax);
+	var arctanA = Math.atan2(ax,ay);
 	var arctanADeg = (arctanA*180)/Math.PI;
-	var arctanD = Math.atan2(dy,dx);
+	var arctanD = Math.atan2(dx,dy);
 	var arctanDDeg = (arctanD*180)/Math.PI;
 	var arcsum1 = arctanA+arctanD;
 	
@@ -126,7 +126,7 @@ function transmogrify(dots,event,dx,dy) {
 		bx = cx-oldX;
 		by = cy-oldY;
 		
-		arctanB = Math.atan2(bx,by);
+		arctanB = Math.atan2(by,bx);
 		var arctanBDeg = (arctanB*180)/Math.PI;
 		arcsum2 = arcsum1-arctanB;
 		

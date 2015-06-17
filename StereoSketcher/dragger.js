@@ -115,7 +115,7 @@ function transmogrify(dots,event,dx,dy) {
 	var arctanADeg = (arctanA*180)/Math.PI;
 	var arctanD = Math.atan2(dx,dy);
 	var arctanDDeg = (arctanD*180)/Math.PI;
-	var arcsum1 = arctanA+arctanD;
+	var arcsum1 = arctanD-arctanA;
 	
 	var oldX, oldY, newX, newY, bx, by, magRatio, arctanB, arcsum2;
 	for(var ii=0;ii<dots.length;ii++) {
@@ -128,12 +128,13 @@ function transmogrify(dots,event,dx,dy) {
 		
 		arctanB = Math.atan2(by,bx);
 		var arctanBDeg = (arctanB*180)/Math.PI;
-		arcsum2 = arcsum1-arctanB;
+		arcsum2 = arcsum1+arctanB;
 		
-		magRatio = magnitude(bx,by)/magA;
+		var magB = magnitude(bx,by);
+		magRatio = magB/magA;
 		
-		newX = oldX+magRatio*Math.sin(arcsum2)*magD;
-		newY = oldY+magRatio*Math.cos(arcsum2)*magD;
+		newX = oldX+magRatio*magD*Math.cos(arcsum2);
+		newY = oldY+magRatio*magD*Math.sin(arcsum2);
 		
 		dot.setAttribute("cx",newX);
 		dot.setAttribute("cy",newY);
@@ -171,9 +172,10 @@ function addMarker(dots) {
 	cx = (maxX + minX) / 2;
 	cy = (maxY + minY) / 2;
 	transmogrifyMarker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-	transmogrifyMarker.setAttribute("cx",cx);
-	transmogrifyMarker.setAttribute("cy",cy);
-	transmogrifyMarker.setAttribute("r", 5);
+	var r = 5;
+	transmogrifyMarker.setAttribute("cx",cx-r);
+	transmogrifyMarker.setAttribute("cy",cy-r);
+	transmogrifyMarker.setAttribute("r", r);
 	transmogrifyMarker.setAttribute("stroke", "green");
 	transmogrifyMarker.setAttribute("stroke-width", 5.0);
 	transmogrifyMarker.setAttribute("fill", "red");

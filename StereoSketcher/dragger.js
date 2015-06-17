@@ -111,9 +111,9 @@ function transmogrify(dots,event,dx,dy) {
 	var ay = event.clientY-cy-dy;
 	var magA = magnitude(ax,ay);
 	var magD = magnitude(dx,dy);
-	var arctanA = Math.atan2(ax,ay);
+	var arctanA = Math.atan2(ay,ax);
 	var arctanADeg = (arctanA*180)/Math.PI;
-	var arctanD = Math.atan2(dx,dy);
+	var arctanD = Math.atan2(dy,dx);
 	var arctanDDeg = (arctanD*180)/Math.PI;
 	var arcsum1 = arctanD-arctanA;
 	

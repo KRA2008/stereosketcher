@@ -8,15 +8,18 @@ function snapDots(dots,IPDchanging,event) {
 	if(event) {
 		dx=event.clientX-prevX;
 		dy=event.clientY-prevY;
-	}
-	if(event && event.ctrlKey) {
-		transmogrify(dots,event,dx,dy);
-	} else {
-		var dot;
-		for (var ii = 0; ii < dots.length; ii++) {
-			dot = dots[ii];
-			moveDot(dot, dx, dy);
+	if(event.button == 0 ) {
+		if(event.ctrlKey) {
+			rotate(dots,event,dx,dy);
+		} else {
+			var dot;
+			for (var ii = 0; ii < dots.length; ii++) {
+				dot = dots[ii];
+				moveDot(dot, dx, dy);
+			}
 		}
+	} else if (event.button == 2) {
+		stretch(dots,event,dx,dy);
 	}
 	if(IPDchanging) {
 		findIPD();

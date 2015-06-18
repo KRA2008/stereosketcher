@@ -98,7 +98,7 @@ var shapeFactory = {
 		shape.onmousedown = function(event) {
 			editMode();
 			preventDefault(event);
-			if (event.button == 0) {
+			if (event.button == 0 || event.button == 2) {
 				pressX=event.clientX;
 				pressY=event.clientY;
 				prevX = pressX;

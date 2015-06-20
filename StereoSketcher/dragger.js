@@ -1,25 +1,27 @@
 'use strict';
 
 var cx, cy, transmogrifyMarker;
+var anchorX, anchorY;
 
-function snapDots(dots,IPDchanging,event) {
+function snapDots(dots,IPDchanging,event,button) {
 	var dx = 0;
 	var dy = 0;
 	if(event) {
 		dx=event.clientX-prevX;
 		dy=event.clientY-prevY;
-	if(event.button == 0 ) {
-		if(event.ctrlKey) {
-			rotate(dots,event,dx,dy);
-		} else {
-			var dot;
-			for (var ii = 0; ii < dots.length; ii++) {
-				dot = dots[ii];
-				moveDot(dot, dx, dy);
+		if(button == 0 ) {
+			if(event.ctrlKey) {
+				//rotate(dots,event,dx,dy);
+			} else {
+				var dot;
+				for (var ii = 0; ii < dots.length; ii++) {
+					dot = dots[ii];
+					moveDot(dot, dx, dy);
+				}
 			}
+		} else if (button == 2) {
+			stretch(dots,event,dx,dy);
 		}
-	} else if (event.button == 2) {
-		stretch(dots,event,dx,dy);
 	}
 	if(IPDchanging) {
 		findIPD();
@@ -93,14 +95,108 @@ function moveDot(dot,dx,dy) {
 	var y=parseFloat(dot.getAttribute("cy"))+dy;
 	dot.setAttribute("cx",x);
 	dot.setAttribute("cy",y);
-	dot.label.setAttribute("x",parseFloat(dot.getAttribute("cx"))+labelX);
-	dot.label.setAttribute("y",parseFloat(dot.getAttribute("cy"))+labelY);
+	dot.label.setAttribute("x",x+labelX);
+	dot.label.setAttribute("y",y+labelY);
 	for(var ii=0;ii<dot.lines.length;ii++) {
 		addClassToElement(dot.lines[ii],"tempMoving");
 	}
 	for(var ii=0;ii<dot.faces.length;ii++) {
 		addClassToElement(dot.faces[ii],"tempMoving");
 	}
+}
+
+function stretch(dots,event,dx,dy) {
+	if(dx !=0 && !anchorX) {
+		assignAnchorX(dots,event,dx,dy);
+	}
+	if(dy !=0 && !anchorY) {
+		assignAnchorY(dots,event,dx,dy);
+	}
+	var dot;
+	for (var ii = 0; ii < dots.length; ii++) {
+		dot = dots[ii];
+		stretchDot(dot, event, dx, dy);
+	}
+}
+
+function stretchDot(dot,event,dx,dy) {
+	var cx=parseFloat(dot.getAttribute("cx"));
+	var cy=parseFloat(dot.getAttribute("cy"));
+	var dxScaled = ((anchorX-cx)/(event.clientX-dx))*dx;
+	var dyScaled = ((anchorY-cy)/(event.clientY-dy))*dy;
+	var x=cx+dxScaled;
+	var y=cy+dyScaled;
+	dot.setAttribute("cx",x);
+	dot.setAttribute("cy",y);
+	dot.label.setAttribute("x",x+labelX);
+	dot.label.setAttribute("y",y+labelY);
+	for(var ii=0;ii<dot.lines.length;ii++) {
+		addClassToElement(dot.lines[ii],"tempMoving");
+	}
+	for(var ii=0;ii<dot.faces.length;ii++) {
+		addClassToElement(dot.faces[ii],"tempMoving");
+	}
+}
+
+function assignAnchorX(dots,event,dx) {
+	var spread=findSpread(dots);
+	var maxXDiff=Math.abs(event.clientX-dx-spread.maxX);
+	var minXDiff=Math.abs(event.clientX-dx-spread.minX);
+	if(maxXDiff>minXDiff) {
+		anchorX = spread.minX;
+	} else {
+		anchorX = spread.maxX;
+	}
+}
+
+function assignAnchorY(dots,event,dy) {
+	var spread=findSpread(dots);
+	var maxYDiff=Math.abs(event.clientY-dy-spread.maxY);
+	var minYDiff=Math.abs(event.clientY-dy-spread.minY);
+	if(maxYDiff>minYDiff) {
+		anchorY = spread.minY;
+	} else {
+		anchorY = spread.maxY;
+	}
+}
+
+function removeAnchors() {
+	anchorX=null;
+	anchorY=null;
+}
+
+function findSpread(dots) {
+	var dot=dots[0];
+	var x, y;
+	var spread = {};
+	spread.maxX=parseFloat(dot.getAttribute("cx"));
+	spread.maxXDot=dot;
+	spread.minX=spread.maxX;
+	spread.minXDot=dot;
+	spread.maxY=parseFloat(dot.getAttribute("cy"));
+	spread.maxYDot=dot;
+	spread.minY=spread.maxY;
+	spread.minYDot=dot;
+	for(var ii=1;ii<dots.length;ii++) {
+		dot = dots[ii];
+		x = parseFloat(dot.getAttribute("cx"));
+		y = parseFloat(dot.getAttribute("cy"));
+		if(x>spread.maxX) {
+			spread.maxX = x;
+			spread.maxXDot = dot;
+		} else if(x<spread.minX) {
+			spread.minX = x;
+			spread.minXDot = dot;
+		}
+		if(y>spread.maxY) {
+			spread.maxY = y;
+			spread.maxYDot = dot;
+		} else if(y<spread.minY) {
+			spread.minY = y;
+			spread.minYDot = dot;
+		}
+	}
+	return spread;
 }
 
 function transmogrify(dots,event,dx,dy) {
@@ -157,23 +253,9 @@ function magnitude(x,y) {
 }
 
 function addMarker(dots) {
-	var maxX=parseFloat(dots[0].getAttribute("cx"));
-	var minX=maxX;
-	var maxY=parseFloat(dots[0].getAttribute("cy"));
-	var minY=maxY;
-	var dot;
-	var x, y;
-	for(var ii=1;ii<dots.length;ii++) {
-		dot = dots[ii];
-		x = parseFloat(dot.getAttribute("cx"));
-		y = parseFloat(dot.getAttribute("cy"));
-		maxX = Math.max(maxX,x);
-		minX = Math.min(minX,x);
-		maxY = Math.max(maxY,y);
-		minY = Math.min(minY,y);
-	}
-	cx = (maxX + minX) / 2;
-	cy = (maxY + minY) / 2;
+	var spread = findSpread(dots);
+	cx = (spread.maxX + spread.minX) / 2;
+	cy = (spread.maxY + spread.minY) / 2;
 	transmogrifyMarker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	var r = 5;
 	transmogrifyMarker.setAttribute("cx",cx-r);

@@ -119,22 +119,35 @@ var shapeFactory = {
 						dotGroup.removeChild(dot);
 						dotGroup.appendChild(dot);
 					}
-					this.onmousemove = function(event) {
-						event.stopPropagation();
-						snapDots(selectedDots,false,event);
-						snapDots(dots,true);
-					};
-					svg.onmousemove = function(event) {
-						event.stopPropagation();
-						snapDots(selectedDots,false,event);
-						snapDots(dots,true);
-					};
+					if(event.button == 0) {
+						this.onmousemove = function(event) {
+							event.stopPropagation();
+							snapDots(selectedDots,false,event,0);
+							snapDots(dots,true);
+						};
+						svg.onmousemove = function(event) {
+							event.stopPropagation();
+							snapDots(selectedDots,false,event,0);
+							snapDots(dots,true);
+						};
+					} else if(event.button == 2){
+						this.onmousemove = function(event) {
+							event.stopPropagation();
+							snapDots(selectedDots,false,event,2);
+							snapDots(dots,true);
+						};
+						svg.onmousemove = function(event) {
+							event.stopPropagation();
+							snapDots(selectedDots,false,event,2);
+							snapDots(dots,true);
+						};
+					}
 				}
 			}
 		};
 		shape.onmouseup = function(event) {
 			editMode();
-			if (event.button == 0) {
+			if (event.button == 0 || event.button == 2) {
 				if(event.detail == 2) {
 					shape.doubleHandler(event);
 				} else if(wasAClick(event)) {
@@ -162,6 +175,7 @@ var shapeFactory = {
 					this.lowlight();
 				};
 				removeMarker();
+				removeAnchors();
 			}
 		};
 	},

@@ -123,12 +123,12 @@ function stretchDot(dot,event,dx,dy) {
 	if(anchorX) {
 		var cx=parseFloat(dot.getAttribute("cx"));
 		var num = anchorX-cx;
-		var denom = event.clientX-dx-cx;
+		var denom = anchorX-event.clientX+dx;
 		var dxScaled;
 		if(denom==0) {
 			dxScaled = dx;
 		} else {
-			dxScaled = Math.abs(num/denom)*dx;
+			dxScaled = (num/denom)*dx;
 		}
 		var x=cx+dxScaled;
 		dot.setAttribute("cx",x);
@@ -137,12 +137,12 @@ function stretchDot(dot,event,dx,dy) {
 	if(anchorY) {
 		var cy=parseFloat(dot.getAttribute("cy"));
 		var num = anchorY-cy;
-		var denom = event.clientY-dy-cy;
+		var denom = anchorY-event.clientY+dy;
 		var dyScaled;
 		if(denom==0) {
 			dyScaled = dy;
 		} else {
-			dyScaled = Math.abs(num/denom)*dy;
+			dyScaled = (num/denom)*dy;
 		}
 		var y=cy+dyScaled;
 		dot.setAttribute("cy",y);

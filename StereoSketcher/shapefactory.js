@@ -169,13 +169,10 @@ var shapeFactory = {
 					}
 				}
 				event.stopPropagation();
-				svg.onmousemove = null;
-				this.onmousemove = null;
+				stopDots();
 				this.onmouseout = function() {
 					this.lowlight();
 				};
-				removeMarker();
-				removeAnchors();
 			}
 		};
 	},
@@ -408,6 +405,16 @@ var shapeFactory = {
 			clone.under.setAttribute("visibility","hidden");
 		}
 	}
+}
+
+function stopDots() {
+	svg.onmousemove = null;
+	var dots = getDots();
+	for(var ii=0;ii<dots.length;ii++) {
+		dots[ii].onmousemove = null;
+	}
+	removeMarker();
+	removeAnchors();
 }
 
 function createLinePressed(event) {

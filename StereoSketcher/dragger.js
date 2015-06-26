@@ -1,6 +1,6 @@
 'use strict';
 
-var cx, cy, transmogrifyMarker;
+var cx, cy, rotateMarker;
 var anchorX, anchorY;
 
 function snapDots(dots,IPDchanging,event,button) {
@@ -11,7 +11,7 @@ function snapDots(dots,IPDchanging,event,button) {
 		dy=event.clientY-prevY;
 		if(button == 0 ) {
 			if(event.ctrlKey) {
-				//rotate(dots,event,dx,dy);
+				rotate(dots,event,dx,dy);
 			} else {
 				var dot;
 				for (var ii = 0; ii < dots.length; ii++) {
@@ -217,24 +217,23 @@ function findSpread(dots) {
 	return spread;
 }
 
-function transmogrify(dots,event,dx,dy) {
-	if(!transmogrifyMarker) {
+function rotate(dots,event,dx,dy) {
+	if(!rotateMarker) {
 		addMarker(dots);	
 	}
 	
-	var x,y;
-	var dot;
-	var ax = event.clientX-cx-dx;
-	var ay = event.clientY-cy-dy;
+	var ax = event.clientX-cx+dx;
+	var ay = event.clientY-cy+dy;
+	
 	var magA = magnitude(ax,ay);
-	var magD = magnitude(dx,dy);
 	var arctanA = Math.atan2(ay,ax);
-	var arctanADeg = (arctanA*180)/Math.PI;
+	
+	var magD = magnitude(dx,dy);
 	var arctanD = Math.atan2(dy,dx);
-	var arctanDDeg = (arctanD*180)/Math.PI;
-	var arcsum1 = arctanD-arctanA;
+	var magN = magD*Math.sin(arctanA-arctanD);
 	
 	var oldX, oldY, newX, newY, bx, by, magRatio, arctanB, arcsum2;
+	var dot;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		oldX=parseFloat(dot.getAttribute("cx"));
@@ -244,14 +243,12 @@ function transmogrify(dots,event,dx,dy) {
 		by = oldY-cy;
 		
 		arctanB = Math.atan2(by,bx);
-		var arctanBDeg = (arctanB*180)/Math.PI;
-		arcsum2 = arcsum1+arctanB;
 		
 		var magB = magnitude(bx,by);
 		magRatio = magB/magA;
 		
-		newX = oldX+magRatio*magD*Math.cos(arcsum2);
-		newY = oldY+magRatio*magD*Math.sin(arcsum2);
+		newX = oldX+magRatio*magN*Math.sin(Math.PI-arctanB);
+		newY = oldY+magRatio*magN*Math.cos(Math.PI-arctanB);
 		
 		dot.setAttribute("cx",newX);
 		dot.setAttribute("cy",newY);
@@ -274,22 +271,22 @@ function addMarker(dots) {
 	var spread = findSpread(dots);
 	cx = (spread.maxX + spread.minX) / 2;
 	cy = (spread.maxY + spread.minY) / 2;
-	transmogrifyMarker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	rotateMarker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 	var r = 5;
-	transmogrifyMarker.setAttribute("cx",cx-r);
-	transmogrifyMarker.setAttribute("cy",cy-r);
-	transmogrifyMarker.setAttribute("r", r);
-	transmogrifyMarker.setAttribute("stroke", "green");
-	transmogrifyMarker.setAttribute("stroke-width", 5.0);
-	transmogrifyMarker.setAttribute("fill", "red");
-	transmogrifyMarker.setAttribute("fill-opacity", 1);
-	transmogrifyMarker.setAttribute("id","transmogrifyMarker");
-	shapeGroup.appendChild(transmogrifyMarker);
+	rotateMarker.setAttribute("cx",cx-r);
+	rotateMarker.setAttribute("cy",cy-r);
+	rotateMarker.setAttribute("r", r);
+	rotateMarker.setAttribute("stroke", "green");
+	rotateMarker.setAttribute("stroke-width", 5.0);
+	rotateMarker.setAttribute("fill", "red");
+	rotateMarker.setAttribute("fill-opacity", 1);
+	rotateMarker.setAttribute("id","rotateMarker");
+	shapeGroup.appendChild(rotateMarker);
 }
 
 function removeMarker() {
-	if(transmogrifyMarker) {
-		transmogrifyMarker = null;
-		shapeGroup.removeChild(document.getElementById("transmogrifyMarker"));
+	if(rotateMarker) {
+		rotateMarker = null;
+		shapeGroup.removeChild(document.getElementById("rotateMarker"));
 	}
 }

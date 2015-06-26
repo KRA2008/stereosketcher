@@ -66,7 +66,7 @@ window.onload=function() {
 		} else if(event.button==0) {
 			releaseSelectangle(event);
 		}
-		svg.onmousemove = null;
+		stopDots();
 	};
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);

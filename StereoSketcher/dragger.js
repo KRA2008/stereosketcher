@@ -232,28 +232,38 @@ function rotate(dots,event,dx,dy) {
 	var arctanD = Math.atan2(dy,dx);
 	var magN = magD*Math.sin(arctanA-arctanD);
 	
-	var oldX, oldY, newX, newY, bx, by, magRatio, arctanB, arcsum2;
 	var dot;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		oldX=parseFloat(dot.getAttribute("cx"));
-		oldY=parseFloat(dot.getAttribute("cy"));
+		var oldX=parseFloat(dot.getAttribute("cx"));
+		var oldY=parseFloat(dot.getAttribute("cy"));
 		
-		bx = oldX-cx;
-		by = oldY-cy;
+		var bx = oldX-cx;
+		var by = oldY-cy;
 		
-		arctanB = Math.atan2(by,bx);
+		var arctanB = Math.atan2(by,bx);
 		
 		var magB = magnitude(bx,by);
-		magRatio = magB/magA;
+		var magRatio = magB/magA;
 		
-		newX = oldX+magRatio*magN*Math.sin(Math.PI-arctanB);
-		newY = oldY+magRatio*magN*Math.cos(Math.PI-arctanB);
+		var proportionalDx = magRatio*magN*Math.sin(Math.PI-arctanB);
+		var proportionalDy = magRatio*magN*Math.cos(Math.PI-arctanB);
 		
-		dot.setAttribute("cx",newX);
-		dot.setAttribute("cy",newY);
-		dot.label.setAttribute("x",newX+labelX);
-		dot.label.setAttribute("y",newY+labelY);
+		var straightNewX = oldX+proportionalDx;
+		var straightNewY = oldY+proportionalDy;
+		
+		var newMagB = magnitude(straightNewX-cx,straightNewY-cy);
+		var curveError = newMagB-magB;
+		
+		var arctanNewB = Math.atan2(straightNewX-cx,straightNewY-cy);
+		
+		var curveDx = curveError*Math.cos(3*Math.PI/2-arctanNewB);
+		var curveDy = curveError*Math.sin(3*Math.PI/2-arctanNewB);
+		
+		dot.setAttribute("cx",straightNewX+curveDx);
+		dot.setAttribute("cy",straightNewY+curveDy);
+		dot.label.setAttribute("x",straightNewX+curveDx+labelX);
+		dot.label.setAttribute("y",straightNewY+curveDy+labelY);
 		for(var jj=0;jj<dot.lines.length;jj++) {
 			addClassToElement(dot.lines[jj],"tempMoving");
 		}

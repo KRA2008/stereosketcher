@@ -2,6 +2,7 @@
 
 var cx, cy, rotateMarker;
 var anchorX, anchorY;
+//var proportion;
 
 function snapDots(dots,IPDchanging,event,button) {
 	var dx = 0;
@@ -106,48 +107,65 @@ function moveDot(dot,dx,dy) {
 }
 
 function stretch(dots,event,dx,dy) {
-	if(dx !=0 && !anchorX) {
-		assignAnchorX(dots,event,dx,dy);
+	if(!anchorX) {
+		assignAnchorX(dots,event,dx);
 	}
-	if(dy !=0 && !anchorY) {
-		assignAnchorY(dots,event,dx,dy);
+	if(!anchorY) {
+		assignAnchorY(dots,event,dy);
+	}
+	var magRatio;
+	if(event.ctrlKey) {
+		//var spread = findSpread(dots);
+		//var spreadX = spread.maxX-spread.minX;
+		//var spreadY = spread.maxY-spread.minY;
+		//proportion = spreadX/spreadY;
+		var ex = event.clientX-dx-anchorX;
+		var ey = event.clientY-dy-anchorY;
+		var magM = (dx*ex+dy*ey)/magnitude(ex,ey);
+		var magE = magnitude(ex,ey);
+		magRatio = magM/magE;
 	}
 	var dot;
 	for (var ii = 0; ii < dots.length; ii++) {
 		dot = dots[ii];
-		stretchDot(dot, event, dx, dy);
+		stretchDot(dot, event, dx, dy, magRatio);
 	}
 }
 
-function stretchDot(dot,event,dx,dy) {
-	if(anchorX) {
-		var cx=parseFloat(dot.getAttribute("cx"));
+function stretchDot(dot,event,dx,dy,magRatio) {
+	var dxScaled=0,dyScaled=0;
+	var cx=parseFloat(dot.getAttribute("cx"));
+	var cy=parseFloat(dot.getAttribute("cy"));
+	if(event.ctrlKey) {
+		var magDel = magnitude(cx-anchorX,cy-anchorY)*magRatio;
+		var cTan = Math.atan2(cy-anchorY,cx-anchorX);
+		dxScaled = magDel*Math.cos(cTan);
+		dyScaled = magDel*Math.sin(cTan);
+	} else {
 		var num = anchorX-cx;
 		var denom = anchorX-event.clientX+dx;
-		var dxScaled;
 		if(denom==0) {
 			dxScaled = dx;
 		} else {
 			dxScaled = (num/denom)*dx;
 		}
-		var x=cx+dxScaled;
-		dot.setAttribute("cx",x);
-		dot.label.setAttribute("x",x+labelX);
-	}
-	if(anchorY) {
-		var cy=parseFloat(dot.getAttribute("cy"));
+		
 		var num = anchorY-cy;
 		var denom = anchorY-event.clientY+dy;
-		var dyScaled;
 		if(denom==0) {
 			dyScaled = dy;
 		} else {
 			dyScaled = (num/denom)*dy;
 		}
-		var y=cy+dyScaled;
-		dot.setAttribute("cy",y);
-		dot.label.setAttribute("y",y+labelY);
 	}
+	
+	var x=cx+dxScaled;
+	dot.setAttribute("cx",x);
+	dot.label.setAttribute("x",x+labelX);
+	
+	var y=cy+dyScaled;
+	dot.setAttribute("cy",y);
+	dot.label.setAttribute("y",y+labelY);
 	for(var ii=0;ii<dot.lines.length;ii++) {
 		addClassToElement(dot.lines[ii],"tempMoving");
 	}
@@ -157,7 +175,7 @@ function stretchDot(dot,event,dx,dy) {
 }
 
 function assignAnchorX(dots,event,dx) {
-	var spread=findSpread(dots);
+	var spread = findSpread(dots);
 	var maxXDiff=Math.abs(event.clientX-dx-spread.maxX);
 	var minXDiff=Math.abs(event.clientX-dx-spread.minX);
 	if(maxXDiff<minXDiff) {
@@ -168,7 +186,7 @@ function assignAnchorX(dots,event,dx) {
 }
 
 function assignAnchorY(dots,event,dy) {
-	var spread=findSpread(dots);
+	var spread = findSpread(dots);
 	var maxYDiff=Math.abs(event.clientY-dy-spread.maxY);
 	var minYDiff=Math.abs(event.clientY-dy-spread.minY);
 	if(maxYDiff<minYDiff) {

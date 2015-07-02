@@ -134,15 +134,15 @@ function stretch(dots,event,dx,dy) {
 
 function stretchDot(dot,event,dx,dy,magRatio) {
 	var dxScaled=0,dyScaled=0;
-	var cx=parseFloat(dot.getAttribute("cx"));
-	var cy=parseFloat(dot.getAttribute("cy"));
+	var oldX=parseFloat(dot.getAttribute("cx"));
+	var oldY=parseFloat(dot.getAttribute("cy"));
 	if(event.ctrlKey) {
-		var magDel = magnitude(cx-anchorX,cy-anchorY)*magRatio;
-		var cTan = Math.atan2(cy-anchorY,cx-anchorX);
+		var magDel = magnitude(oldX-anchorX,oldY-anchorY)*magRatio;
+		var cTan = Math.atan2(oldY-anchorY,oldX-anchorX);
 		dxScaled = magDel*Math.cos(cTan);
 		dyScaled = magDel*Math.sin(cTan);
 	} else {
-		var num = anchorX-cx;
+		var num = anchorX-oldX;
 		var denom = anchorX-event.clientX+dx;
 		if(denom==0) {
 			dxScaled = dx;
@@ -150,7 +150,7 @@ function stretchDot(dot,event,dx,dy,magRatio) {
 			dxScaled = (num/denom)*dx;
 		}
 		
-		var num = anchorY-cy;
+		var num = anchorY-oldY;
 		var denom = anchorY-event.clientY+dy;
 		if(denom==0) {
 			dyScaled = dy;
@@ -159,13 +159,13 @@ function stretchDot(dot,event,dx,dy,magRatio) {
 		}
 	}
 	
-	var x=cx+dxScaled;
-	dot.setAttribute("cx",x);
-	dot.label.setAttribute("x",x+labelX);
+	var newX=oldX+dxScaled;
+	dot.setAttribute("cx",newX);
+	dot.label.setAttribute("x",newX+labelX);
 	
-	var y=cy+dyScaled;
-	dot.setAttribute("cy",y);
-	dot.label.setAttribute("y",y+labelY);
+	var newY=oldY+dyScaled;
+	dot.setAttribute("cy",newY);
+	dot.label.setAttribute("y",newY+labelY);
 	for(var ii=0;ii<dot.lines.length;ii++) {
 		addClassToElement(dot.lines[ii],"tempMoving");
 	}
@@ -236,7 +236,7 @@ function findSpread(dots) {
 }
 
 function rotate(dots,event,dx,dy) {
-	if(!rotateMarker) {
+	if(!(cx && cy)) {
 		addMarker(dots);	
 	}
 	
@@ -299,22 +299,11 @@ function addMarker(dots) {
 	var spread = findSpread(dots);
 	cx = (spread.maxX + spread.minX) / 2;
 	cy = (spread.maxY + spread.minY) / 2;
-	rotateMarker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-	var r = 5;
-	rotateMarker.setAttribute("cx",cx-r);
-	rotateMarker.setAttribute("cy",cy-r);
-	rotateMarker.setAttribute("r", r);
-	rotateMarker.setAttribute("stroke", "green");
-	rotateMarker.setAttribute("stroke-width", 5.0);
-	rotateMarker.setAttribute("fill", "red");
-	rotateMarker.setAttribute("fill-opacity", 1);
-	rotateMarker.setAttribute("id","rotateMarker");
-	shapeGroup.appendChild(rotateMarker);
 }
 
 function removeMarker() {
-	if(rotateMarker) {
-		rotateMarker = null;
-		shapeGroup.removeChild(document.getElementById("rotateMarker"));
+	if(cx && cy) {
+		cx = null;
+		cy = null;
 	}
 }

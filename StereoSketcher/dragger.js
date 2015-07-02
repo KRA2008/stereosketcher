@@ -115,10 +115,6 @@ function stretch(dots,event,dx,dy) {
 	}
 	var magRatio;
 	if(event.ctrlKey) {
-		//var spread = findSpread(dots);
-		//var spreadX = spread.maxX-spread.minX;
-		//var spreadY = spread.maxY-spread.minY;
-		//proportion = spreadX/spreadY;
 		var ex = event.clientX-dx-anchorX;
 		var ey = event.clientY-dy-anchorY;
 		var magM = (dx*ex+dy*ey)/magnitude(ex,ey);

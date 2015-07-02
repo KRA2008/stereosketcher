@@ -2,7 +2,6 @@
 
 var cx, cy, rotateMarker;
 var anchorX, anchorY;
-//var proportion;
 
 function snapDots(dots,IPDchanging,event,button) {
 	var dx = 0;

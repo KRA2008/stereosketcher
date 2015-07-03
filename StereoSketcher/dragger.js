@@ -13,6 +13,7 @@ function snapDots(dots,IPDchanging,event,button) {
 			if(event.ctrlKey) {
 				rotate(dots,event,dx,dy);
 			} else {
+			    removeMarker();
 				var dot;
 				for (var ii = 0; ii < dots.length; ii++) {
 					dot = dots[ii];

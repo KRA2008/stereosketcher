@@ -147,7 +147,7 @@ var shapeFactory = {
 		};
 		shape.onmouseup = function(event) {
 			editMode();
-			if (event.button == 0 || event.button == 2) {
+			if (event.button == 0) {
 				if(event.detail == 2) {
 					shape.doubleHandler(event);
 				} else if(wasAClick(event)) {

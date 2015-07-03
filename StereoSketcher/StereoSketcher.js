@@ -44,8 +44,10 @@ window.onload=function() {
 			editMode();
 			var dots = getDots();
 			svg.onmousemove = function(event) {
-				preventDefault(event);
-				snapDots(dots,false,event);
+			    preventDefault(event);
+			    if (!event.ctrlKey) {
+			        snapDots(dots, false, event, 0);
+			    }
 			};
 		}
 	};

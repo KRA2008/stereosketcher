@@ -22,6 +22,12 @@ function snapDots(dots,IPDchanging,event,button) {
 		} else if (button == 2) {
 			stretch(dots,event,dx,dy);
 		}
+	} else {
+	    var shapes = getLinesAndFaces();
+	    var shape;
+	    for (var ii = 0; ii < shapes.length; ii++) {
+	        addClassToElement(shapes[ii], "tempMoving");
+	    }
 	}
 	if(IPDchanging) {
 		findIPD();

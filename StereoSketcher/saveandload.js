@@ -14,7 +14,8 @@ function collectDrawing() {
 	var stereosketch = {
 		version:version,
 		dots:[],
-		shapes:[]
+		shapes: [],
+		background: getBackgroundColor()
 	}
 	var dot;
 	var dots = getDots();
@@ -107,4 +108,6 @@ function loadSketch(sketch) {
 			newFace.setOpacity(shape.opacity);
 		}
 	}
+	picker.color.fromString(sketch.background);
+	setBackground();
 }

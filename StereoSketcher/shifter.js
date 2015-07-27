@@ -92,3 +92,17 @@ function findIPD() {
 			return;
 	}
 }
+
+function invertShift() {
+    var dots = getDots();
+    var dot
+    var shifted = [];
+    for (var ii = 0; ii < dots.length; ii++) {
+        dot = dots[ii];
+        if (dot.isSelected()) {
+            dot.setShift(dot.getShift() * -1);
+            shifted.push(dot);
+        }
+    }
+    snapDots(shifted);
+}

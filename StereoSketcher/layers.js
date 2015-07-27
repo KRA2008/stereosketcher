@@ -72,8 +72,21 @@ function moveSelectedOneLayer(forward) {
     var reordered = linesAndFaces.slice(0);
     for(var jj=0;jj<reordered.length;jj++) {
     	item = reordered[jj];
-    	item.remove();
     	item.add();
     	item.lowlight();
+    }
+}
+
+function invertLayering() {
+    var linesAndFaces = getLinesAndFaces();
+    var item;
+    for (var ii = 0; ii < linesAndFaces.length; ii++) {
+        item = linesAndFaces[ii];
+        item.remove();
+    }
+    linesAndFaces.reverse();
+    for (var ii = 0; ii < linesAndFaces.length; ii++) {
+        item = linesAndFaces[ii];
+        item.add();
     }
 }

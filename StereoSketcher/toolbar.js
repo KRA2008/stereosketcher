@@ -19,7 +19,8 @@ var toolSets = [
 			new tool('q',moveSelectedToBack,'toback.png','move selected lines and faces to back layer'),
 			new tool('w',moveSelectedOneBack,'backward.png','move selected lines and faces one layer backward'),
 			new tool('e',moveSelectedOneForward,'forward.png','move selected lines and faces one layer forward'),
-			new tool('r',moveSelectedToFront,'tofront.png','move selected lines and faces to front layer')
+			new tool('r',moveSelectedToFront, 'tofront.png', 'move selected lines and faces to front layer'),
+            new tool('b',invertLayering,'invertlayers.png','invert all layering')
 		]
 	),
 	new toolSet(
@@ -31,13 +32,14 @@ var toolSets = [
 	new toolSet(
 		[
 			new tool('a',shiftIn,'shiftin.png','shift dots into screen'),
-			new tool('s',shiftOut,'shiftout.png','shift dots out of screen')
+			new tool('s', shiftOut, 'shiftout.png', 'shift dots out of screen'),
+            new tool('g', invertShift, 'invertshift.png', 'invert depth of selected dots')
 		]
 	),
 	new toolSet(
 		[
 			new tool('d',createLinePressed,'line.png','create line between two selected dots'),
-			new tool('f',createFacePressed,'face.png','create face between three selected dots')
+			new tool('f', createFacePressed, 'face.png', 'create face between three selected dots')
 		]
 	),
 	new toolSet(

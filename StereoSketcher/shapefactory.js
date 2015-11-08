@@ -169,11 +169,17 @@ var shapeFactory = {
 					}
 				}
 				event.stopPropagation();
-				stopDots();
 				this.onmouseout = function() {
 					this.lowlight();
 				};
+			} else if (event.button == 2) {
+				if(doesElementHaveClass(this,"dot")) {
+					this.select();
+					createLinePressed();
+					event.stopPropagation();
+				}
 			}
+			stopDots();
 		};
 	},
 	createLine : function(dot1, dot2) {

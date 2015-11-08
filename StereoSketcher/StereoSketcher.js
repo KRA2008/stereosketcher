@@ -89,11 +89,13 @@ window.onload=function() {
 		load();
     });
 	hideLoading();
+	setTimeout(function() {
+		window.onbeforeunload = function(e) {
+			preventDefault(e);
+		}
+	},5000);
 };
 
-window.onbeforeunload = function(e) {
-	preventDefault(e);
-}
 
 function wasAClick(event) {
 	return event.clientX == pressX && event.clientY == pressY;

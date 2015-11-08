@@ -31,7 +31,6 @@ function editMode(force) {
 		} else {
 			showClones();
 		}
-		deselectAll();
 		removeOverlaps();
 		showDots();
 		isEditMode = true;
@@ -90,7 +89,6 @@ function showDots() {
 }
 
 function hideDots() {
-	deselectAll();
 	var dots = getDots();
 	var dot;
 	for(var ii=0;ii<dots.length;ii++) {

@@ -1,10 +1,10 @@
 'use strict';
 
-function copyAndPasteSelectedShapes(x,y) {
+function copyAndPasteSelectedShapes(x,y,isExtrusion) {
 	var mid = findMiddleOfCopyableDots();
-	doTheActualCopy(x,y,mid);
+	doTheActualCopy(x,y,mid,isExtrusion);
 	restackCopies();
-	cleanUpCopies();
+	cleanUpCopies(isExtrusion);
 }
 
 function restackCopies() {
@@ -19,14 +19,25 @@ function restackCopies() {
 	}
 }
 
-function cleanUpCopies() {
+function cleanUpCopies(isExtrusion) {
 	var dots = getDots();
+	var dot;
 	for(var ii=0;ii<dots.length;ii++) {
-		dots[ii].copy = null;
+		dot = dots[ii];
+		dot.copy = null;
+		if(dot.isExtrusion) {
+			dot.select();
+			dot.isExtrusion = false;
+		}
 	}
 	var shapes = getLinesAndFaces();
+	var shape;
 	for(var ii=0;ii<shapes.length;ii++) {
-		shapes[ii].copy = null;
+		shape = shapes[ii];
+		shape.copy = null;
+		if(isExtrusion) {
+			shape.deselect();
+		}
 	}
 }
 
@@ -78,17 +89,17 @@ function findMiddleOfCopyableDots() {
 	}
 }
 
-function doTheActualCopy(x,y,mid) {
+function doTheActualCopy(x,y,mid,isExtrusion) {
 	var lines = getLines();
 	var line;
 	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
 		if(line.isSelected()) {
 			if(!line.dot1.copy) {
-				copyDot(line.dot1,x,y,mid);
+				copyDot(line.dot1,x,y,mid,isExtrusion);
 			}
 			if(!line.dot2.copy) {
-				copyDot(line.dot2,x,y,mid);
+				copyDot(line.dot2,x,y,mid,isExtrusion);
 			}
 		}
 	}
@@ -104,13 +115,13 @@ function doTheActualCopy(x,y,mid) {
 		face = faces[ii];
 		if(face.isSelected()) {
 			if(!face.dot1.copy) {
-				copyDot(face.dot1,x,y,mid);
+				copyDot(face.dot1,x,y,mid,isExtrusion);
 			}
 			if(!face.dot2.copy) {
-				copyDot(face.dot2,x,y,mid);
+				copyDot(face.dot2,x,y,mid,isExtrusion);
 			}
 			if(!face.dot3.copy) {
-				copyDot(face.dot3,x,y,mid);
+				copyDot(face.dot3,x,y,mid,isExtrusion);
 			}
 		}
 	}
@@ -123,13 +134,18 @@ function doTheActualCopy(x,y,mid) {
 }
 
 
-function copyDot(dot,x,y,mid) {
+function copyDot(dot,x,y,mid,isExtrusion) {
 	var newX = x + parseFloat(dot.getAttribute("cx"))-mid.midCopyX;
 	var newY = y + parseFloat(dot.getAttribute("cy"))-mid.midCopyY;
 	var newDot = shapeFactory.createDot(newX,newY);
 	dot.copy = newDot;
 	newDot.setShift(dot.getShift());
 	newDot.lowlight();
+	if(isExtrusion) {
+		shapeFactory.createLine(dot,newDot);
+		newDot.select();
+		newDot.isExtrusion = true;
+	}
 }
 
 function copyLine(line) {

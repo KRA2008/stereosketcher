@@ -33,7 +33,11 @@ window.onload=function() {
 		}
 		if(event.button==1) {
 			if(!middleMouseButtonLock) {
-				copyAndPasteSelectedShapes(event.clientX,event.clientY);
+				var withExtrude = false;
+				if(event.ctrlKey) {
+					withExtrude = true;
+				}
+				copyAndPasteSelectedShapes(event.clientX,event.clientY,withExtrude);
 				middleMouseButtonLock = true;
 				setTimeout(function() {
 					middleMouseButtonLock = false;

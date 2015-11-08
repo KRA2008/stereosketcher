@@ -63,6 +63,11 @@ window.onload=function() {
 				var dot=shapeFactory.createDot(event.clientX,event.clientY);
 				if(event.shiftKey) {
 					dot.select();
+					if (event.ctrlKey) {
+						var previousDot = dot;
+						createLinePressed(event);
+						previousDot.select();
+					}
 				}
 			}
 		} else if(event.button==0) {

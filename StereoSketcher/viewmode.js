@@ -1,27 +1,27 @@
 'use strict';
 
 function magicEyeMode() {
-	mode=2;
-	setViewModeIndicator();
-	findIPD();
-	editMode(true);
-	restoreAllOpacity();
+	setMode(2);
 }
 
 function redCyanMode() {
-	mode=3;
-	setViewModeIndicator();
-	findIPD();
-	editMode(true);
-	stowAllOpacity();
+	setMode(3);
 }
 
 function crossEyeMode() {
-	mode=1;
+	setMode(1);
+}
+
+function setMode(mode) {
+	mode = mode;
 	setViewModeIndicator();
 	findIPD();
 	editMode(true);
-	restoreAllOpacity();
+	if(mode == 3) {
+		stowAllOpacity();
+	} else {
+		restoreAllOpacity();
+	}
 }
 
 function editMode(force) {

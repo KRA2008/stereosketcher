@@ -15,7 +15,10 @@ function collectDrawing() {
 		version:version,
 		dots:[],
 		shapes: [],
-		background: getBackgroundColor()
+		background: getBackgroundColor(),
+		buffer: buffer,
+		mode: mode,
+		zoomLevel: zoomLevel
 	}
 	var dot;
 	var dots = getDots();
@@ -84,6 +87,9 @@ function load() {
 }
 
 function loadSketch(sketch) {
+	setMode(sketch.mode);
+	setZoomLevel(sketch.zoomLevel);
+	buffer = sketch.buffer;
 	var loadedDots = sketch.dots;
 	var dot;
 	for(var ii=0;ii<loadedDots.length;ii++) {

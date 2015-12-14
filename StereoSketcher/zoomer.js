@@ -6,29 +6,48 @@ var zoomLimit = 15.0;
 
 function zoom(event) {
 	editMode();
+	var roll = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+	if(roll<0) {
+		if(zoomLevel<=-1*zoomLimit) {
+			return;
+		}
+		zoomOut(event.clientX,event.clientY);
+	} else {
+		if(zoomLevel>=zoomLimit) {
+			return;
+		}
+		zoomIn(event.clientX,event.clientY);
+	}
+}
+
+function setZoomLevel(newZoomLevel) {
+	if(newZoomLevel > 0) {
+		for(var ii = newZoomLevel;ii>0;ii--) {
+			zoomIn(window.innerWidth/2,window.innerHeight/2);
+		}
+	} else {
+		for(var ii = newZoomLevel;ii<0;ii++) {
+			zoomOut(window.innerWidth/2,window.innerHeight/2);
+		}
+	}
+}
+
+function zoomIn(centerX,centerY) {
+	zoomLevel++;
+	applyZoom(zoomSpeed,centerX,centerY);
+}
+
+function zoomOut(centerX,centerY) {
+	zoomLevel--;
+	applyZoom(1-((zoomSpeed-1)/zoomSpeed),centerX,centerY);
+}
+
+function applyZoom(zoom,centerX,centerY) {
 	var dot;
 	var dots = getDots();
 	var diffX, diffY;
 	var shiftX, shiftY;
 	var oldX, oldY;
-	var eventX = event.clientX;
-	var eventY = event.clientY;
-	var roll = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
-	var zoom = zoomSpeed;
-	if(roll<0) {
-		zoom = 1-((zoomSpeed-1)/zoomSpeed);
-	}
-	if(roll>0) {
-		if(zoomLevel>=zoomLimit) {
-			return;
-		}
-		zoomLevel++;
-	} else {
-		if(zoomLevel<=-1*zoomLimit) {
-			return;
-		}
-		zoomLevel--;
-	}		
 	IPD*=zoom;
 	buffer*=zoom;
 	shiftSpeed*=zoom;
@@ -37,8 +56,8 @@ function zoom(event) {
 		dot = dots[ii];
 		oldX = parseFloat(dot.getAttribute("cx"));
 		oldY = parseFloat(dot.getAttribute("cy"));
-		diffX = eventX-oldX;
-		diffY = eventY-oldY;
+		diffX = centerX-oldX;
+		diffY = centerY-oldY;
 		shiftX = diffX-zoom*diffX;
 		shiftY = diffY-zoom*diffY;
 		moveDot(dot,shiftX,shiftY);

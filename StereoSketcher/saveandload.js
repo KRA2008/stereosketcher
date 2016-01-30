@@ -60,11 +60,13 @@ function exportLine(line) {
 }
 
 function exportFace(face) {
+	var dotIds = [];
+	for(var ii=0;ii<face.dots.length;ii++) {
+		dotIds.push(face.dots[ii].tempId);
+	}
 	return {
 		type:"face",
-		dot1:face.dot1.tempId,
-		dot2:face.dot2.tempId,
-		dot3:face.dot3.tempId,
+		dots:dotIds,
 		color:face.color,
 		opacity:face.getOpacity()
 	}
@@ -109,7 +111,11 @@ function loadSketch(sketch) {
 			newLine.setColor(shape.color);
 			newLine.setOpacity(shape.opacity);
 		} else if (shape.type == "face") {
-			var newFace = shapeFactory.createFace(dots[(dots.length-loadedDots.length)+shape.dot1],dots[(dots.length-loadedDots.length)+shape.dot2],dots[(dots.length-loadedDots.length)+shape.dot3]);
+			var faceDots = [];
+			for(var jj=0;jj<shape.dots.length;jj++) {
+				faceDots.push(dots[(dots.length-loadedDots.length)+shape.dots[jj]]);
+			}
+			var newFace = shapeFactory.createFace(faceDots);
 			newFace.setColor(shape.color);
 			newFace.setOpacity(shape.opacity);
 		}

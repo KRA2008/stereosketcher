@@ -39,7 +39,7 @@ var toolSets = [
 	new toolSet(
 		[
 			new tool('d',createLinePressed,'line.png','create line between two selected dots'),
-			new tool('f', createFacePressed, 'face.png', 'create face between three selected dots')
+			new tool('f', createFacePressed, 'face.png', 'create face between three or more selected dots')
 		]
 	),
 	new toolSet(

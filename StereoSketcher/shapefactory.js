@@ -116,6 +116,7 @@ var shapeFactory = {
 					}
 					for(var jj=0;jj<selectedDots.length;jj++) {
 						dot = selectedDots[jj];
+						
 						dotGroup.removeChild(dot);
 						dotGroup.appendChild(dot);
 					}
@@ -286,18 +287,15 @@ var shapeFactory = {
 			clone.setAttribute("visibility","hidden");
 		}
 	},
-	createFace : function(dot1, dot2, dot3) {
-		dot1.deselect();
-		dot2.deselect();
-		dot3.deselect();
+	createFace : function(dots) {
 		var face = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		for(var ii=0;ii<dots.length;ii++) {
+			var dot = dots[ii];
+			dot.deselect();
+			dot.faces.push(face);
+		}
+		face.dots = Array.prototype.slice.call(dots);
 		var under = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-		dot1.faces.push(face);
-		dot2.faces.push(face);
-		dot3.faces.push(face);
-		face.dot1 = dot1;
-		face.dot2 = dot2;
-		face.dot3 = dot3;
 		face.under = under;
 		face.color = picker.value;
 		face.setAttribute("fill", picker.value);
@@ -359,9 +357,10 @@ var shapeFactory = {
 			removeOverlapsOfItem(this);
 		};
 		face.delete = function() {
-			this.dot1.faces.splice(this.dot1.faces.indexOf(this),1);
-			this.dot2.faces.splice(this.dot2.faces.indexOf(this),1);
-			this.dot3.faces.splice(this.dot3.faces.indexOf(this),1);
+			var dots = this.dots;
+			for(var ii=0;ii<dots.length;ii++) {
+				dots[ii].faces.splice(this.dots[ii].faces.indexOf(this),1);
+			}
 			this.remove();
 		};
 		face.setColor = function(color) {
@@ -463,50 +462,19 @@ function createLinePressed(event) {
 }
 
 function createFacePressed(event) {
-	var selectedDots=0;
-	var dot1;
-	var dot2;
-	var dot3;
-	var dots = getDots();
-	for(var io=0;io<dots.length;io++) {
-		if(dots[io].isSelected()) {
-			selectedDots++;
-			if(dot1==null)
-			{
-				dot1=dots[io];
-				continue;
-			}
-			if(dot2==null)
-			{
-				dot2=dots[io];
-				continue;
-			}
-			if(dot3==null)
-			{
-				dot3=dots[io];
-				continue;
-			}
-			if(selectedDots==4)
-			{
-				return;
-			}
+	var candidateDots = getDots();
+	var candidateDot;
+	var selectedDots = [];
+	for(var ii=0;ii<candidateDots.length;ii++) {
+		candidateDot = candidateDots[ii];
+		if(candidateDot.isSelected()) {
+			selectedDots.push(candidateDot);
 		}
 	}
-	if(selectedDots!=3) {
+	if(selectedDots.length < 3) {
 		return;
 	}
-	var faces = getFaces();
-	var face;
-	for(var ii=0;ii<faces.length;ii++) {
-		face = faces[ii];
-		if((dot1 == face.dot1 || dot1 == face.dot2 || dot1 == face.dot3) && 
-		(dot2 == face.dot1 || dot2 == face.dot2 || dot2 == face.dot3) && 
-		(dot3 == face.dot1 || dot3 == face.dot2 || dot3 == face.dot3))
-		{
-			return;
-		}
-	}
-	shapeFactory.createFace(dot1,dot2,dot3,event);
+	shapeFactory.createFace(selectedDots);
 }
 
 function deletePressed() {
@@ -531,8 +499,16 @@ function deletePressed() {
 	var faces = getFaces();
 	for (var ii=faces.length-1;ii>=0;ii--) {
 		face=faces[ii];
-		if(face.isSelected() || face.dot1.isSelected() || face.dot2.isSelected() || face.dot3.isSelected()) {
+		if(face.isSelected()) {
 			face.delete();
+			continue;
+		}
+		var dots = face.dots;
+		for(var jj=0;jj<dots.length;jj++) {
+			if(dots[jj].isSelected()) {
+				face.delete();
+				break;
+			}
 		}
 	}
 	snapDots(getDots(),true);

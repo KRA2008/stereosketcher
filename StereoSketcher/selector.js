@@ -20,9 +20,10 @@ function selectDotsOfFace(face,event) {
 	if(!event.shiftKey) {
 		deselectAll();
 	}
-	face.dot1.select();
-	face.dot2.select();
-	face.dot3.select();
+	var dots = face.dots;
+	for(var ii=0;ii<dots.length;ii++) {
+		dots[ii].select();
+	}
 }
 
 function selectShapesOfDot(dot,event) {
@@ -65,10 +66,14 @@ function selectAllContiguousShapes(sourceShape,event) {
 }
 
 function recursiveSelectShapes(sourceShape) {
-	recursiveSelectShapesDotStepper(sourceShape.dot1);
-	recursiveSelectShapesDotStepper(sourceShape.dot2);
 	if(doesElementHaveClass(sourceShape,"face")) {
-		recursiveSelectShapesDotStepper(sourceShape.dot3);
+		var dots = sourceShape.dots;
+		for(var ii=0;ii<dots.length;ii++) {
+			recursiveSelectShapesDotStepper(dots[ii]);
+		}
+	} else {
+		recursiveSelectShapesDotStepper(sourceShape.dot1);
+		recursiveSelectShapesDotStepper(sourceShape.dot2);
 	}
 }
 
@@ -139,37 +144,23 @@ function recursiveSelectDots(dot) {
 	var face;
 	for(var ii=0;ii<faces.length;ii++) {
 		face = faces[ii];
-		if(face.dot1.isSelected() && face.dot2.isSelected() && face.dot3.isSelected()) {
+		var allDone = true;
+		for(var jj=0;jj<face.dots.length;jj++) {
+			if(!face.dots[jj].isSelected()) {
+				allDone = false;
+			}
+		}
+		if(allDone) {
 			continue;
 		}
-		if(face.dot1 == dot) {
-			if(!face.dot2.isSelected()) {
-				face.dot2.select();
-				recursiveSelectDots(face.dot2);
-			}
-			if(!face.dot3.isSelected()) {
-				face.dot3.select();
-				recursiveSelectDots(face.dot3);
-			}
-		}
-		if(face.dot2 == dot) {
-			if(!face.dot1.isSelected()) {
-				face.dot1.select();
-				recursiveSelectDots(face.dot1);
-			}
-			if(!face.dot3.isSelected()) {
-				face.dot3.select();
-				recursiveSelectDots(face.dot3);
-			}
-		}
-		if(face.dot3 == dot) {
-			if(!face.dot2.isSelected()) {
-				face.dot2.select();
-				recursiveSelectDots(face.dot2);
-			}
-			if(!face.dot1.isSelected()) {
-				face.dot1.select();
-				recursiveSelectDots(face.dot1);
+		for(var jj=0;jj<face.dots.length;jj++) {
+			if(face.dots[jj] == dot) {
+				for(var kk=0;kk<face.dots.length;kk++) {
+					if(face.dots[jj] != face.dots[kk] && !face.dots[kk].isSelected()) {
+						face.dots[kk].select();
+						recursiveSelectDots(face.dots[kk]);
+					}
+				}
 			}
 		}
 	}

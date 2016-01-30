@@ -114,14 +114,12 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 	for(var ii=0;ii<faces.length;ii++) {
 		face = faces[ii];
 		if(face.isSelected()) {
-			if(!face.dot1.copy) {
-				copyDot(face.dot1,x,y,mid,isExtrusion);
-			}
-			if(!face.dot2.copy) {
-				copyDot(face.dot2,x,y,mid,isExtrusion);
-			}
-			if(!face.dot3.copy) {
-				copyDot(face.dot3,x,y,mid,isExtrusion);
+			var dots = face.dots;
+			var dot;
+			for(var jj=0;jj<dots.length;jj++) {
+				if(!dot.copy) {
+					copyDot(dot,x,y,mid,isExtrusion);
+				}
 			}
 		}
 	}
@@ -159,7 +157,12 @@ function copyLine(line) {
 }
 
 function copyFace(face) {
-	var newFace = shapeFactory.createFace(face.dot1.copy,face.dot2.copy,face.dot3.copy);
+	var originalDots = face.dots;
+	var copyDots;
+	for(var ii=0;ii<originalDots.lengh;ii++) {
+		copyDots.push(originalDots[ii].copy);
+	}
+	var newFace = shapeFactory.createFace(copyDots);
 	newFace.setColor(face.color);
 	newFace.setOpacity(face.getOpacity());
 	newFace.storedOpacity = face.storedOpacity;

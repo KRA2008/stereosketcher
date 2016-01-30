@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,fileDragger;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -18,6 +18,7 @@ window.onload=function() {
 	zoomLabel = document.getElementById('zoomLabel');
 	toolGroup = document.getElementById('toolGroup');
 	fileInput = document.getElementById('fileInput');
+	fileDragger = document.getElementById('fileDrag');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -78,6 +79,10 @@ window.onload=function() {
 	};
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);
+	fileDragger.addEventListener("change", FileDragHandler, false);
+	fileDragger.addEventListener("drop", FileDragHandler, false);
+	fileDragger.addEventListener("dragleave", FileDragHover, false);
+	fileDragger.addEventListener("dragover", FileDragHover, false);
 	crossEyeMode();
 	picker.color.fromString("#000000");
 	zoomLabel.innerHTML = zoomLevel;

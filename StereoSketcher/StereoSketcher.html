@@ -33,18 +33,28 @@
 	</head>
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
 		<div id="pickerDiv" class="bottomleft">
+			<form>
+				<div id="fileDrag">
+					<br/>
+					Drop image here to add <br/> 
+					image to selected face
+					<br/>
+					<br/>
+				</div>
+			</form>
+			<hr/>
 			<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
-			<input type="button" value="Set Selected" onclick="setColor()" /><br/>
-			<input type="button" value="Sample Selected" onclick="sampleColor()" /><br/>
+			<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
+			<input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
 			<br/>
-			<input id="setBackground" type="button" value="Set Background" onclick="setBackground()" /><br/>
-			<input id="sampleBackground" type="button" value="Sample Background" onclick="sampleBackground()" /><br/>
-			<br/>
+			<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
+			<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
+			<hr/>
 			View mode:<br/>
 			&nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
 			&nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
 			&nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: red/cyan</span><br/>
-			<br/>
+			<hr/>
 			Zoom: <span id="zoomLabel"></span>
 		</div>
 		<div class="topright">

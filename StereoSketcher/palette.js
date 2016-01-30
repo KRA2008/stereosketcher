@@ -119,3 +119,25 @@ function stowAllOpacity() {
 		shapes[ii].setOpacity(1.0);
 	}
 }
+
+function FileDragHover(e) {
+	e.stopPropagation();
+	e.preventDefault();
+}
+
+function FileDragHandler(e) {
+	FileDragHover(e);
+
+
+	// fetch FileList object
+	var files = e.target.files || e.dataTransfer.files;
+
+	// process all File objects
+	for (var i = 0, f; f = files[i]; i++) {
+		ParseFile(f);
+	}
+}
+
+function ParseFile(file) {
+	alert("File information: " + file.name + " type: " + file.type + " size: " + file.size + " bytes");
+}

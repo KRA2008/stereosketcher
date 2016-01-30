@@ -117,7 +117,6 @@ var shapeFactory = {
 					selectedDots.push(this);
 					for(var jj=0;jj<selectedDots.length;jj++) {
 						dot = selectedDots[jj];
-						
 						dotGroup.removeChild(dot);
 						dotGroup.appendChild(dot);
 					}

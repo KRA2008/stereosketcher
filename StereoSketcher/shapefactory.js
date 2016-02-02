@@ -103,17 +103,18 @@ var shapeFactory = {
 				pressY=event.clientY;
 				prevX = pressX;
 				prevY = pressY;
-				if(doesElementHaveClass(this,"dot") && this.isSelected()) {
+				if(doesElementHaveClass(this,"dot")) {
 					event.stopPropagation();
 					var dot;
 					var dots = getDots();
 					var selectedDots = [];
 					for(var ii=0;ii<dots.length;ii++) {
 						dot = dots[ii];
-						if(dot.isSelected()) {
+						if(dot.isSelected() && this != dot) {
 							selectedDots.push(dot);
 						}
 					}
+					selectedDots.push(this);
 					for(var jj=0;jj<selectedDots.length;jj++) {
 						dot = selectedDots[jj];
 						
@@ -122,6 +123,13 @@ var shapeFactory = {
 					}
 					if(event.button == 0) {
 						this.onmousemove = function(event) {
+							if(!this.isSelected()) {
+								if(!event.shiftKey) {
+									deselectAll();
+									selectedDots = [this];
+								}
+								this.select();
+							}
 							event.stopPropagation();
 							snapDots(selectedDots,false,event,0);
 							snapDots(dots,true);

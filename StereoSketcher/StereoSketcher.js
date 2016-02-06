@@ -79,10 +79,10 @@ window.onload=function() {
 	};
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);
-	fileDragger.addEventListener("change", FileDragHandler, false);
-	fileDragger.addEventListener("drop", FileDragHandler, false);
-	fileDragger.addEventListener("dragleave", FileDragHover, false);
-	fileDragger.addEventListener("dragover", FileDragHover, false);
+	fileDragger.addEventListener("change", fileDragHandler, false);
+	fileDragger.addEventListener("drop", fileDragHandler, false);
+	fileDragger.addEventListener("dragleave", fileDragHover, false);
+	fileDragger.addEventListener("dragover", fileDragHover, false);
 	crossEyeMode();
 	picker.color.fromString("#000000");
 	zoomLabel.innerHTML = zoomLevel;

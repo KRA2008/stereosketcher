@@ -1,7 +1,5 @@
 'use strict';
 var opacityStep=0.05;
-var filterCounter=1;
-var imageFilterIdPrefix="imageFilter";
 
 function sampleColor() {
 	var selectedItem = null;
@@ -122,59 +120,43 @@ function stowAllOpacity() {
 	}
 }
 
-//TODO: rename these to camel from paschal
-function FileDragHover(e) {
+function fileDragHover(e) {
 	e.stopPropagation();
 	e.preventDefault();
 }
 
-function FileDragHandler(e) {
-	FileDragHover(e);
+function fileDragHandler(e) {
+	fileDragHover(e);
 
 	var files = e.target.files || e.dataTransfer.files;
 
 	for (var i = 0, f; f = files[i]; i++) {
-		ParseFile(f);
+		parseFile(f);
 	}
 }
 
-function ParseFile(file) {
+function parseFile(file) {
 	var reader = new FileReader();
 	reader.onloadend = function(evt) {
 		var data = evt.target.result;
-		ApplyImageToFaces(data);
+		createImages(data);
 	}
 	reader.readAsDataURL(file);
 }
 
-function ApplyImageToFaces(data) {
-	var filterId = imageFilterIdPrefix+filterCounter
-	var filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
-	filter.setAttribute("id",filterId);
-	filter.setAttribute("x","0%");
-	filter.setAttribute("y","0%");
-	filter.setAttribute("width","100%");
-	filter.setAttribute("height","100%");
-	filter.setAttribute("primitiveUnits","objectBoundingBox");
-	
-	var image = document.createElementNS("http://www.w3.org/2000/svg", "feImage");
-	image.setAttribute("preserveAspectRatio","none");
-	image.setAttribute("xlink:href",data);
-	
-	defs.appendChild(filter);
-	filter.appendChild(image);
-	
-	var faces = getFaces();
-	var face;
-	var selectedFaces = [];
-	for(var ii=0;ii<faces.length;ii++) {
-		face = faces[ii];
-		if(face.isSelected()) {
-			selectedFaces.push(face);
+function createImages(data) {
+	var dots = getDots();
+	var dot;
+	var selectedDots = [];
+	for(var ii=0;ii<dots.length;ii++) {
+		dot = dots[ii];
+		if(dot.isSelected()) {
+			selectedDots.push(dot);
 		}
 	}
-	for(var jj=0;jj<selectedFaces.length;jj++) {
-		face = selectedFaces[jj];
-		face.setAttribute("filter","url(#"+filterId+")");
+	if(selectedDots.length != 4) {
+		return;
 	}
+	
+	shapeFactory.createImage(selectedDots,data);
 }

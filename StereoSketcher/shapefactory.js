@@ -416,7 +416,49 @@ var shapeFactory = {
 			clone.setAttribute("visibility","hidden");
 			clone.under.setAttribute("visibility","hidden");
 		}
+	},
+	createImage: function(dots,imageData) {
+		for(var ii=0;ii<dots.length;ii++) {
+			dots[ii].deselect();
+		}
+		//dots.reverse();
+		
+		var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+		image.setAttribute("x",400);
+		image.setAttribute("y",400);
+		image.setAttribute("width",500);
+		image.setAttribute("height",500);
+		image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageData);
+		
+		shapeGroup.appendChild(image);
+		
+		var sourcePoints = [[400,400],[900,400],[900,900],[400,900]];
+		var targetPoints = [getDotPoint(dots[0]),getDotPoint(dots[1]),getDotPoint(dots[2]),getDotPoint(dots[3])];
+		
+		for (var a = [], b = [], i = 0, n = sourcePoints.length; i < n; ++i) {
+	    	var s = sourcePoints[i], t = targetPoints[i];
+	    	a.push([s[0], s[1], 1, 0, 0, 0, -s[0] * t[0], -s[1] * t[0]]), b.push(t[0]);
+	    	a.push([0, 0, 0, s[0], s[1], 1, -s[0] * t[1], -s[1] * t[1]]), b.push(t[1]);
+		}
+		var X = solve(a, b, true), matrix = [
+	    round(X[0]), round(X[3]), 0, round(X[6]),
+	    round(X[1]), round(X[4]), 0, round(X[7]),
+	       0,    0, 1,    0,
+	    round(X[2]), round(X[5]), 0,    1
+		];
+		
+		image.setAttribute("style", "transform: matrix3d(" + matrix + ");");
 	}
+}
+
+function round(original) {
+	var precision = 10;
+	var multiplier = Math.pow(10,precision);
+	return (Math.round(original*multiplier))/multiplier;
+}
+
+function getDotPoint(dot) {
+	return [parseFloat(dot.getAttribute("cx")),parseFloat(dot.getAttribute("cy"))];
 }
 
 function stopDots() {

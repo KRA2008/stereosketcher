@@ -3,6 +3,7 @@ var opacityStep=0.05;
 
 function sampleColor() {
 	var selectedItem = null;
+	//TODO: eh?
 	var items = getLinesAndFaces();
 	var item;
 	for(var ii=0;ii<items.length;ii++) {
@@ -75,7 +76,7 @@ function changeOpacity(increase) {
 	if(mode!==3) {
 		var shape;
 		var opacity;
-		var shapes = getLinesAndFaces();
+		var shapes = getShapes();
 		for(var ii=0;ii<shapes.length;ii++) {
 			shape = shapes[ii];
 			if(shape.isSelected()) {
@@ -105,7 +106,7 @@ function changeOpacity(increase) {
 
 function restoreAllOpacity() {
 	var shape;
-	var shapes = getLinesAndFaces();
+	var shapes = getShapes();
 	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];
 		shape.setOpacity(shape.storedOpacity);
@@ -114,7 +115,7 @@ function restoreAllOpacity() {
 
 function stowAllOpacity() {
 	var shape;
-	var shapes = getLinesAndFaces();
+	var shapes = getShapes();
 	for(var ii=0;ii<shapes.length;ii++) {
 		shapes[ii].setOpacity(1.0);
 	}

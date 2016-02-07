@@ -65,7 +65,7 @@ function findSketchWidth() {
 		minX = maxX;
 		for(var ii=1;ii<dots.length;ii++) {
 			dot = dots[ii];
-			if(dot.lines.length===0 && dot.faces.length===0) continue;
+			if(dot.lines.length===0 && dot.faces.length===0 && dot.images.length===0) continue;
 			dotX = parseFloat(dot.getAttribute("cx"));
 			if(dotX>maxX) {
 				maxX = dotX;

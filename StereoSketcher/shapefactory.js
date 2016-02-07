@@ -11,6 +11,8 @@ var dotColor = "#000000";
 var selectedColor = "#FFFF00";
 var highlitColor = "#008800";
 var strokeLinecap = "round";
+var highlit = "highlit";
+var selected = "selected";
 
 var shapeFactory = {
 	createDot : function(x,y) {
@@ -23,7 +25,7 @@ var shapeFactory = {
 		dot.setAttribute("fill", selectedColor);
 		dot.setAttribute("fill-opacity", 0);
 		dot.setAttribute("class","dot");
-		addClassToElement(dot, "highlit");
+		addClassToElement(dot, highlit);
 		this.attachCommonHandlers(dot);
 		dot.doubleHandler = function(event) {
 			if (wasAClick(event)) {
@@ -40,15 +42,16 @@ var shapeFactory = {
 		label.textContent = "0";
 		dot.label = label;
 		dot.faces = [];
+		dot.images = [];
 		labelGroup.appendChild(label);
 		dotGroup.appendChild(dot);
 		dot.select = function() {
 			this.setAttribute("fill-opacity", 0.5);
-			addClassToElement(this, "selected");
+			addClassToElement(this, selected);
 		};
 		dot.deselect = function() {
 			this.setAttribute("fill-opacity", 0);
-			removeClassFromElement(this, "selected");
+			removeClassFromElement(this, selected);
 			if (this.isHighlit()) {
 				this.highlight();
 			}
@@ -56,12 +59,12 @@ var shapeFactory = {
 		dot.highlight = function() {
 			this.setAttribute("stroke", highlitColor);
 			this.label.setAttribute("fill", highlitColor);
-			addClassToElement(this, "highlit");
+			addClassToElement(this, highlit);
 		};
 		dot.lowlight = function() {
 			this.setAttribute("stroke", dotColor);
 			this.label.setAttribute("fill", dotColor);
-			removeClassFromElement(this, "highlit");
+			removeClassFromElement(this, highlit);
 		};
 		dot.getShift = function() {
 			return shift;
@@ -83,10 +86,10 @@ var shapeFactory = {
 			this.lowlight();
 		};
 		shape.isSelected = function() {
-			return doesElementHaveClass(this, "selected");
+			return doesElementHaveClass(this, selected);
 		};
 		shape.isHighlit = function() {
-			return doesElementHaveClass(this,"highlit");
+			return doesElementHaveClass(this,highlit);
 		};
 		shape.toggleSelect = function() {
 			if (this.isSelected()) {
@@ -166,6 +169,8 @@ var shapeFactory = {
 							selectDotsOfFace(this,event);
 						} else if (doesElementHaveClass(this,"line")) {
 							selectDotsOfLine(this,event);
+						} else if (doesElementHaveClass(this,"image")) {
+							selectDotsOfImage(this,event);
 						}
 					} else {
 						if(event.shiftKey) {
@@ -210,30 +215,28 @@ var shapeFactory = {
 		};
 		line.setAttribute("stroke-linecap", strokeLinecap);
 		this.createCloneLine(line);
-		shapeGroup.appendChild(line);
-		snapDots(getDots(),true);
 		line.overlaps = [];
 		
 		line.select = function() {
 			editMode();
 			this.setAttribute("stroke", selectedColor);
-			addClassToElement(this, "selected");
+			addClassToElement(this, selected);
 		};
 		line.deselect = function() {
 			this.setAttribute("stroke", this.color);
-			removeClassFromElement(this, "selected");
+			removeClassFromElement(this, selected);
 			if (this.isHighlit()) {
 				this.highlight();
 			}
 		};
 		line.highlight = function() {
 			this.setAttribute("stroke", highlitColor);
-			addClassToElement(this, "highlit");
+			addClassToElement(this, highlit);
 		};
 		line.lowlight = function() {
-			removeClassFromElement(this, "highlit");
+			removeClassFromElement(this, highlit);
 			if (this.isSelected()) {
-				this.setAttribute("stroke", selectedColor);
+				this.select();
 			} else {
 				this.setAttribute("stroke", this.color);
 			}
@@ -278,6 +281,10 @@ var shapeFactory = {
 			this.setAttribute("stroke-opacity",opacity);
 			this.clone.setAttribute("stroke-opacity",opacity);
 		};
+		
+		line.add();
+		snapDots(getDots(),true);
+		
 		return line;
 	},
 	createCloneLine : function(line) {
@@ -288,7 +295,6 @@ var shapeFactory = {
 		clone.setAttribute("stroke-opacity",1.0);
 		clone.setAttribute("class","cloneLine");
 		clone.setAttribute("stroke-linecap", strokeLinecap);
-		shapeGroup.appendChild(clone);
 		if(mode==3)
 		{
 			clone.setAttribute("visibility","hidden");
@@ -320,19 +326,16 @@ var shapeFactory = {
 			selectAllContiguousShapes(this,event);
 		};
 		this.createCloneFace(face);
-		shapeGroup.appendChild(under);
-		shapeGroup.appendChild(face);
-		snapDots(getDots(),true);
 		face.overlaps = [];
 		face.select = function() {
 			editMode();
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
 			this.setAttribute("stroke", selectedColor);
-			addClassToElement(this, "selected");
+			addClassToElement(this, selected);
 		};
 		face.deselect = function() {
 			this.setAttribute("stroke-width", 0);
-			removeClassFromElement(this, "selected");
+			removeClassFromElement(this, selected);
 			if (this.isHighlit()) {
 				this.highlight();
 			}
@@ -340,12 +343,12 @@ var shapeFactory = {
 		face.highlight = function() {
 			this.setAttribute("stroke", highlitColor);
 			this.setAttribute("stroke-width", faceActionStrokeWidth);
-			addClassToElement(this, "highlit");
+			addClassToElement(this, highlit);
 		};
 		face.lowlight = function() {
-			removeClassFromElement(this, "highlit");
+			removeClassFromElement(this, highlit);
 			if (this.isSelected()) {
-				this.setAttribute("stroke", selectedColor);
+				this.select();
 			} else {
 				this.setAttribute("stroke-width", 0);
 			}
@@ -392,6 +395,10 @@ var shapeFactory = {
 			this.under.setAttribute("stroke-opacity",mathedOpacity);
 			this.clone.under.setAttribute("stroke-opacity",mathedOpacity);
 		};
+		
+		face.add();
+		snapDots(getDots(),true);
+		
 		return face;
 	},
 	createCloneFace : function(face) {
@@ -409,8 +416,6 @@ var shapeFactory = {
 		under.setAttribute("stroke-width", faceSpaceCorrection);
 		under.setAttribute("stroke-opacity", 1.0);
 		under.setAttribute("class", "cloneUnder");
-		shapeGroup.appendChild(under);
-		shapeGroup.appendChild(clone);
 		if(mode==3)
 		{
 			clone.setAttribute("visibility","hidden");
@@ -418,36 +423,79 @@ var shapeFactory = {
 		}
 	},
 	createImage: function(dots,imageData) {
+		var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
 		for(var ii=0;ii<dots.length;ii++) {
 			dots[ii].deselect();
+			dots[ii].images.push(image);
 		}
-		//dots.reverse();
-		
-		var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-		image.setAttribute("x",400);
-		image.setAttribute("y",400);
-		image.setAttribute("width",500);
-		image.setAttribute("height",500);
+		image.setAttribute("x",0);
+		image.setAttribute("y",0);
+		image.setAttribute("width",1000);
+		image.setAttribute("height",1000);
 		image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageData);
+		image.setAttribute("class","image");
+		image.dots = dots;
+		image.indicator = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+		image.indicator.setAttribute("points",makePolygonPointString(dots,false));
+		image.indicator.setAttribute("fill-opacity",0);
 		
+		shapeGroup.appendChild(image.indicator);
 		shapeGroup.appendChild(image);
 		
-		var sourcePoints = [[400,400],[900,400],[900,900],[400,900]];
-		var targetPoints = [getDotPoint(dots[0]),getDotPoint(dots[1]),getDotPoint(dots[2]),getDotPoint(dots[3])];
+		this.createCloneImage(image,imageData);
 		
-		for (var a = [], b = [], i = 0, n = sourcePoints.length; i < n; ++i) {
-	    	var s = sourcePoints[i], t = targetPoints[i];
-	    	a.push([s[0], s[1], 1, 0, 0, 0, -s[0] * t[0], -s[1] * t[0]]), b.push(t[0]);
-	    	a.push([0, 0, 0, s[0], s[1], 1, -s[0] * t[1], -s[1] * t[1]]), b.push(t[1]);
+		image.select = function() {
+			this.indicator.setAttribute("stroke-width","2");
+			this.indicator.setAttribute("stroke",selectedColor);
+			addClassToElement(this,selected);
+		};
+		image.deselect = function() {
+			this.indicator.setAttribute("stroke-width","0");
+			removeClassFromElement(this,selected);
+		};
+		image.highlight = function() {
+			this.indicator.setAttribute("stroke-width","2");
+			this.indicator.setAttribute("stroke",highlitColor);
+			addClassToElement(this,highlit);
+		};
+		image.lowlight = function() {
+			if(doesElementHaveClass(this,selected)) {
+				this.select();
+			} else {
+				this.indicator.setAttribute("stroke-width","0");
+			}
+			removeClassFromElement(this,highlit);
+		};
+		image.delete = function() {
+			var dots = this.dots;
+			for(var ii=0;ii<dots.length;ii++) {
+				dots[ii].images.splice(this.dots[ii].images.indexOf(this),1);
+			}
+			this.remove();
+		};
+		image.remove = function() {
+			shapeGroup.removeChild(this.indicator);
+			shapeGroup.removeChild(this.clone);
+			shapeGroup.removeChild(this);
+		};
+		image.add = function() {
+			shapeGroup.appendChild(this.indicator);
+			shapeGroup.appendChild(this.clone);
+			shapeGroup.appendChild(this);
 		}
-		var X = solve(a, b, true), matrix = [
-	    round(X[0]), round(X[3]), 0, round(X[6]),
-	    round(X[1]), round(X[4]), 0, round(X[7]),
-	       0,    0, 1,    0,
-	    round(X[2]), round(X[5]), 0,    1
-		];
-		
-		image.setAttribute("style", "transform: matrix3d(" + matrix + ");");
+		this.attachCommonHandlers(image);
+		image.add();
+		snapDots(getDots(),true);
+	},
+	createCloneImage: function(firstImage,imageData) {		
+		var clone = document.createElementNS("http://www.w3.org/2000/svg", "image");
+		clone.setAttribute("x",0);
+		clone.setAttribute("y",0);
+		clone.setAttribute("width",1000);
+		clone.setAttribute("height",1000);
+		clone.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageData);
+		clone.setAttribute("class","imageClone");
+		firstImage.clone = clone;
 	}
 }
 
@@ -455,10 +503,6 @@ function round(original) {
 	var precision = 10;
 	var multiplier = Math.pow(10,precision);
 	return (Math.round(original*multiplier))/multiplier;
-}
-
-function getDotPoint(dot) {
-	return [parseFloat(dot.getAttribute("cx")),parseFloat(dot.getAttribute("cy"))];
 }
 
 function stopDots() {
@@ -544,21 +588,27 @@ function deletePressed() {
 			line.delete();
 		}
 	}
-	var face;
-	var faces = getFaces();
-	for (var ii=faces.length-1;ii>=0;ii--) {
-		face=faces[ii];
-		if(face.isSelected()) {
-			face.delete();
+	
+	deletePressedImagesOrFaces(getFaces());
+	deletePressedImagesOrFaces(getImages());
+	
+	snapDots(getDots(),true);
+}
+
+function deletePressedImagesOrFaces(imagesOrFaces) {
+	var imageOrFace;
+	for (var ii=imagesOrFaces.length-1;ii>=0;ii--) {
+		imageOrFace=imagesOrFaces[ii];
+		if(imageOrFace.isSelected()) {
+			imageOrFace.delete();
 			continue;
 		}
-		var dots = face.dots;
+		var dots = imageOrFace.dots;
 		for(var jj=0;jj<dots.length;jj++) {
 			if(dots[jj].isSelected()) {
-				face.delete();
+				imageOrFace.delete();
 				break;
 			}
 		}
 	}
-	snapDots(getDots(),true);
 }

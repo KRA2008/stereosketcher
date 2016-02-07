@@ -129,17 +129,25 @@ function getLines() {
 	return shapeGroup.getElementsByClassName("line");
 }
 
-function getLinesAndFaces() {
+function getImages() {
+	return shapeGroup.getElementsByClassName("image");
+}
+
+function getShapes() {
 	var item;
 	var items = shapeGroup.children;
-	var linesAndFaces = [];
+	var shapes = [];
 	for(var ii=0;ii<items.length;ii++) {
 		item = items[ii];
-		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")) {
-			linesAndFaces.push(item);
+		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")||doesElementHaveClass(item,"image")) {
+			shapes.push(item);
 		}
 	}
-	return linesAndFaces;
+	return shapes;
+}
+
+function getLinesAndFaces() {
+	
 }
 
 function getFaces() {

@@ -27,7 +27,7 @@ function collectDrawing() {
 		dot.tempId = ii;
 		stereosketch.dots.push(exportDot(dot));
 	}
-	var shapes = getLinesAndFaces();
+	var shapes = getShapes();
 	var shape;
 	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];

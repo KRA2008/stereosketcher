@@ -8,7 +8,7 @@ function copyAndPasteSelectedShapes(x,y,isExtrusion) {
 }
 
 function restackCopies() {
-	var shapes = getLinesAndFaces();
+	var shapes = getShapes();
 	var shape;
 	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];
@@ -30,7 +30,7 @@ function cleanUpCopies(isExtrusion) {
 			dot.isExtrusion = false;
 		}
 	}
-	var shapes = getLinesAndFaces();
+	var shapes = getShapes();
 	var shape;
 	for(var ii=0;ii<shapes.length;ii++) {
 		shape = shapes[ii];

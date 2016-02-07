@@ -1,12 +1,12 @@
 'use strict';
 
 function moveSelectedToBack() {
-    var linesAndFaces = getLinesAndFaces();
+    var shapes = getShapes();
     var removed = [];
     var item;
-    var startLength = linesAndFaces.length;
+    var startLength = shapes.length;
     for(var ii=startLength-1;ii>=0;ii--) {
-	    item = linesAndFaces[ii];
+	    item = shapes[ii];
 	    if(item.isSelected()) {
 		    item.remove();
 		    removed.push(item);
@@ -20,17 +20,20 @@ function moveSelectedToBack() {
 	            shapeGroup.insertBefore(item.under,shapeGroup.firstChild);
 	            shapeGroup.insertBefore(item.clone.under,shapeGroup.firstChild);
 	    }
+	    if(item.indicator) {
+	            shapeGroup.insertBefore(item.indicator,shapeGroup.firstChild);
+	    }
 	    item.lowlight();
     }
 }
 
 function moveSelectedToFront() {
-    var linesAndFaces = getLinesAndFaces();
+    var shapes = getShapes();
     var removed = [];
     var item;
-    var startLength = linesAndFaces.length;
+    var startLength = shapes.length;
     for(var ii=startLength-1;ii>=0;ii--) {
-    	item = linesAndFaces[ii];
+    	item = shapes[ii];
     	if(item.isSelected()) {
 		    item.remove();
 		    removed.push(item);
@@ -52,24 +55,24 @@ function moveSelectedOneBack() {
 }
 
 function moveSelectedOneLayer(forward) {
-	var linesAndFaces = getLinesAndFaces();
+	var shapes = getShapes();
 	var item;
 	var next;
 	if(forward) {
-		linesAndFaces.reverse();
+		shapes.reverse();
 	}
-    for(var ii=0;ii<linesAndFaces.length;ii++) {
-    	item = linesAndFaces[ii];
-    	next = linesAndFaces[ii+1];
-    	if(ii+1<linesAndFaces.length && next.isSelected() && !item.isSelected()) {
-    		linesAndFaces[ii] = next;
-    		linesAndFaces[ii+1] = item;
+    for(var ii=0;ii<shapes.length;ii++) {
+    	item = shapes[ii];
+    	next = shapes[ii+1];
+    	if(ii+1<shapes.length && next.isSelected() && !item.isSelected()) {
+    		shapes[ii] = next;
+    		shapes[ii+1] = item;
     	}
     }
     if(forward) {
-    	linesAndFaces.reverse();
+    	shapes.reverse();
     }
-    var reordered = linesAndFaces.slice(0);
+    var reordered = shapes.slice(0);
     for(var jj=0;jj<reordered.length;jj++) {
     	item = reordered[jj];
     	item.add();
@@ -78,15 +81,15 @@ function moveSelectedOneLayer(forward) {
 }
 
 function invertLayering() {
-    var linesAndFaces = getLinesAndFaces();
+    var shapes = getShapes();
     var item;
-    for (var ii = 0; ii < linesAndFaces.length; ii++) {
-        item = linesAndFaces[ii];
+    for (var ii = 0; ii < shapes.length; ii++) {
+        item = shapes[ii];
         item.remove();
     }
-    linesAndFaces.reverse();
-    for (var ii = 0; ii < linesAndFaces.length; ii++) {
-        item = linesAndFaces[ii];
+    shapes.reverse();
+    for (var ii = 0; ii < shapes.length; ii++) {
+        item = shapes[ii];
         item.add();
     }
 }

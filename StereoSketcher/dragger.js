@@ -2,6 +2,7 @@
 
 var cx, cy, rotateMarker;
 var anchorX, anchorY;
+var tempMoving = "tempMoving";
 
 function snapDots(dots,IPDchanging,event,button) {
 	var dx = 0;
@@ -24,10 +25,10 @@ function snapDots(dots,IPDchanging,event,button) {
 			stretch(dots,event,dx,dy);
 		}
 	} else {
-	    var shapes = getLinesAndFaces();
+	    var shapes = getShapes();
 	    var shape;
 	    for (var ii = 0; ii < shapes.length; ii++) {
-	        addClassToElement(shapes[ii], "tempMoving");
+	        addClassToElement(shapes[ii], tempMoving);
 	    }
 	}
 	if(IPDchanging) {
@@ -45,47 +46,59 @@ function moveShapes() {
 	var line;
 	var faces = getFaces();
 	var face;
+	var images = getImages();
+	var image;
 	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
-		if(doesElementHaveClass(line,"tempMoving")) {
+		if(doesElementHaveClass(line,tempMoving)) {
 			snapLine(line);			
-			removeClassFromElement(line,"tempMoving");
+			removeClassFromElement(line,tempMoving);
 		}
 	}
 	for(var ii=0;ii<faces.length;ii++) {
 		face = faces[ii];
-		if(doesElementHaveClass(face,"tempMoving")) {
+		if(doesElementHaveClass(face,tempMoving)) {
 			snapFace(face);			
-			removeClassFromElement(face,"tempMoving");
+			removeClassFromElement(face,tempMoving);
+		}
+	}
+	for(var ii=0;ii<images.length;ii++) {
+		image = images[ii];
+		if(doesElementHaveClass(image,tempMoving)) {
+			snapImage(image);
+			removeClassFromElement(image,tempMoving);
 		}
 	}
 }
 
 function snapFace(face) {
-	var dotsString = "";
-	var dots = face.dots;
-	for(var ii=0;ii<dots.length;ii++) {
-		var dot = dots[ii];
-		dotsString+=dot.getAttribute("cx");
-		dotsString+=",";
-		dotsString+=dot.getAttribute("cy");
-		dotsString+=" ";
-	}
+	
+	var dotsString = makePolygonPointString(face.dots,false);
 	
 	face.setAttribute("points",dotsString);
 	face.under.setAttribute("points",dotsString);
 	
-	var cloneDotsString = "";
-	for(var ii=0;ii<dots.length;ii++) {
-		var dot = dots[ii];
-		cloneDotsString+=(parseFloat(dot.getAttribute("cx"))+dot.getShift()*shiftSpeed+IPD);
-		cloneDotsString+=",";
-		cloneDotsString+=dot.getAttribute("cy");
-		cloneDotsString+=" ";
-	}
+	var cloneDotsString = makePolygonPointString(face.dots,true);
 	
 	face.clone.setAttribute("points",cloneDotsString);
 	face.clone.under.setAttribute("points",cloneDotsString);
+}
+
+function makePolygonPointString(dots,isClone) {
+	var pointString = "";
+	var dot;
+	for(var ii=0;ii<dots.length;ii++) {
+		dot = dots[ii];
+		if(isClone) {
+			pointString+=(parseFloat(dot.getAttribute("cx"))+dot.getShift()*shiftSpeed+IPD);
+		} else {
+			pointString+=dot.getAttribute("cx");
+		}
+		pointString+=",";
+		pointString+=dot.getAttribute("cy");
+		pointString+=" ";
+	}
+	return pointString;
 }
 
 function snapLine(line) {
@@ -104,6 +117,40 @@ function snapLine(line) {
 	line.clone.setAttribute("y2",y);
 }
 
+function snapImage(image) {
+	var sourcePoints = [[0,0],[1000,0],[1000,1000],[0,1000]];
+	var targetPoints = [getDotPoint(image.dots[0]),getDotPoint(image.dots[1]),getDotPoint(image.dots[2]),getDotPoint(image.dots[3])];
+	
+	calculateMatrix(image,sourcePoints,targetPoints);
+	
+	for(var ii=0;ii<4;ii++) {
+		targetPoints[ii][0]+=IPD+image.dots[ii].getShift()*shiftSpeed;
+	}
+	calculateMatrix(image.clone,sourcePoints,targetPoints);
+	
+	image.indicator.setAttribute("points",makePolygonPointString(image.dots,false));
+}
+
+function calculateMatrix(image,sourcePoints,targetPoints) {	
+	for (var a = [], b = [], i = 0, n = sourcePoints.length; i < n; ++i) {
+    	var s = sourcePoints[i], t = targetPoints[i];
+    	a.push([s[0], s[1], 1, 0, 0, 0, -s[0] * t[0], -s[1] * t[0]]), b.push(t[0]);
+    	a.push([0, 0, 0, s[0], s[1], 1, -s[0] * t[1], -s[1] * t[1]]), b.push(t[1]);
+	}
+	var X = solve(a, b, true), matrix = [
+    X[0], X[3], 0, X[6],
+    X[1], X[4], 0, X[7],
+       0,    0, 1,    0,
+    X[2], X[5], 0,    1
+	];
+	
+	image.setAttribute("style", "transform: matrix3d(" + matrix + ");");
+}
+
+function getDotPoint(dot) {
+	return [parseFloat(dot.getAttribute("cx")),parseFloat(dot.getAttribute("cy"))];
+}
+
 function moveDot(dot,dx,dy) {
 	var x=parseFloat(dot.getAttribute("cx"))+dx;
 	var y=parseFloat(dot.getAttribute("cy"))+dy;
@@ -112,10 +159,13 @@ function moveDot(dot,dx,dy) {
 	dot.label.setAttribute("x",x+labelX);
 	dot.label.setAttribute("y",y+labelY);
 	for(var ii=0;ii<dot.lines.length;ii++) {
-		addClassToElement(dot.lines[ii],"tempMoving");
+		addClassToElement(dot.lines[ii],tempMoving);
 	}
 	for(var ii=0;ii<dot.faces.length;ii++) {
-		addClassToElement(dot.faces[ii],"tempMoving");
+		addClassToElement(dot.faces[ii],tempMoving);
+	}
+	for(var ii=0;ii<dot.images.length;ii++) {
+		addClassToElement(dot.images[ii],tempMoving);
 	}
 }
 
@@ -176,10 +226,13 @@ function stretchDot(dot,event,dx,dy,magRatio) {
 	dot.setAttribute("cy",newY);
 	dot.label.setAttribute("y",newY+labelY);
 	for(var ii=0;ii<dot.lines.length;ii++) {
-		addClassToElement(dot.lines[ii],"tempMoving");
+		addClassToElement(dot.lines[ii],tempMoving);
 	}
 	for(var ii=0;ii<dot.faces.length;ii++) {
-		addClassToElement(dot.faces[ii],"tempMoving");
+		addClassToElement(dot.faces[ii],tempMoving);
+	}
+	for(var ii=0;ii<dot.images.length;ii++) {
+		addClassToElement(dot.images[ii],tempMoving);
 	}
 }
 
@@ -292,10 +345,13 @@ function rotate(dots,event,dx,dy) {
 		dot.label.setAttribute("x",straightNewX+curveDx+labelX);
 		dot.label.setAttribute("y",straightNewY+curveDy+labelY);
 		for(var jj=0;jj<dot.lines.length;jj++) {
-			addClassToElement(dot.lines[jj],"tempMoving");
+			addClassToElement(dot.lines[jj],tempMoving);
 		}
 		for(var jj=0;jj<dot.faces.length;jj++) {
-			addClassToElement(dot.faces[jj],"tempMoving");
+			addClassToElement(dot.faces[jj],tempMoving);
+		}
+		for(var jj=0;jj<dot.images.length;jj++) {
+			addClassToElement(dot.images[jj],tempMoving)
 		}
 	}
 }

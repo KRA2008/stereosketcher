@@ -26,22 +26,35 @@ function selectDotsOfFace(face,event) {
 	}
 }
 
+function selectDotsOfImage(image,event) {
+	if(!event.shiftKey) {
+		deselectAll();
+	}
+	for(var ii=0;ii<image.dots.length;ii++) {
+		image.dots[ii].select();
+	}
+}
+
 function selectShapesOfDot(dot,event) {
 	if(!event.shiftKey) {
 		deselectAll();
 	}
 	var lines = dot.lines;
 	var faces = dot.faces;
+	var images = dot.images;
 	for(var ii=0;ii<lines.length;ii++) {
 		lines[ii].select();
 	}
 	for(var ii=0;ii<faces.length;ii++) {
 		faces[ii].select();
 	}
+	for(var ii=0;ii<images.length;ii++) {
+		images[ii].select();
+	}
 }
 
 function selectAllContiguousShapes(sourceShape,event) {
-	var shapes = getLinesAndFaces();
+	var shapes = getShapes();
 	var shape;
 	if(!event.shiftKey) {
 		deselectAll();
@@ -66,7 +79,7 @@ function selectAllContiguousShapes(sourceShape,event) {
 }
 
 function recursiveSelectShapes(sourceShape) {
-	if(doesElementHaveClass(sourceShape,"face")) {
+	if(doesElementHaveClass(sourceShape,"face")||doesElementHaveClass(sourceShape,"image")) {
 		var dots = sourceShape.dots;
 		for(var ii=0;ii<dots.length;ii++) {
 			recursiveSelectShapesDotStepper(dots[ii]);
@@ -88,8 +101,14 @@ function recursiveSelectShapesDotStepper(dot) {
 			recursiveSelectShapes(shape);
 		}
 	}
-	for(var jj=0;jj<dot.faces.length;jj++) {
-		shape = dot.faces[jj];
+	recursiveSelectShapesFacesOrImages(dot.faces);
+	recursiveSelectShapesFacesOrImages(dot.images);
+}
+
+function recursiveSelectShapesFacesOrImages(facesOrImages) {
+	var shape;
+	for(var jj=0;jj<facesOrImages.length;jj++) {
+		shape = dot.facesOrImages[jj];
 		if(shape.isSelected()) {
 			continue;
 		} else {
@@ -140,25 +159,29 @@ function recursiveSelectDots(dot) {
 			recursiveSelectDots(line.dot1);
 		}
 	}
-	var faces = dot.faces;
-	var face;
-	for(var ii=0;ii<faces.length;ii++) {
-		face = faces[ii];
+	recursiveSelectFacesOrImages(dot.faces,dot);
+	recursiveSelectFacesOrImages(dot.images,dot);
+}
+
+function recursiveSelectFacesOrImages(facesOrImages,dot) {
+	var shape;
+	for(var ii=0;ii<facesOrImages.length;ii++) {
+		shape = facesOrImages[ii];
 		var allDone = true;
-		for(var jj=0;jj<face.dots.length;jj++) {
-			if(!face.dots[jj].isSelected()) {
+		for(var jj=0;jj<shape.dots.length;jj++) {
+			if(!shape.dots[jj].isSelected()) {
 				allDone = false;
 			}
 		}
 		if(allDone) {
 			continue;
 		}
-		for(var jj=0;jj<face.dots.length;jj++) {
-			if(face.dots[jj] == dot) {
-				for(var kk=0;kk<face.dots.length;kk++) {
-					if(face.dots[jj] != face.dots[kk] && !face.dots[kk].isSelected()) {
-						face.dots[kk].select();
-						recursiveSelectDots(face.dots[kk]);
+		for(var jj=0;jj<shape.dots.length;jj++) {
+			if(shape.dots[jj] == dot) {
+				for(var kk=0;kk<shape.dots.length;kk++) {
+					if(shape.dots[jj] != shape.dots[kk] && !shape.dots[kk].isSelected()) {
+						shape.dots[kk].select();
+						recursiveSelectDots(shape.dots[kk]);
 					}
 				}
 			}
@@ -167,26 +190,24 @@ function recursiveSelectDots(dot) {
 }
 
 function deselectAllDots() {
-	var dot;
 	var dots = getDots();
 	for(var ii=0;ii<dots.length;ii++) {
-		dot=dots[ii];
-		dot.deselect();
+		dots[ii].deselect();
 	}
 }
 
 function deselectAll() {
 	deselectAllDots();
-	var line;
 	var lines=getLines();
 	for(var nn=0;nn<lines.length;nn++) {
-		line=lines[nn];
-		line.deselect();
+		lines[nn].deselect();
 	}
-	var face;
 	var faces=getFaces();
 	for(var ii=0;ii<faces.length;ii++) {
-		face=faces[ii];
-		face.deselect();
+		faces[ii].deselect();
+	}
+	var images=getImages();
+	for(var ii=0;ii<images.length;ii++) {
+		images[ii].deselect();
 	}
 }

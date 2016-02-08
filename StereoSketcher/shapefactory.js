@@ -422,7 +422,7 @@ var shapeFactory = {
 			clone.under.setAttribute("visibility","hidden");
 		}
 	},
-	createImage: function(dots,imageData) {
+	createImage: function(dots,imageObject) {
 		var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
 		for(var ii=0;ii<dots.length;ii++) {
 			dots[ii].deselect();
@@ -430,9 +430,9 @@ var shapeFactory = {
 		}
 		image.setAttribute("x",0);
 		image.setAttribute("y",0);
-		image.setAttribute("width",1000);
-		image.setAttribute("height",1000);
-		image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageData);
+		image.setAttribute("width",imageObject.width);
+		image.setAttribute("height",imageObject.height);
+		image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageObject.src);
 		image.setAttribute("class","image");
 		image.dots = dots;
 		image.indicator = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -442,7 +442,7 @@ var shapeFactory = {
 		shapeGroup.appendChild(image.indicator);
 		shapeGroup.appendChild(image);
 		
-		this.createCloneImage(image,imageData);
+		this.createCloneImage(image,imageObject);
 		
 		image.select = function() {
 			this.indicator.setAttribute("stroke-width","2");
@@ -487,13 +487,13 @@ var shapeFactory = {
 		image.add();
 		snapDots(getDots(),true);
 	},
-	createCloneImage: function(firstImage,imageData) {		
+	createCloneImage: function(firstImage,imageObject) {		
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "image");
 		clone.setAttribute("x",0);
 		clone.setAttribute("y",0);
-		clone.setAttribute("width",1000);
-		clone.setAttribute("height",1000);
-		clone.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageData);
+		clone.setAttribute("width",imageObject.width);
+		clone.setAttribute("height",imageObject.height);
+		clone.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageObject.src);
 		clone.setAttribute("class","imageClone");
 		firstImage.clone = clone;
 	}

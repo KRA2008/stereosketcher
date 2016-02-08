@@ -118,7 +118,7 @@ function snapLine(line) {
 }
 
 function snapImage(image) {
-	var sourcePoints = [[0,0],[1000,0],[1000,1000],[0,1000]];
+	var sourcePoints = [[0,0],[parseFloat(image.getAttribute("width")),0],[parseFloat(image.getAttribute("width")),parseFloat(image.getAttribute("height"))],[0,parseFloat(image.getAttribute("height"))]];
 	var targetPoints = [getDotPoint(image.dots[0]),getDotPoint(image.dots[1]),getDotPoint(image.dots[2]),getDotPoint(image.dots[3])];
 	
 	calculateMatrix(image,sourcePoints,targetPoints);

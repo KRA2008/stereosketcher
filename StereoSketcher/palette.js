@@ -3,7 +3,6 @@ var opacityStep=0.05;
 
 function sampleColor() {
 	var selectedItem = null;
-	//TODO: eh?
 	var items = getLinesAndFaces();
 	var item;
 	for(var ii=0;ii<items.length;ii++) {
@@ -139,13 +138,16 @@ function fileDragHandler(e) {
 function parseFile(file) {
 	var reader = new FileReader();
 	reader.onloadend = function(evt) {
-		var data = evt.target.result;
-		createImages(data);
+		var image = new Image();
+		image.onload = function(evt) {
+			createImage(this);
+		};
+		image.src = evt.target.result;
 	}
 	reader.readAsDataURL(file);
 }
 
-function createImages(data) {
+function createImage(image) {
 	var dots = getDots();
 	var dot;
 	var selectedDots = [];
@@ -159,5 +161,5 @@ function createImages(data) {
 		return;
 	}
 	
-	shapeFactory.createImage(selectedDots,data);
+	shapeFactory.createImage(selectedDots,image);
 }

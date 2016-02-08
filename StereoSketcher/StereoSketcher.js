@@ -147,7 +147,16 @@ function getShapes() {
 }
 
 function getLinesAndFaces() {
-	
+	var item;
+	var items = shapeGroup.children;
+	var shapes = [];
+	for(var ii=0;ii<items.length;ii++) {
+		item = items[ii];
+		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")) {
+			shapes.push(item);
+		}
+	}
+	return shapes;
 }
 
 function getFaces() {

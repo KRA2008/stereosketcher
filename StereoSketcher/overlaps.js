@@ -16,7 +16,6 @@ function addOverlaps() {
 		var cloneShape;
 		var lineThickness;
 		
-		//TODO: eh?
 		var linesAndFaces = getLinesAndFaces();
 		var backgroundColor = getBackgroundColor();
 		
@@ -227,8 +226,6 @@ function correctOverlaps() {
 }
 
 function removeOverlaps() {
-	//TODO: remove
-	return;
 	showLoading();
 	setTimeout(function() {
 		var item;
@@ -276,8 +273,6 @@ function removeOverlapsOfItem(item) {
 }
 
 function showClones() {
-	//TODO: remove
-	return;
 	var shape;
 	var shapes = getLinesAndFaces();
 	for(var ii=0;ii<shapes.length;ii++) {

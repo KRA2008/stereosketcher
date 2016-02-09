@@ -432,6 +432,7 @@ var shapeFactory = {
 		image.setAttribute("y",0);
 		image.setAttribute("width",imageObject.width);
 		image.setAttribute("height",imageObject.height);
+		image.setAttribute("opacity",1.0);
 		image.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageObject.src);
 		image.setAttribute("class","image");
 		image.dots = dots;
@@ -445,7 +446,7 @@ var shapeFactory = {
 		this.createCloneImage(image,imageObject);
 		
 		image.select = function() {
-			this.indicator.setAttribute("stroke-width","2");
+			this.indicator.setAttribute("stroke-width","3");
 			this.indicator.setAttribute("stroke",selectedColor);
 			addClassToElement(this,selected);
 		};
@@ -454,7 +455,7 @@ var shapeFactory = {
 			removeClassFromElement(this,selected);
 		};
 		image.highlight = function() {
-			this.indicator.setAttribute("stroke-width","2");
+			this.indicator.setAttribute("stroke-width","3");
 			this.indicator.setAttribute("stroke",highlitColor);
 			addClassToElement(this,highlit);
 		};
@@ -483,9 +484,21 @@ var shapeFactory = {
 			shapeGroup.appendChild(this.clone);
 			shapeGroup.appendChild(this);
 		}
+		image.doubleHandler = function(event) {
+			selectAllContiguousShapes(this,event);
+		};
+		image.getOpacity = function() {
+			return this.getAttribute("opacity");
+		};
+		image.setOpacity = function(opacity) {
+			this.setAttribute("opacity",opacity);
+			this.clone.setAttribute("opacity",opacity);
+		};
 		this.attachCommonHandlers(image);
 		image.add();
 		snapDots(getDots(),true);
+		
+		return image;
 	},
 	createCloneImage: function(firstImage,imageObject) {		
 		var clone = document.createElementNS("http://www.w3.org/2000/svg", "image");

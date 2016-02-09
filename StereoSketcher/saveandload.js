@@ -35,6 +35,8 @@ function collectDrawing() {
 			stereosketch.shapes.push(exportLine(shape));
 		} else if(doesElementHaveClass(shape,"face")) {
 			stereosketch.shapes.push(exportFace(shape));
+		} else if(doesElementHaveClass(shape,"image")) {
+			stereosketch.shapes.push(exportImage(shape));
 		}
 	}
 	return stereosketch;
@@ -69,6 +71,19 @@ function exportFace(face) {
 		dots:dotIds,
 		color:face.color,
 		opacity:face.getOpacity()
+	}
+}
+
+function exportImage(image) {
+	var dotIds = [];
+	for(var ii=0;ii<image.dots.length;ii++) {
+		dotIds.push(image.dots[ii].tempId);
+	}
+	return {
+		type:"image",
+		dots:dotIds,
+		href:image.getAttributeNS('http://www.w3.org/1999/xlink', 'href'),
+		opacity:image.getOpacity()
 	}
 }
 
@@ -118,6 +133,17 @@ function loadSketch(sketch) {
 			var newFace = shapeFactory.createFace(faceDots);
 			newFace.setColor(shape.color);
 			newFace.setOpacity(shape.opacity);
+		} else if (shape.type == "image") {
+			var imageDots = [];
+			for(var jj=0;jj<shape.dots.length;jj++) {
+				imageDots.push(dots[(dots.length-loadedDots.length)+shape.dots[jj]]);
+			}
+			var imageObject = new Image();
+			imageObject.onload = function(evt) {
+				var newImage = shapeFactory.createImage(imageDots,this);
+				newImage.setOpacity(shape.opacity);
+			}
+			imageObject.src = shape.href;
 		}
 	}
 	picker.color.fromString(sketch.background);

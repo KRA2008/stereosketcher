@@ -52,7 +52,7 @@ function findMiddleOfCopyableDots() {
 	var minY;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		shapes = dot.lines.concat(dot.faces);
+		shapes = dot.lines.concat(dot.faces).concat(dot.images);
 		for(var jj=0;jj<shapes.length;jj++) {
 			shape = shapes[jj];
 			if(shape.isSelected()) {
@@ -117,6 +117,7 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 			var dots = face.dots;
 			var dot;
 			for(var jj=0;jj<dots.length;jj++) {
+				dot = dots[jj];
 				if(!dot.copy) {
 					copyDot(dot,x,y,mid,isExtrusion);
 				}
@@ -127,6 +128,27 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 		face = faces[ii];
 		if(face.isSelected()) {
 			copyFace(face);
+		}
+	}
+	var images = getImages();
+	var image;
+	for(var ii=0;ii<images.length;ii++) {
+		image = images[ii];
+		if(image.isSelected()) {
+			var dots = image.dots;
+			var dot;
+			for(var jj=0;jj<dots.length;jj++) {
+				dot = dots[jj];
+				if(!dot.copy) {
+					copyDot(dot,x,y,mid,isExtrusion);
+				}
+			}
+		}
+	}
+	for(var ii=0;ii<images.length;ii++) {
+		image = images[ii];
+		if(image.isSelected()) {
+			copyImage(image);
 		}
 	}
 }
@@ -158,8 +180,8 @@ function copyLine(line) {
 
 function copyFace(face) {
 	var originalDots = face.dots;
-	var copyDots;
-	for(var ii=0;ii<originalDots.lengh;ii++) {
+	var copyDots = [];
+	for(var ii=0;ii<originalDots.length;ii++) {
 		copyDots.push(originalDots[ii].copy);
 	}
 	var newFace = shapeFactory.createFace(copyDots);
@@ -168,4 +190,22 @@ function copyFace(face) {
 	newFace.storedOpacity = face.storedOpacity;
 	newFace.lowlight();
 	face.copy = newFace;
+}
+
+function copyImage(image) {
+	var originalDots = image.dots;
+	var copyDots = [];
+	for(var ii=0;ii<originalDots.length;ii++) {
+		copyDots.push(originalDots[ii].copy);
+	}
+	
+	var imageObject = new Image();
+	imageObject.onload = function(evt) {
+		var newImage = shapeFactory.createImage(copyDots,this);
+		//TODO: copy opacity onto new image
+		newImage.lowlight();
+		image.copy = newImage;
+		//TODO: this is async. wonder if that's why it doesn't restack right
+	};
+	imageObject.src = image.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
 }

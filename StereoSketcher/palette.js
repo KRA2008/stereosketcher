@@ -79,11 +79,7 @@ function changeOpacity(increase) {
 		for(var ii=0;ii<shapes.length;ii++) {
 			shape = shapes[ii];
 			if(shape.isSelected()) {
-				if(doesElementHaveClass(shape,"line")) {
-					opacity = parseFloat(shape.getAttribute("stroke-opacity"));
-				} else if (doesElementHaveClass(shape,"face")) {
-					opacity = parseFloat(shape.getAttribute("fill-opacity"));
-				}
+				opacity = parseFloat(shape.getOpacity());
 				opacity = Math.round((1/opacityStep)*opacity)*opacityStep;
 				if(increase) {
 					if(opacity<1.0)
@@ -113,10 +109,29 @@ function restoreAllOpacity() {
 }
 
 function stowAllOpacity() {
-	var shape;
 	var shapes = getShapes();
 	for(var ii=0;ii<shapes.length;ii++) {
 		shapes[ii].setOpacity(1.0);
+	}
+}
+
+function stowImages() {
+	var image;
+	var images = getImages();
+	for(var ii=0;ii<images.length;ii++) {
+		image = images[ii];
+		image.setAttribute("visibility","hidden");
+		image.clone.setAttribute("visibility","hidden");
+	}
+}
+
+function restoreImages() {
+	var image;
+	var images = getImages();
+	for(var ii=0;ii<images.length;ii++) {
+		image = images[ii];
+		image.setAttribute("visibility","visible");
+		image.clone.setAttribute("visibility","visible");
 	}
 }
 

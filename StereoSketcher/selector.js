@@ -108,7 +108,7 @@ function recursiveSelectShapesDotStepper(dot) {
 function recursiveSelectShapesFacesOrImages(facesOrImages) {
 	var shape;
 	for(var jj=0;jj<facesOrImages.length;jj++) {
-		shape = dot.facesOrImages[jj];
+		shape = facesOrImages[jj];
 		if(shape.isSelected()) {
 			continue;
 		} else {
@@ -133,7 +133,7 @@ function selectAllContiguousDots(sourceDot,event) {
 		}
 	}
 	sourceDot.select();
-	recursiveSelectDots(sourceDot);
+	recursiveSelectDot(sourceDot);
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		if(doesElementHaveClass(dot,"tempSelect")) {
@@ -143,7 +143,7 @@ function selectAllContiguousDots(sourceDot,event) {
 	}
 }
 
-function recursiveSelectDots(dot) {
+function recursiveSelectDot(dot) {
 	var lines = dot.lines;
 	var line;
 	for(var ii=0;ii<lines.length;ii++) {
@@ -153,10 +153,10 @@ function recursiveSelectDots(dot) {
 		}
 		if(line.dot1 == dot) {
 			line.dot2.select();
-			recursiveSelectDots(line.dot2);
+			recursiveSelectDot(line.dot2);
 		} else if (line.dot2 == dot) {
 			line.dot1.select();
-			recursiveSelectDots(line.dot1);
+			recursiveSelectDot(line.dot1);
 		}
 	}
 	recursiveSelectFacesOrImages(dot.faces,dot);
@@ -181,7 +181,7 @@ function recursiveSelectFacesOrImages(facesOrImages,dot) {
 				for(var kk=0;kk<shape.dots.length;kk++) {
 					if(shape.dots[jj] != shape.dots[kk] && !shape.dots[kk].isSelected()) {
 						shape.dots[kk].select();
-						recursiveSelectDots(shape.dots[kk]);
+						recursiveSelectDot(shape.dots[kk]);
 					}
 				}
 			}

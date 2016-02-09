@@ -19,8 +19,10 @@ function setMode(newMode) {
 	editMode(true);
 	if(mode == 3) {
 		stowAllOpacity();
+		stowImages();
 	} else {
 		restoreAllOpacity();
+		restoreImages();
 	}
 }
 

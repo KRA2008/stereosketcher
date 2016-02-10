@@ -8,7 +8,9 @@ function save() {
 	showLoading();
 	var stereosketch = collectDrawing();
 	var blob = new Blob([JSON.stringify(stereosketch)], {type: "stereosketch;charset=utf-8"});
-	saveAs(blob, Date.now()+".stereosketch");
+	var date = new Date();
+	var formattedDate = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+"-"+date.getHours()+"-"+date.getMinutes()+"-"+date.getSeconds();
+	saveAs(blob, formattedDate+".stereosketch");
 	hideLoading();
 }
 

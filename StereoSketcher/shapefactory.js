@@ -445,6 +445,9 @@ var shapeFactory = {
 		
 		this.createCloneImage(image,imageObject);
 		
+		image.onclick = function(event) {
+			event.preventDefault();
+		};
 		image.select = function() {
 			this.indicator.setAttribute("stroke-width","5");
 			this.indicator.setAttribute("stroke",selectedColor);
@@ -510,12 +513,6 @@ var shapeFactory = {
 		clone.setAttribute("class","imageClone");
 		firstImage.clone = clone;
 	}
-}
-
-function round(original) {
-	var precision = 10;
-	var multiplier = Math.pow(10,precision);
-	return (Math.round(original*multiplier))/multiplier;
 }
 
 function stopDots() {

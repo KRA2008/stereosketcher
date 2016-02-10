@@ -141,9 +141,12 @@ function fileDragHover(e) {
 }
 
 function fileDragHandler(e) {
-	showLoading();
 	fileDragHover(e);
 
+	if(mode == 3) {
+		return;
+	}
+	
 	var files = e.target.files || e.dataTransfer.files;
 
 	for (var i = 0, f; f = files[i]; i++) {
@@ -152,6 +155,7 @@ function fileDragHandler(e) {
 }
 
 function parseFile(file) {
+	showLoading();
 	var reader = new FileReader();
 	reader.onloadend = function(evt) {
 		var image = new Image();

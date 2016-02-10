@@ -59,6 +59,8 @@ html, body, svg
 	bottom:50%;
 	right:50%;
 	z-index:9999;
+	background-color:#888888;
+	padding: 20px;
 }
 
 .hidden

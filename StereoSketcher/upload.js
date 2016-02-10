@@ -2,14 +2,18 @@
 var imageToSend;
 
 function upload() {
-	setSuccessDisplay("Uploading image...");
-	hideToolbar();
-	if(isEditMode) {
-		viewMode();
-	}
+	showLoading();
 	setTimeout(function() {
-		addWatermark();
-		saveSvgAsPng(document.getElementById("svg"), 1);
+		setSuccessDisplay("Converting SVG to PNG...");
+		hideToolbar();
+		if(isEditMode) {
+			viewMode();
+		}
+		setTimeout(function() {
+			addWatermark();
+			saveSvgAsPng(document.getElementById("svg"), 1);
+			setSuccessDisplay("Uploading image...");
+		},200);
 	},200);
 }
 
@@ -42,6 +46,7 @@ function setSuccessDisplay(text,id) {
 	var resultDisplay = document.getElementById("uploadResult");
 	if(id) {
 		resultDisplay.innerHTML = "<a target='none' href='http://imgur.com/"+id+"'>"+text+"</a>"
+		hideLoading();
 	} else {
 		resultDisplay.innerHTML = text;
 	}

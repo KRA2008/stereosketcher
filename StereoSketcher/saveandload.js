@@ -5,9 +5,11 @@ function warning() {
 }
 
 function save() {
+	showLoading();
 	var stereosketch = collectDrawing();
 	var blob = new Blob([JSON.stringify(stereosketch)], {type: "stereosketch;charset=utf-8"});
 	saveAs(blob, Date.now()+".stereosketch");
+	hideLoading();
 }
 
 function collectDrawing() {
@@ -82,12 +84,13 @@ function exportImage(image) {
 	return {
 		type:"image",
 		dots:dotIds,
-		href:image.getAttributeNS('http://www.w3.org/1999/xlink', 'href'),
+		href:image.getAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href'),
 		opacity:image.getOpacity()
 	}
 }
 
 function load() {
+	showLoading();
 	var file = fileInput.files[0];
 	var stereotype = /^.+\.stereosketch$/;
 	if (file.name.match(stereotype)) {
@@ -142,10 +145,22 @@ function loadSketch(sketch) {
 			imageObject.onload = function(evt) {
 				var newImage = shapeFactory.createImage(imageDots,this);
 				newImage.setOpacity(shape.opacity);
+				imagesWaitingToFinish--;
 			}
+			imagesWaitingToFinish++;
 			imageObject.src = shape.href;
 		}
 	}
 	picker.color.fromString(sketch.background);
 	setBackground();
+	if(imagesWaitingToFinish===0) {
+		hideLoading();
+	} else {
+		var interval = setInterval(function() {
+			if(imagesWaitingToFinish===0) {
+				hideLoading();
+				clearInterval(interval);
+			}
+		},100);
+	}
 }

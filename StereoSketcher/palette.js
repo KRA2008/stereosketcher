@@ -141,6 +141,7 @@ function fileDragHover(e) {
 }
 
 function fileDragHandler(e) {
+	showLoading();
 	fileDragHover(e);
 
 	var files = e.target.files || e.dataTransfer.files;
@@ -177,4 +178,5 @@ function createImage(image) {
 	}
 	
 	shapeFactory.createImage(selectedDots,image);
+	hideLoading();
 }

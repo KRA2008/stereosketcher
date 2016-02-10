@@ -1,10 +1,26 @@
 'use strict';
 
+var imagesWaitingToFinish = 0;
+
 function copyAndPasteSelectedShapes(x,y,isExtrusion) {
+	showLoading();
 	var mid = findMiddleOfCopyableDots();
 	doTheActualCopy(x,y,mid,isExtrusion);
+	if(imagesWaitingToFinish===0) {
+		copyCleanup(isExtrusion);
+	} else {
+		var interval = setInterval(function() {
+			if(imagesWaitingToFinish===0) {
+				copyCleanup(isExtrusion);
+				clearInterval(interval);
+			}
+		},100);
+	}
+}
+function copyCleanup(isExtrusion) {
 	restackCopies();
 	cleanUpCopies(isExtrusion);
+	hideLoading();
 }
 
 function restackCopies() {
@@ -130,6 +146,7 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 			copyFace(face);
 		}
 	}
+	var didImageGetCopied = false;
 	var images = getImages();
 	var image;
 	for(var ii=0;ii<images.length;ii++) {
@@ -149,8 +166,10 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 		image = images[ii];
 		if(image.isSelected()) {
 			copyImage(image);
+			didImageGetCopied = true;
 		}
 	}
+	return didImageGetCopied;
 }
 
 
@@ -202,10 +221,11 @@ function copyImage(image) {
 	var imageObject = new Image();
 	imageObject.onload = function(evt) {
 		var newImage = shapeFactory.createImage(copyDots,this);
-		//TODO: copy opacity onto new image
+		newImage.setOpacity(image.getOpacity());
 		newImage.lowlight();
 		image.copy = newImage;
-		//TODO: this is async. wonder if that's why it doesn't restack right
+		imagesWaitingToFinish--;
 	};
-	imageObject.src = image.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+	imagesWaitingToFinish++;
+	imageObject.src = image.getAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href');
 }

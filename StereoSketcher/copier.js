@@ -14,7 +14,7 @@ function copyAndPasteSelectedShapes(x,y,isExtrusion) {
 				copyCleanup(isExtrusion);
 				clearInterval(interval);
 			}
-		},100);
+		},50);
 	}
 }
 function copyCleanup(isExtrusion) {
@@ -227,5 +227,5 @@ function copyImage(image) {
 		imagesWaitingToFinish--;
 	};
 	imagesWaitingToFinish++;
-	imageObject.src = image.getAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href');
+	imageObject.src = image.getAttribute('xlink:href');
 }

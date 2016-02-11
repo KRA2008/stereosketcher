@@ -86,7 +86,7 @@ function exportImage(image) {
 	return {
 		type:"image",
 		dots:dotIds,
-		href:image.getAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href'),
+		href:image.getAttribute('xlink:href'),
 		opacity:image.getOpacity()
 	}
 }
@@ -130,6 +130,7 @@ function loadSketch(sketch) {
 			newLine.setThickness(shape.thickness);
 			newLine.setColor(shape.color);
 			newLine.setOpacity(shape.opacity);
+			shape.loaded = newLine;
 		} else if (shape.type == "face") {
 			var faceDots = [];
 			for(var jj=0;jj<shape.dots.length;jj++) {
@@ -138,31 +139,52 @@ function loadSketch(sketch) {
 			var newFace = shapeFactory.createFace(faceDots);
 			newFace.setColor(shape.color);
 			newFace.setOpacity(shape.opacity);
+			shape.loaded = newFace;
 		} else if (shape.type == "image") {
-			var imageDots = [];
-			for(var jj=0;jj<shape.dots.length;jj++) {
-				imageDots.push(dots[(dots.length-loadedDots.length)+shape.dots[jj]]);
-			}
-			var imageObject = new Image();
-			imageObject.onload = function(evt) {
-				var newImage = shapeFactory.createImage(imageDots,this);
-				newImage.setOpacity(shape.opacity);
-				imagesWaitingToFinish--;
-			}
-			imagesWaitingToFinish++;
-			imageObject.src = shape.href;
+			loadImage(shape,dots,loadedDots);
 		}
 	}
 	picker.color.fromString(sketch.background);
 	setBackground();
 	if(imagesWaitingToFinish===0) {
-		hideLoading();
+		finishLoadingSketch(sketch);
 	} else {
 		var interval = setInterval(function() {
 			if(imagesWaitingToFinish===0) {
-				hideLoading();
+				finishLoadingSketch(sketch);
 				clearInterval(interval);
 			}
-		},100);
+		},50);
 	}
+}
+
+function finishLoadingSketch(sketch) {
+	restackLoads(sketch);
+	hideLoading();
+}
+
+function restackLoads(sketch) {
+	var shapes = sketch.shapes;
+	var newShape;
+	for(var ii=0;ii<shapes.length;ii++) {
+		newShape = shapes[ii].loaded;
+		newShape.remove();
+		newShape.add();
+	}
+}
+
+function loadImage(image,sketchDots,loadedDots) {
+	imagesWaitingToFinish++;
+	var imageDots = [];
+	for(var jj=0;jj<image.dots.length;jj++) {
+		imageDots.push(sketchDots[(sketchDots.length-loadedDots.length)+image.dots[jj]]);
+	}
+	var imageObject = new Image();
+	imageObject.onload = function(evt) {
+		var newImage = shapeFactory.createImage(imageDots,this);
+		newImage.setOpacity(image.opacity);
+		imagesWaitingToFinish--;
+		image.loaded = newImage;
+	}
+	imageObject.src = image.href;
 }

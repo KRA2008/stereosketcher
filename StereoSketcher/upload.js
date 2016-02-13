@@ -62,7 +62,16 @@ function addWatermark() {
 	watermark.setAttribute("x", window.innerWidth-width);
 	watermark.setAttribute("font-size",size);
 	watermark.setAttribute("font-family","Arial");
-	watermark.setAttribute("fill", "black");
+	var backgroundColor = parseInt("0x"+getBackgroundColor().substr(1,6));
+	var chunk1 = backgroundColor&0xff;
+	var chunk2 = (backgroundColor&0xff00)>>8;
+	var chunk3 = (backgroundColor&0xff0000)>>16;
+	var backgroundSum = chunk1+chunk2+chunk3;
+	if(backgroundSum>382) {
+		watermark.setAttribute("fill", "black");
+	} else {
+		watermark.setAttribute("fill", "white");
+	}
 	watermark.textContent="StereoSketcher.com";
 	svg.appendChild(watermark);
 }

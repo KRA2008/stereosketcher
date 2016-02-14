@@ -115,7 +115,7 @@ function buildToolBar() {
 			
 			toolTip = document.createElementNS("http://www.w3.org/2000/svg", "text");
 			toolTip.setAttribute("class","toolTip");
-			toolTip.textContent = "("+tool.key+") "+tool.description;
+			toolTip.textContent = tool.description+"  (keyboard shortcut: "+tool.key+")";
 			toolTip.setAttribute("x",toolMargin);
 			toolTip.setAttribute("y",toolMargin*(toolSets.length)+toolWidth*(toolSets.length)+toolWidth/2);
 			addClassToElement(toolTip,"hidden");

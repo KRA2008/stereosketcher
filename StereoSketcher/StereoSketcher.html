@@ -35,30 +35,34 @@
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
 		<div id="pickerDiv" class="bottomleft">
 			<form>
-				<div id="fileDrag">
-					<br/>
-					Drag and drop an image  <br/>
-					here from your file system <br/>
-					to add an image	between  <br/>
-					four selected dots.
-					<br/>
-					<br/>
+				<div id="imageDrag">
+					<img src="tools/dragAndDropMain.png" />
+				</div>
+				<hr/>
+				<div id="cloneDrag">
+					<img src="tools/dragAndDropPair.png" />
 				</div>
 			</form>
 			<hr/>
-			<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
-			<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
-			<input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
-			<br/>
-			<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
-			<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
+			<div>
+				<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
+				<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
+				<input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
+				<br/>
+				<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
+				<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
+			</div>
 			<hr/>
-			View mode:<br/>
-			&nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
-			&nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
-			&nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: anaglyph</span><br/>
+			<div>
+				View mode:<br/>
+				&nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
+				&nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
+				&nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: anaglyph</span><br/>
+			</div>
 			<hr/>
-			Zoom: <span id="zoomLabel"></span>
+			<div>
+				Zoom: <span id="zoomLabel"></span>
+			</div>
 		</div>
 		<div class="topright">
 			<div class="fileButton">

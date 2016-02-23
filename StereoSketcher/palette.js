@@ -135,13 +135,21 @@ function restoreImages() {
 	}
 }
 
-function fileDragHover(e) {
+function dragHover(e) {
 	e.stopPropagation();
 	e.preventDefault();
 }
 
-function fileDragHandler(e) {
-	fileDragHover(e);
+function imageDragHandler(e) {
+	dragHandler(e,false);
+}
+
+function cloneDragHandler(e) {
+	dragHandler(e,true);
+}
+
+function dragHandler(e,isCloneImage) {
+	dragHover(e);
 
 	if(mode == 3) {
 		return;
@@ -150,37 +158,61 @@ function fileDragHandler(e) {
 	var files = e.target.files || e.dataTransfer.files;
 
 	for (var i = 0, f; f = files[i]; i++) {
-		parseFile(f);
+		parseFile(f,isCloneImage);
 	}
 }
 
-function parseFile(file) {
+function parseFile(file,isCloneImage) {
 	showLoading();
 	var reader = new FileReader();
 	reader.onloadend = function(evt) {
 		var image = new Image();
 		image.onload = function(evt) {
-			createImage(this);
+			createImage(this,isCloneImage);
 		};
 		image.src = evt.target.result;
 	}
 	reader.readAsDataURL(file);
 }
 
-function createImage(image) {
-	var dots = getDots();
-	var dot;
-	var selectedDots = [];
-	for(var ii=0;ii<dots.length;ii++) {
-		dot = dots[ii];
-		if(dot.isSelected()) {
-			selectedDots.push(dot);
+function createImage(image,isCloneImage) {
+	if(!isCloneImage) {
+		var dots = getDots();
+		var dot;
+		var selectedDots = [];
+		for(var ii=0;ii<dots.length;ii++) {
+			dot = dots[ii];
+			if(dot.isSelected()) {
+				selectedDots.push(dot);
+			}
+		}
+		if(selectedDots.length != 4) {
+			hideLoading();
+			return;
+		}
+		
+		shapeFactory.createImage(selectedDots,image);
+	} else {
+		var imageShapes = getImages();
+		var imageShape;
+		var selectedImages = [];
+		for(var ii=0;ii<imageShapes.length;ii++) {
+			imageShape = imageShapes[ii];
+			if(imageShape.isSelected()) {
+				selectedImages.push(imageShape);
+			}
+		}
+		if(selectedImages.length == 0) {
+			hideLoading();
+			return;
+		}
+		for(var jj=0;jj<selectedImages.length;jj++) {
+			imageShape = selectedImages[jj];
+			imageShape.remove();
+			shapeFactory.createCloneImage(imageShape,image);
+			imageShape.add();
+			snapDots(getDots(),true);
 		}
 	}
-	if(selectedDots.length != 4) {
-		return;
-	}
-	
-	shapeFactory.createImage(selectedDots,image);
 	hideLoading();
 }

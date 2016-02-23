@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,fileDragger;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,cloneDragger;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -18,7 +18,8 @@ window.onload=function() {
 	zoomLabel = document.getElementById('zoomLabel');
 	toolGroup = document.getElementById('toolGroup');
 	fileInput = document.getElementById('fileInput');
-	fileDragger = document.getElementById('fileDrag');
+	imageDragger = document.getElementById('imageDrag');
+	cloneDragger = document.getElementById('cloneDrag');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -79,10 +80,21 @@ window.onload=function() {
 	};
 	svg.addEventListener("mousewheel",zoom,false);
 	svg.addEventListener("DOMMouseScroll",zoom,false);
-	fileDragger.addEventListener("change", fileDragHandler, false);
-	fileDragger.addEventListener("drop", fileDragHandler, false);
-	fileDragger.addEventListener("dragleave", fileDragHover, false);
-	fileDragger.addEventListener("dragover", fileDragHover, false);
+	
+	imageDragger.addEventListener("change", imageDragHandler, false);
+	imageDragger.addEventListener("drop", imageDragHandler, false);
+	imageDragger.addEventListener("dragleave", dragHover, false);
+	imageDragger.addEventListener("dragover", dragHover, false);
+	imageDragger.addEventListener("mouseenter",imageHover,false);
+	imageDragger.addEventListener("mouseleave",imageLeave,false);
+	
+	cloneDragger.addEventListener("change", cloneDragHandler, false);
+	cloneDragger.addEventListener("drop", cloneDragHandler, false);
+	cloneDragger.addEventListener("dragleave", dragHover, false);
+	cloneDragger.addEventListener("dragover", dragHover, false);
+	cloneDragger.addEventListener("mouseenter",imageHover,false);
+	cloneDragger.addEventListener("mouseleave",imageLeave,false);
+	
 	crossEyeMode();
 	picker.color.fromString("#000000");
 	zoomLabel.innerHTML = zoomLevel;

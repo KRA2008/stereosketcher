@@ -113,13 +113,7 @@ function buildToolBar() {
 			toolButton.setAttribute("fill","url(#"+tool.image+")");
 			toolGroup.appendChild(toolButton);
 			
-			toolTip = document.createElementNS("http://www.w3.org/2000/svg", "text");
-			toolTip.setAttribute("class","toolTip");
-			toolTip.textContent = tool.description+"  (keyboard shortcut: "+tool.key+")";
-			toolTip.setAttribute("x",toolMargin);
-			toolTip.setAttribute("y",toolMargin*(toolSets.length)+toolWidth*(toolSets.length)+toolWidth/2);
-			addClassToElement(toolTip,"hidden");
-			toolGroup.appendChild(toolTip);
+			toolTip = buildToolTip(tool);
 			
 			toolButton.tip = toolTip;
 			toolButton.tool = tool;
@@ -157,6 +151,22 @@ function buildToolBar() {
 			}
 		}
 	}
+	imageDragger.toolTip = buildToolTip({"description": "drag and drop an image from your file system to add it between four selected dots"});
+	cloneDragger.toolTip = buildToolTip({"description": "drag and drop the second image of a stereo pair to add it as the clone for a selected image"});
+}
+
+function buildToolTip(tool) {
+	var toolTip = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	toolTip.setAttribute("class","toolTip");
+	toolTip.textContent = tool.description;
+	if(tool.key) {
+		toolTip.textContent+="  (keyboard shortcut: "+tool.key+")";
+	}
+	toolTip.setAttribute("x",toolMargin);
+	toolTip.setAttribute("y",toolMargin*(toolSets.length)+toolWidth*(toolSets.length)+toolWidth/2);
+	addClassToElement(toolTip,"hidden");
+	toolGroup.appendChild(toolTip);
+	return toolTip;
 }
 
 function mapKeyPress(event) {
@@ -226,5 +236,21 @@ function buildTable() {
 			row.appendChild(cell);
 			keyTable.appendChild(row);
 		}
+	}
+}
+
+function imageHover(e) {
+	if(e.target == imageDragger) {
+		removeClassFromElement(imageDragger.toolTip,"hidden");
+	} else if (e.target == cloneDragger) {
+		removeClassFromElement(cloneDragger.toolTip,"hidden");
+	}
+}
+
+function imageLeave(e) {
+	if(e.target == imageDragger) {
+		addClassToElement(imageDragger.toolTip,"hidden");
+	} else if (e.target == cloneDragger) {
+		addClassToElement(cloneDragger.toolTip,"hidden");
 	}
 }

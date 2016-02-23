@@ -25,6 +25,18 @@ html, body, svg
 	float:right;
 }
 
+#imageDrag :hover {
+	border: #008800 1px solid;
+}
+
+#cloneDrag :hover {
+	border: #008800 1px solid;
+}
+
+#pickerDiv div {
+	margin: 5px;
+}
+
 .bottomleft
 {
 	position: absolute;

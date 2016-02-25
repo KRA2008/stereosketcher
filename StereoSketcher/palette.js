@@ -141,14 +141,14 @@ function dragHover(e) {
 }
 
 function imageDragHandler(e) {
-	dragHandler(e,false);
-}
-
-function cloneDragHandler(e) {
 	dragHandler(e,true);
 }
 
-function dragHandler(e,isCloneImage) {
+function imageDragHandlerNoClone(e) {
+	dragHandler(e,false);
+}
+
+function dragHandler(e,withClone) {
 	dragHover(e);
 
 	if(mode == 3) {
@@ -158,61 +158,38 @@ function dragHandler(e,isCloneImage) {
 	var files = e.target.files || e.dataTransfer.files;
 
 	for (var i = 0, f; f = files[i]; i++) {
-		parseFile(f,isCloneImage);
+		parseFile(f,withClone);
 	}
 }
 
-function parseFile(file,isCloneImage) {
+function parseFile(file,withClone) {
 	showLoading();
 	var reader = new FileReader();
 	reader.onloadend = function(evt) {
 		var image = new Image();
 		image.onload = function(evt) {
-			createImage(this,isCloneImage);
+			createImage(this,withClone);
 		};
 		image.src = evt.target.result;
 	}
 	reader.readAsDataURL(file);
 }
 
-function createImage(image,isCloneImage) {
-	if(!isCloneImage) {
-		var dots = getDots();
-		var dot;
-		var selectedDots = [];
-		for(var ii=0;ii<dots.length;ii++) {
-			dot = dots[ii];
-			if(dot.isSelected()) {
-				selectedDots.push(dot);
-			}
-		}
-		if(selectedDots.length != 4) {
-			hideLoading();
-			return;
-		}
-		
-		shapeFactory.createImage(selectedDots,image);
-	} else {
-		var imageShapes = getImages();
-		var imageShape;
-		var selectedImages = [];
-		for(var ii=0;ii<imageShapes.length;ii++) {
-			imageShape = imageShapes[ii];
-			if(imageShape.isSelected()) {
-				selectedImages.push(imageShape);
-			}
-		}
-		if(selectedImages.length == 0) {
-			hideLoading();
-			return;
-		}
-		for(var jj=0;jj<selectedImages.length;jj++) {
-			imageShape = selectedImages[jj];
-			imageShape.remove();
-			shapeFactory.createCloneImage(imageShape,image);
-			imageShape.add();
-			snapDots(getDots(),true);
+function createImage(image,withClone) {
+	var dots = getDots();
+	var dot;
+	var selectedDots = [];
+	for(var ii=0;ii<dots.length;ii++) {
+		dot = dots[ii];
+		if(dot.isSelected()) {
+			selectedDots.push(dot);
 		}
 	}
+	if(selectedDots.length != 4) {
+		hideLoading();
+		return;
+	}
+	
+	shapeFactory.createImage(selectedDots,image,withClone);
 	hideLoading();
 }

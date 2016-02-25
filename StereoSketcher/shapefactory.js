@@ -422,7 +422,7 @@ var shapeFactory = {
 			clone.under.setAttribute("visibility","hidden");
 		}
 	},
-	createImage: function(dots,imageObject) {
+	createImage: function(dots,imageObject,withClone) {
 		var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
 		for(var ii=0;ii<dots.length;ii++) {
 			dots[ii].deselect();
@@ -434,7 +434,11 @@ var shapeFactory = {
 		image.setAttribute("height",imageObject.height);
 		image.setAttribute("opacity",1.0);
 		image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', imageObject.src);
-		image.setAttribute("class","image");
+		if(withClone) {
+			image.setAttribute("class","image");
+		} else {
+			image.setAttribute("class","imageNoClone");
+		}
 		image.dots = dots;
 		image.indicator = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
 		image.indicator.setAttribute("points",makePolygonPointString(dots,false));
@@ -443,7 +447,9 @@ var shapeFactory = {
 		shapeGroup.appendChild(image.indicator);
 		shapeGroup.appendChild(image);
 		
-		this.createCloneImage(image,imageObject);
+		if(withClone) {
+			this.createCloneImage(image,imageObject);
+		}
 		
 		image.onclick = function(event) {
 			event.preventDefault();
@@ -479,12 +485,16 @@ var shapeFactory = {
 		};
 		image.remove = function() {
 			shapeGroup.removeChild(this.indicator);
-			shapeGroup.removeChild(this.clone);
+			if(this.clone) {
+				shapeGroup.removeChild(this.clone);
+			}
 			shapeGroup.removeChild(this);
 		};
 		image.add = function() {
 			shapeGroup.appendChild(this.indicator);
-			shapeGroup.appendChild(this.clone);
+			if(this.clone) {
+				shapeGroup.appendChild(this.clone);
+			}
 			shapeGroup.appendChild(this);
 		}
 		image.doubleHandler = function(event) {

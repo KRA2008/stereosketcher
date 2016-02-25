@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,cloneDragger;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,imageDraggerNoClone;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -19,7 +19,7 @@ window.onload=function() {
 	toolGroup = document.getElementById('toolGroup');
 	fileInput = document.getElementById('fileInput');
 	imageDragger = document.getElementById('imageDrag');
-	cloneDragger = document.getElementById('cloneDrag');
+	imageDraggerNoClone = document.getElementById('imageDragNoClone');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -88,12 +88,12 @@ window.onload=function() {
 	imageDragger.addEventListener("mouseenter",imageHover,false);
 	imageDragger.addEventListener("mouseleave",imageLeave,false);
 	
-	cloneDragger.addEventListener("change", cloneDragHandler, false);
-	cloneDragger.addEventListener("drop", cloneDragHandler, false);
-	cloneDragger.addEventListener("dragleave", dragHover, false);
-	cloneDragger.addEventListener("dragover", dragHover, false);
-	cloneDragger.addEventListener("mouseenter",imageHover,false);
-	cloneDragger.addEventListener("mouseleave",imageLeave,false);
+	imageDraggerNoClone.addEventListener("change", imageDragHandlerNoClone, false);
+	imageDraggerNoClone.addEventListener("drop", imageDragHandlerNoClone, false);
+	imageDraggerNoClone.addEventListener("dragleave", dragHover, false);
+	imageDraggerNoClone.addEventListener("dragover", dragHover, false);
+	imageDraggerNoClone.addEventListener("mouseenter",imageHover,false);
+	imageDraggerNoClone.addEventListener("mouseleave",imageLeave,false);
 	
 	crossEyeMode();
 	picker.color.fromString("#000000");
@@ -145,13 +145,17 @@ function getImages() {
 	return shapeGroup.getElementsByClassName("image");
 }
 
+function getNoCloneImages() {
+	return shapeGroup.getElementsByClassName("imageNoClone");
+}
+
 function getShapes() {
 	var item;
 	var items = shapeGroup.children;
 	var shapes = [];
 	for(var ii=0;ii<items.length;ii++) {
 		item = items[ii];
-		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")||doesElementHaveClass(item,"image")) {
+		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")||doesElementHaveClass(item,"image")||doesElementHaveClass(item,"imageNoClone")) {
 			shapes.push(item);
 		}
 	}

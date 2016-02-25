@@ -48,6 +48,7 @@ function moveShapes() {
 	var face;
 	var images = getImages();
 	var image;
+	var imagesNoClones = getNoCloneImages();
 	for(var ii=0;ii<lines.length;ii++) {
 		line = lines[ii];
 		if(doesElementHaveClass(line,tempMoving)) {
@@ -64,6 +65,13 @@ function moveShapes() {
 	}
 	for(var ii=0;ii<images.length;ii++) {
 		image = images[ii];
+		if(doesElementHaveClass(image,tempMoving)) {
+			snapImage(image);
+			removeClassFromElement(image,tempMoving);
+		}
+	}
+	for(var ii=0;ii<imagesNoClones.length;ii++) {
+		image = imagesNoClones[ii];
 		if(doesElementHaveClass(image,tempMoving)) {
 			snapImage(image);
 			removeClassFromElement(image,tempMoving);
@@ -123,10 +131,12 @@ function snapImage(image) {
 	
 	calculateMatrix(image,sourcePoints,targetPoints);
 	
-	for(var ii=0;ii<4;ii++) {
-		targetPoints[ii][0]+=IPD+image.dots[ii].getShift()*shiftSpeed;
+	if(image.clone) {
+		for(var ii=0;ii<4;ii++) {
+			targetPoints[ii][0]+=IPD+image.dots[ii].getShift()*shiftSpeed;
+		}
+		calculateMatrix(image.clone,sourcePoints,targetPoints);
 	}
-	calculateMatrix(image.clone,sourcePoints,targetPoints);
 	
 	image.indicator.setAttribute("points",makePolygonPointString(image.dots,false));
 }

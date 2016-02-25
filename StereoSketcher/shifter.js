@@ -65,7 +65,21 @@ function findSketchWidth() {
 		minX = maxX;
 		for(var ii=1;ii<dots.length;ii++) {
 			dot = dots[ii];
-			if(dot.lines.length===0 && dot.faces.length===0 && dot.images.length===0) continue;
+			if(dot.lines.length===0 && dot.faces.length===0) {
+				if(dot.images.length===0) {
+					continue;
+				} else {
+					var onlyNoClones = true;
+					for(var jj=0;jj<dot.images.length;jj++) {
+						if(!doesElementHaveClass(dot.images[jj],"imageNoClone")) {
+							onlyNoClones = false;
+						}
+					}
+					if(onlyNoClones) {
+						continue;
+					}
+				}
+			}
 			dotX = parseFloat(dot.getAttribute("cx"));
 			if(dotX>maxX) {
 				maxX = dotX;

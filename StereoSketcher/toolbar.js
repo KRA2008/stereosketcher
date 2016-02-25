@@ -152,7 +152,7 @@ function buildToolBar() {
 		}
 	}
 	imageDragger.toolTip = buildToolTip({"description": "drag and drop an image from your file system to add it between four selected dots"});
-	cloneDragger.toolTip = buildToolTip({"description": "drag and drop the second image of a stereo pair to add it as the clone for a selected image"});
+	imageDraggerNoClone.toolTip = buildToolTip({"description": "drag and drop the second image of a stereo pair to add it as the clone for a selected image"});
 }
 
 function buildToolTip(tool) {
@@ -242,15 +242,15 @@ function buildTable() {
 function imageHover(e) {
 	if(e.target == imageDragger) {
 		removeClassFromElement(imageDragger.toolTip,"hidden");
-	} else if (e.target == cloneDragger) {
-		removeClassFromElement(cloneDragger.toolTip,"hidden");
+	} else if (e.target == imageDraggerNoClone) {
+		removeClassFromElement(imageDraggerNoClone.toolTip,"hidden");
 	}
 }
 
 function imageLeave(e) {
 	if(e.target == imageDragger) {
 		addClassToElement(imageDragger.toolTip,"hidden");
-	} else if (e.target == cloneDragger) {
-		addClassToElement(cloneDragger.toolTip,"hidden");
+	} else if (e.target == imageDraggerNoClone) {
+		addClassToElement(imageDraggerNoClone.toolTip,"hidden");
 	}
 }

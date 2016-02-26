@@ -29,7 +29,7 @@ html, body, svg
 	border: #008800 1px solid;
 }
 
-#cloneDrag :hover {
+#baseDrag :hover {
 	border: #008800 1px solid;
 }
 

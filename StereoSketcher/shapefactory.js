@@ -43,6 +43,7 @@ var shapeFactory = {
 		dot.label = label;
 		dot.faces = [];
 		dot.images = [];
+		dot.bases = [];
 		labelGroup.appendChild(label);
 		dotGroup.appendChild(dot);
 		dot.select = function() {
@@ -165,12 +166,8 @@ var shapeFactory = {
 					if(event.ctrlKey) {
 						if(doesElementHaveClass(this,"dot")) {
 							selectShapesOfDot(this,event);
-						} else if (doesElementHaveClass(this,"face")) {
-							selectDotsOfFace(this,event);
-						} else if (doesElementHaveClass(this,"line")) {
-							selectDotsOfLine(this,event);
-						} else if (doesElementHaveClass(this,"image")) {
-							selectDotsOfImage(this,event);
+						} else {
+							selectDotsOfFaceImageOrBase(this,event);
 						}
 					} else {
 						if(event.shiftKey) {
@@ -185,7 +182,7 @@ var shapeFactory = {
 				this.onmouseout = function() {
 					this.lowlight();
 				};
-			} else if (event.button == 2) {
+			} else if (event.button == 2 && wasAClick(event)) {
 				if(doesElementHaveClass(this,"dot")) {
 					this.select();
 					createLinePressed();
@@ -422,11 +419,18 @@ var shapeFactory = {
 			clone.under.setAttribute("visibility","hidden");
 		}
 	},
-	createImage: function(dots,imageObject,withClone) {
+	createImage: function(dots,imageObject,asBase) {
 		var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-		for(var ii=0;ii<dots.length;ii++) {
-			dots[ii].deselect();
-			dots[ii].images.push(image);
+		if(!asBase) {
+			for(var ii=0;ii<dots.length;ii++) {
+				dots[ii].deselect();
+				dots[ii].images.push(image);
+			}
+		} else {
+			for(var ii=0;ii<dots.length;ii++) {
+				dots[ii].deselect();
+				dots[ii].bases.push(image);
+			}
 		}
 		image.setAttribute("x",0);
 		image.setAttribute("y",0);
@@ -434,20 +438,26 @@ var shapeFactory = {
 		image.setAttribute("height",imageObject.height);
 		image.setAttribute("opacity",1.0);
 		image.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', imageObject.src);
-		if(withClone) {
+		
+		if(!asBase) {
 			image.setAttribute("class","image");
 		} else {
-			image.setAttribute("class","imageNoClone");
+			image.setAttribute("class","base");
 		}
+		
 		image.dots = dots;
 		image.indicator = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-		image.indicator.setAttribute("points",makePolygonPointString(dots,false));
+		if(!asBase) {
+			image.indicator.setAttribute("points",makePolygonPointString(dots,false));
+		} else {
+			image.indicator.setAttribute("points",makeBoxFromTwoPointsString(dots,false));
+		}
 		image.indicator.setAttribute("fill-opacity",0);
 		
 		shapeGroup.appendChild(image.indicator);
 		shapeGroup.appendChild(image);
 		
-		if(withClone) {
+		if(!asBase) {
 			this.createCloneImage(image,imageObject);
 		}
 		
@@ -478,21 +488,27 @@ var shapeFactory = {
 		};
 		image.delete = function() {
 			var dots = this.dots;
-			for(var ii=0;ii<dots.length;ii++) {
-				dots[ii].images.splice(this.dots[ii].images.indexOf(this),1);
+			if(doesElementHaveClass(this,"image")) {
+				for(var ii=0;ii<dots.length;ii++) {
+					dots[ii].images.splice(this.dots[ii].images.indexOf(this),1);
+				}
+			} else {
+				for(var ii=0;ii<dots.length;ii++) {
+					dots[ii].bases.splice(this.dots[ii].bases.indexOf(this),1);
+				}
 			}
 			this.remove();
 		};
 		image.remove = function() {
 			shapeGroup.removeChild(this.indicator);
-			if(this.clone) {
+			if(!doesElementHaveClass(this,"base")) {
 				shapeGroup.removeChild(this.clone);
 			}
 			shapeGroup.removeChild(this);
 		};
 		image.add = function() {
 			shapeGroup.appendChild(this.indicator);
-			if(this.clone) {
+			if(!doesElementHaveClass(this,"base")) {
 				shapeGroup.appendChild(this.clone);
 			}
 			shapeGroup.appendChild(this);
@@ -505,7 +521,9 @@ var shapeFactory = {
 		};
 		image.setOpacity = function(opacity) {
 			this.setAttribute("opacity",opacity);
-			this.clone.setAttribute("opacity",opacity);
+			if(!doesElementHaveClass(this,"base")) {
+				this.clone.setAttribute("opacity",opacity);
+			}
 		};
 		this.attachCommonHandlers(image);
 		image.add();
@@ -611,6 +629,7 @@ function deletePressed() {
 	
 	deletePressedImagesOrFaces(getFaces());
 	deletePressedImagesOrFaces(getImages());
+	deletePressedImagesOrFaces(getBases());
 	
 	snapDots(getDots(),true);
 }

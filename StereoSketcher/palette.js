@@ -141,14 +141,14 @@ function dragHover(e) {
 }
 
 function imageDragHandler(e) {
-	dragHandler(e,true);
-}
-
-function imageDragHandlerNoClone(e) {
 	dragHandler(e,false);
 }
 
-function dragHandler(e,withClone) {
+function baseDragHandler(e) {
+	dragHandler(e,true);
+}
+
+function dragHandler(e,asBase) {
 	dragHover(e);
 
 	if(mode == 3) {
@@ -158,24 +158,25 @@ function dragHandler(e,withClone) {
 	var files = e.target.files || e.dataTransfer.files;
 
 	for (var i = 0, f; f = files[i]; i++) {
-		parseFile(f,withClone);
+		parseFile(f,asBase);
 	}
 }
 
-function parseFile(file,withClone) {
+function parseFile(file,asBase) {
 	showLoading();
 	var reader = new FileReader();
 	reader.onloadend = function(evt) {
 		var image = new Image();
 		image.onload = function(evt) {
-			createImage(this,withClone);
+			createImage(this,asBase);
 		};
 		image.src = evt.target.result;
 	}
 	reader.readAsDataURL(file);
 }
 
-function createImage(image,withClone) {
+function createImage(image,asBase) {
+	var requisiteDots = asBase ? 2 : 4;
 	var dots = getDots();
 	var dot;
 	var selectedDots = [];
@@ -185,11 +186,10 @@ function createImage(image,withClone) {
 			selectedDots.push(dot);
 		}
 	}
-	if(selectedDots.length != 4) {
+	if(selectedDots.length != requisiteDots) {
 		hideLoading();
 		return;
 	}
-	
-	shapeFactory.createImage(selectedDots,image,withClone);
+	shapeFactory.createImage(selectedDots,image,asBase);
 	hideLoading();
 }

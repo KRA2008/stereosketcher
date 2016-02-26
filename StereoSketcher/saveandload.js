@@ -41,6 +41,8 @@ function collectDrawing() {
 			stereosketch.shapes.push(exportFace(shape));
 		} else if(doesElementHaveClass(shape,"image")) {
 			stereosketch.shapes.push(exportImage(shape));
+		} else if(doesElementHaveClass(shape,"base")) {
+			stereosketch.shapes.push(exportImage(shape));
 		}
 	}
 	return stereosketch;
@@ -78,13 +80,14 @@ function exportFace(face) {
 	}
 }
 
-function exportImage(image) {
+function exportImageOrBase(image) {
 	var dotIds = [];
 	for(var ii=0;ii<image.dots.length;ii++) {
 		dotIds.push(image.dots[ii].tempId);
 	}
+	var type = doesElementHaveClass(image,"base") ? "base" : "image";
 	return {
-		type:"image",
+		type:type,
 		dots:dotIds,
 		href:image.getAttribute('xlink:href'),
 		opacity:image.getOpacity()
@@ -140,7 +143,7 @@ function loadSketch(sketch) {
 			newFace.setColor(shape.color);
 			newFace.setOpacity(shape.opacity);
 			shape.loaded = newFace;
-		} else if (shape.type == "image") {
+		} else if (shape.type == "image" || shape.type == "base") {
 			loadImage(shape,dots,loadedDots);
 		}
 	}
@@ -181,7 +184,7 @@ function loadImage(image,sketchDots,loadedDots) {
 	}
 	var imageObject = new Image();
 	imageObject.onload = function(evt) {
-		var newImage = shapeFactory.createImage(imageDots,this);
+		var newImage = shapeFactory.createImage(imageDots,this,imageDots.length == 2);
 		newImage.setOpacity(image.opacity);
 		imagesWaitingToFinish--;
 		image.loaded = newImage;

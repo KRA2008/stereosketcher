@@ -16,22 +16,13 @@ function selectDotsOfLine(line,event) {
 	line.dot2.select();
 }
 
-function selectDotsOfFace(face,event) {
+function selectDotsOfFaceImageOrBase(shape,event) {
 	if(!event.shiftKey) {
 		deselectAll();
 	}
-	var dots = face.dots;
+	var dots = shape.dots;
 	for(var ii=0;ii<dots.length;ii++) {
 		dots[ii].select();
-	}
-}
-
-function selectDotsOfImage(image,event) {
-	if(!event.shiftKey) {
-		deselectAll();
-	}
-	for(var ii=0;ii<image.dots.length;ii++) {
-		image.dots[ii].select();
 	}
 }
 
@@ -42,6 +33,7 @@ function selectShapesOfDot(dot,event) {
 	var lines = dot.lines;
 	var faces = dot.faces;
 	var images = dot.images;
+	var bases = dot.base;
 	for(var ii=0;ii<lines.length;ii++) {
 		lines[ii].select();
 	}
@@ -50,6 +42,9 @@ function selectShapesOfDot(dot,event) {
 	}
 	for(var ii=0;ii<images.length;ii++) {
 		images[ii].select();
+	}
+	for(var ii=0;ii<bases.length;ii++) {
+		bases[ii].select();
 	}
 }
 
@@ -79,14 +74,14 @@ function selectAllContiguousShapes(sourceShape,event) {
 }
 
 function recursiveSelectShapes(sourceShape) {
-	if(doesElementHaveClass(sourceShape,"face")||doesElementHaveClass(sourceShape,"image")) {
+	if(doesElementHaveClass(sourceShape,"line")) {
+		recursiveSelectShapesDotStepper(sourceShape.dot1);
+		recursiveSelectShapesDotStepper(sourceShape.dot2);
+	} else {
 		var dots = sourceShape.dots;
 		for(var ii=0;ii<dots.length;ii++) {
 			recursiveSelectShapesDotStepper(dots[ii]);
 		}
-	} else {
-		recursiveSelectShapesDotStepper(sourceShape.dot1);
-		recursiveSelectShapesDotStepper(sourceShape.dot2);
 	}
 }
 
@@ -103,6 +98,7 @@ function recursiveSelectShapesDotStepper(dot) {
 	}
 	recursiveSelectShapesFacesOrImages(dot.faces);
 	recursiveSelectShapesFacesOrImages(dot.images);
+	recursiveSelectShapesFacesOrImages(dot.bases);
 }
 
 function recursiveSelectShapesFacesOrImages(facesOrImages) {
@@ -161,6 +157,7 @@ function recursiveSelectDot(dot) {
 	}
 	recursiveSelectFacesOrImages(dot.faces,dot);
 	recursiveSelectFacesOrImages(dot.images,dot);
+	recursiveSelectFacesOrImages(dot.bases,dot);
 }
 
 function recursiveSelectFacesOrImages(facesOrImages,dot) {
@@ -209,5 +206,9 @@ function deselectAll() {
 	var images=getImages();
 	for(var ii=0;ii<images.length;ii++) {
 		images[ii].deselect();
+	}
+	var bases=getBases();
+	for(var ii=0;ii<bases.length;ii++) {
+		bases[ii].deselect();
 	}
 }

@@ -60,25 +60,16 @@ function findSketchWidth() {
 	var width;
 	var dotX;
 	var dot;
+	if(getBases().length != 0) {
+		return 0;
+	}
 	if(dots[0]) {
 		maxX = parseFloat(dots[0].getAttribute("cx"));
 		minX = maxX;
 		for(var ii=1;ii<dots.length;ii++) {
 			dot = dots[ii];
-			if(dot.lines.length===0 && dot.faces.length===0) {
-				if(dot.images.length===0) {
-					continue;
-				} else {
-					var onlyNoClones = true;
-					for(var jj=0;jj<dot.images.length;jj++) {
-						if(!doesElementHaveClass(dot.images[jj],"imageNoClone")) {
-							onlyNoClones = false;
-						}
-					}
-					if(onlyNoClones) {
-						continue;
-					}
-				}
+			if(dot.lines.length===0 && dot.faces.length===0 && dot.images.length===0) {
+				continue;
 			}
 			dotX = parseFloat(dot.getAttribute("cx"));
 			if(dotX>maxX) {

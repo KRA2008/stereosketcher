@@ -68,7 +68,7 @@ function findMiddleOfCopyableDots() {
 	var minY;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		shapes = dot.lines.concat(dot.faces).concat(dot.images);
+		shapes = dot.lines.concat(dot.faces).concat(dot.images).concat(dot.bases);
 		for(var jj=0;jj<shapes.length;jj++) {
 			shape = shapes[jj];
 			if(shape.isSelected()) {
@@ -146,13 +146,18 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 			copyFace(face);
 		}
 	}
+	var didImageGetCopied = copyImagesOrBases(getImages(),x,y,mid,isExtrusion);
+	var didBaseGetCopied = copyImagesOrBases(getBases(),x,y,mid,isExtrusion);
+	return didImageGetCopied || didBaseGetCopied;
+}
+
+function copyImagesOrBases(shapes,x,y,mid,isExtrusion) {
 	var didImageGetCopied = false;
-	var images = getImages();
-	var image;
-	for(var ii=0;ii<images.length;ii++) {
-		image = images[ii];
-		if(image.isSelected()) {
-			var dots = image.dots;
+	var shape;
+	for(var ii=0;ii<shapes.length;ii++) {
+		shape = shapes[ii];
+		if(shape.isSelected()) {
+			var dots = shape.dots;
 			var dot;
 			for(var jj=0;jj<dots.length;jj++) {
 				dot = dots[jj];
@@ -162,10 +167,10 @@ function doTheActualCopy(x,y,mid,isExtrusion) {
 			}
 		}
 	}
-	for(var ii=0;ii<images.length;ii++) {
-		image = images[ii];
-		if(image.isSelected()) {
-			copyImage(image);
+	for(var ii=0;ii<shapes.length;ii++) {
+		shape = shapes[ii];
+		if(shape.isSelected()) {
+			copyImage(shape);
 			didImageGetCopied = true;
 		}
 	}
@@ -220,7 +225,7 @@ function copyImage(image) {
 	
 	var imageObject = new Image();
 	imageObject.onload = function(evt) {
-		var newImage = shapeFactory.createImage(copyDots,this);
+		var newImage = shapeFactory.createImage(copyDots,this,copyDots.length == 2);
 		newImage.setOpacity(image.getOpacity());
 		newImage.lowlight();
 		image.copy = newImage;

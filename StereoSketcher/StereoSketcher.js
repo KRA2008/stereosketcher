@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,imageDraggerNoClone;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -19,7 +19,7 @@ window.onload=function() {
 	toolGroup = document.getElementById('toolGroup');
 	fileInput = document.getElementById('fileInput');
 	imageDragger = document.getElementById('imageDrag');
-	imageDraggerNoClone = document.getElementById('imageDragNoClone');
+	baseDragger = document.getElementById('baseDrag');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -88,12 +88,12 @@ window.onload=function() {
 	imageDragger.addEventListener("mouseenter",imageHover,false);
 	imageDragger.addEventListener("mouseleave",imageLeave,false);
 	
-	imageDraggerNoClone.addEventListener("change", imageDragHandlerNoClone, false);
-	imageDraggerNoClone.addEventListener("drop", imageDragHandlerNoClone, false);
-	imageDraggerNoClone.addEventListener("dragleave", dragHover, false);
-	imageDraggerNoClone.addEventListener("dragover", dragHover, false);
-	imageDraggerNoClone.addEventListener("mouseenter",imageHover,false);
-	imageDraggerNoClone.addEventListener("mouseleave",imageLeave,false);
+	baseDragger.addEventListener("change", baseDragHandler, false);
+	baseDragger.addEventListener("drop", baseDragHandler, false);
+	baseDragger.addEventListener("dragleave", dragHover, false);
+	baseDragger.addEventListener("dragover", dragHover, false);
+	baseDragger.addEventListener("mouseenter",imageHover,false);
+	baseDragger.addEventListener("mouseleave",imageLeave,false);
 	
 	crossEyeMode();
 	picker.color.fromString("#000000");
@@ -145,8 +145,8 @@ function getImages() {
 	return shapeGroup.getElementsByClassName("image");
 }
 
-function getNoCloneImages() {
-	return shapeGroup.getElementsByClassName("imageNoClone");
+function getBases() {
+	return shapeGroup.getElementsByClassName("base");
 }
 
 function getShapes() {
@@ -155,7 +155,7 @@ function getShapes() {
 	var shapes = [];
 	for(var ii=0;ii<items.length;ii++) {
 		item = items[ii];
-		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")||doesElementHaveClass(item,"image")||doesElementHaveClass(item,"imageNoClone")) {
+		if(doesElementHaveClass(item,"line")||doesElementHaveClass(item,"face")||doesElementHaveClass(item,"image")||doesElementHaveClass(item,"base")) {
 			shapes.push(item);
 		}
 	}

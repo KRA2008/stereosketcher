@@ -40,9 +40,9 @@ function collectDrawing() {
 		} else if(doesElementHaveClass(shape,"face")) {
 			stereosketch.shapes.push(exportFace(shape));
 		} else if(doesElementHaveClass(shape,"image")) {
-			stereosketch.shapes.push(exportImage(shape));
+			stereosketch.shapes.push(exportImageOrBase(shape));
 		} else if(doesElementHaveClass(shape,"base")) {
-			stereosketch.shapes.push(exportImage(shape));
+			stereosketch.shapes.push(exportImageOrBase(shape));
 		}
 	}
 	return stereosketch;

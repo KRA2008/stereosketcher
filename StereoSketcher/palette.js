@@ -123,6 +123,13 @@ function stowImages() {
 		image.setAttribute("visibility","hidden");
 		image.clone.setAttribute("visibility","hidden");
 	}
+	var base;
+	var bases = getBases();
+	for(var ii=0;ii<bases.length;ii++) {
+		base = bases[ii];
+		base.setAttribute("visibility","hidden");
+		base.clone.setAttribute("visibility","hidden");
+	}
 }
 
 function restoreImages() {
@@ -132,6 +139,13 @@ function restoreImages() {
 		image = images[ii];
 		image.setAttribute("visibility","visible");
 		image.clone.setAttribute("visibility","visible");
+	}
+	var base;
+	var bases = getBases();
+	for(var ii=0;ii<bases.length;ii++) {
+		base = bases[ii];
+		base.setAttribute("visibility","visible");
+		base.clone.setAttribute("visibility","visible");
 	}
 }
 

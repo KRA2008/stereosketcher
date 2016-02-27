@@ -33,7 +33,7 @@ function selectShapesOfDot(dot,event) {
 	var lines = dot.lines;
 	var faces = dot.faces;
 	var images = dot.images;
-	var bases = dot.base;
+	var bases = dot.bases;
 	for(var ii=0;ii<lines.length;ii++) {
 		lines[ii].select();
 	}

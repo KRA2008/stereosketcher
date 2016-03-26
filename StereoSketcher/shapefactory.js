@@ -166,6 +166,8 @@ var shapeFactory = {
 					if(event.ctrlKey) {
 						if(doesElementHaveClass(this,"dot")) {
 							selectShapesOfDot(this,event);
+						} else if (doesElementHaveClass(this,"line")) {
+							selectDotsOfLine(this,event);
 						} else {
 							selectDotsOfFaceImageOrBase(this,event);
 						}

@@ -15,7 +15,9 @@ function moveSelectedToBack() {
     for(var jj=0;jj<removed.length;jj++) {
     	item = removed[jj];
 	    shapeGroup.insertBefore(item,shapeGroup.firstChild);
-	    shapeGroup.insertBefore(item.clone,shapeGroup.firstChild);
+	    if(item.clone) {
+	    	shapeGroup.insertBefore(item.clone,shapeGroup.firstChild);
+	    }
 	    if(item.under) {
 	            shapeGroup.insertBefore(item.under,shapeGroup.firstChild);
 	            shapeGroup.insertBefore(item.clone.under,shapeGroup.firstChild);

@@ -154,6 +154,14 @@ function dragHover(e) {
 	e.preventDefault();
 }
 
+function imageButtonClick(e) {
+	parseFile(imageButton.files[0],false);
+}
+
+function baseButtonClick(e) {
+	parseFile(baseButton.files[0],true);
+}
+
 function imageDragHandler(e) {
 	dragHandler(e,false);
 }
@@ -201,9 +209,9 @@ function createImage(image,asBase) {
 		}
 	}
 	if(selectedDots.length != requisiteDots) {
-		hideLoading();
-		return;
+		alert("Select "+requisiteDots+" dots first.");
+	} else {
+		shapeFactory.createImage(selectedDots,image,asBase);
 	}
-	shapeFactory.createImage(selectedDots,image,asBase);
 	hideLoading();
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton;
 var isEditMode=true;
 var mode=1;
 var pressX, pressY;
@@ -20,6 +20,8 @@ window.onload=function() {
 	fileInput = document.getElementById('fileInput');
 	imageDragger = document.getElementById('imageDrag');
 	baseDragger = document.getElementById('baseDrag');
+	imageButton = document.getElementById('imageButton');
+	baseButton = document.getElementById('baseButton');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -86,14 +88,16 @@ window.onload=function() {
 	imageDragger.addEventListener("dragleave", dragHover, false);
 	imageDragger.addEventListener("dragover", dragHover, false);
 	imageDragger.addEventListener("mouseenter",imageHover,false);
-	imageDragger.addEventListener("mouseleave",imageLeave,false);
+	imageDragger.addEventListener("mouseleave",imageLeave,false);	
+	imageButton.addEventListener('change',imageButtonClick, false);
 	
 	baseDragger.addEventListener("change", baseDragHandler, false);
 	baseDragger.addEventListener("drop", baseDragHandler, false);
 	baseDragger.addEventListener("dragleave", dragHover, false);
 	baseDragger.addEventListener("dragover", dragHover, false);
 	baseDragger.addEventListener("mouseenter",imageHover,false);
-	baseDragger.addEventListener("mouseleave",imageLeave,false);
+	baseDragger.addEventListener("mouseleave",imageLeave,false);	
+	baseButton.addEventListener('change',baseButtonClick,false);
 	
 	crossEyeMode();
 	picker.color.fromString("#000000");

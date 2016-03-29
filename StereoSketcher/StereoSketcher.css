@@ -25,11 +25,11 @@ html, body, svg
 	float:right;
 }
 
-#imageDrag :hover {
+#imageDrag:hover {
 	border: #008800 1px solid;
 }
 
-#baseDrag :hover {
+#baseDrag:hover {
 	border: #008800 1px solid;
 }
 
@@ -49,6 +49,24 @@ html, body, svg
     border-width: 1px;
 	border-bottom:none;
 	border-left:none;
+}
+
+#statusDiv div {
+	margin: 5px;
+}
+
+.bottomright
+{
+	position: absolute;
+	bottom:0;
+	right:0;
+	z-index: 9999;
+	background-color:white;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+	border-bottom:none;
+	border-right:none;
 }
 
 .topmiddle

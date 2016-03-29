@@ -60,8 +60,12 @@ function findSketchWidth() {
 	var width;
 	var dotX;
 	var dot;
-	if(getBases().length != 0) {
-		return 0;
+	var bases = getBases();
+	if(bases.length != 0) {
+		buffer = 0;
+		var x1 = bases[0].dots[0].getAttribute("cx");
+		var x2 = bases[0].dots[1].getAttribute("cx");
+		return (x2-x1)/2;
 	}
 	if(dots[0]) {
 		maxX = parseFloat(dots[0].getAttribute("cx"));

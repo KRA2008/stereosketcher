@@ -2,7 +2,6 @@
 
 var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton;
 var isEditMode=true;
-var mode=1;
 var pressX, pressY;
 var prevX, prevY;
 var loading=false;

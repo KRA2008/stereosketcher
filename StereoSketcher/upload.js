@@ -4,6 +4,8 @@ var imageToSend;
 function upload() {
 	showLoading();
 	setTimeout(function() {
+		deselectAll();
+		lowlightAll();
 		setSuccessDisplay("Converting SVG to PNG...");
 		hideToolbar();
 		if(isEditMode) {
@@ -84,7 +86,9 @@ function addWatermark() {
 	watermark.textContent="StereoSketcher.com";
 	watermarkClone.textContent="StereoSketcher.com";
 	svg.appendChild(watermark);
-	svg.appendChild(watermarkClone);
+	if(mode==1) {
+		svg.appendChild(watermarkClone);
+	}
 }
 
 function calculateWatermarkDot() {
@@ -105,7 +109,9 @@ function calculateWatermarkDot() {
 
 function hideWatermark() {
 	var watermark = document.getElementById("waterMark");
-	svg.removeChild(watermark);
-	var watermarkClone = document.getElementById("waterMarkClone");
-	svg.removeChild(watermarkClone);
+	svg.removeChild(watermark);	
+	if(mode==1) {
+		var watermarkClone = document.getElementById("waterMarkClone");
+		svg.removeChild(watermarkClone);
+	}
 }

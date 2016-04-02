@@ -1,5 +1,7 @@
 'use strict';
 
+var mode=1;
+
 function magicEyeMode() {
 	setMode(2);
 }

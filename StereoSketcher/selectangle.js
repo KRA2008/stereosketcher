@@ -60,7 +60,11 @@ function releaseSelectangle(event) {
 			var doty=parseFloat(dot.getAttribute("cy"));
 			if(dotx<maxx && dotx>minx) {
 				if(doty<maxy && doty>miny) {
-					dot.select();
+					if(event.ctrlKey) {
+						selectShapesOfDot(dot,event);
+					} else {
+						dot.select();
+					}
 				}
 			}
 		}

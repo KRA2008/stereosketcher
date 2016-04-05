@@ -165,10 +165,19 @@ var shapeFactory = {
 				} else if(wasAClick(event)) {
 					if(event.ctrlKey) {
 						if(doesElementHaveClass(this,"dot")) {
+							if(!event.shiftKey) {
+								deselectAll();
+							}
 							selectShapesOfDot(this,event);
 						} else if (doesElementHaveClass(this,"line")) {
+							if(!event.shiftKey) {
+								deselectAll();
+							}
 							selectDotsOfLine(this,event);
 						} else {
+							if(!event.shiftKey) {
+								deselectAll();
+							}
 							selectDotsOfFaceImageOrBase(this,event);
 						}
 					} else {

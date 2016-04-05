@@ -9,17 +9,11 @@ function lowlightAll() {
 }
 
 function selectDotsOfLine(line,event) {
-	if(!event.shiftKey) {
-		deselectAll();
-	}
 	line.dot1.select();
 	line.dot2.select();
 }
 
 function selectDotsOfFaceImageOrBase(shape,event) {
-	if(!event.shiftKey) {
-		deselectAll();
-	}
 	var dots = shape.dots;
 	for(var ii=0;ii<dots.length;ii++) {
 		dots[ii].select();
@@ -27,9 +21,6 @@ function selectDotsOfFaceImageOrBase(shape,event) {
 }
 
 function selectShapesOfDot(dot,event) {
-	if(!event.shiftKey) {
-		deselectAll();
-	}
 	var lines = dot.lines;
 	var faces = dot.faces;
 	var images = dot.images;

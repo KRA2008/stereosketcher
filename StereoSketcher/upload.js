@@ -55,9 +55,10 @@ function setSuccessDisplay(text,id) {
 }
 
 function addWatermark() {
+	var watermarkContent = "Sketch free @ StereoSketcher.com"
 	var size = 15
 	var height = 10;
-	var width = 145;
+	var width = 220;
 	var destinationDot = calculateWatermarkDot();
 	var watermark = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	watermark.setAttribute("id", "waterMark");
@@ -83,8 +84,8 @@ function addWatermark() {
 		watermark.setAttribute("fill", "white");
 		watermarkClone.setAttribute("fill", "white");
 	}
-	watermark.textContent="StereoSketcher.com";
-	watermarkClone.textContent="StereoSketcher.com";
+	watermark.textContent=watermarkContent;
+	watermarkClone.textContent=watermarkContent;
 	svg.appendChild(watermark);
 	if(mode==1) {
 		svg.appendChild(watermarkClone);

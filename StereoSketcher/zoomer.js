@@ -52,6 +52,7 @@ function applyZoom(zoom,centerX,centerY) {
 	buffer*=zoom;
 	shiftSpeed*=zoom;
 	defaultLineThickness*=zoom;
+	thickenRate*=zoom;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		oldX = parseFloat(dot.getAttribute("cx"));

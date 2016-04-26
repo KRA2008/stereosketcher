@@ -59,17 +59,18 @@ function addWatermark() {
 	var size = 15
 	var height = 10;
 	var width = 220;
-	var destinationDot = calculateWatermarkDot();
+	var rightest = findRightMostPosition();
+	var back = findBackMostShift();
 	var watermark = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	watermark.setAttribute("id", "waterMark");
 	watermark.setAttribute("y", window.innerHeight-height);
-	watermark.setAttribute("x", destinationDot.getAttribute("cx")-width);
+	watermark.setAttribute("x", rightest-width);
 	watermark.setAttribute("font-size",size);
 	watermark.setAttribute("font-family","Arial");
 	var watermarkClone = document.createElementNS("http://www.w3.org/2000/svg", "text");
 	watermarkClone.setAttribute("id", "waterMarkClone");
 	watermarkClone.setAttribute("y", window.innerHeight-height);
-	watermarkClone.setAttribute("x", parseFloat(destinationDot.getAttribute("cx"))+destinationDot.getShift()*shiftSpeed+IPD-width);
+	watermarkClone.setAttribute("x", rightest+back*shiftSpeed+IPD-width);
 	watermarkClone.setAttribute("font-size",size);
 	watermarkClone.setAttribute("font-family","Arial");
 	var backgroundColor = parseInt("0x"+getBackgroundColor().substr(1,6));
@@ -92,7 +93,7 @@ function addWatermark() {
 	}
 }
 
-function calculateWatermarkDot() {
+function findBackMostShift() {
 	var dots = getDots();
 	var targetDot = dots[0];
 	for(var ii=1;ii<dots.length;ii++) {
@@ -100,12 +101,18 @@ function calculateWatermarkDot() {
 			targetDot = dots[ii];
 		}
 	}
-	for(var jj=0;jj<dots.length;jj++) {
-		if(dots[jj].getShift() == targetDot.getShift() && dots[jj].getAttribute("cx")>targetDot.getAttribute("cx")) {
+	return targetDot.getShift();
+}
+
+function findRightMostPosition() {
+	var dots = getDots();
+	var targetDot = dots[0];
+	for(var jj=1;jj<dots.length;jj++) {
+		if(parseFloat(dots[jj].getAttribute("cx"))>parseFloat(targetDot.getAttribute("cx"))) {
 			targetDot = dots[jj];
 		}
 	}
-	return targetDot;
+	return parseFloat(targetDot.getAttribute("cx"));
 }
 
 function hideWatermark() {

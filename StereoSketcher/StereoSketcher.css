@@ -18,6 +18,9 @@ html, body, svg
 	top:0; 
 	right:0;
 	z-index: 9999;
+	border: 1px solid black;
+	border-top:none;
+	border-right:none;
 }
 
 .fileButton
@@ -44,9 +47,7 @@ html, body, svg
 	left:0;
 	z-index: 9999;
 	background-color:white;
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
+	border: 1px solid black;
 	border-bottom:none;
 	border-left:none;
 }
@@ -73,7 +74,7 @@ html, body, svg
 {
 	position: absolute; 
 	top:0; 
-	left:50%; 
+	left:37%; 
 	z-index: 9998;
 }
 

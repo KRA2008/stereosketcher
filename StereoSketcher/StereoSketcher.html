@@ -27,6 +27,8 @@
 		<script type="text/javascript" src="saveandload.js"></script>
 		<script type="text/javascript" src="FileSaver.min.js"></script>
 		<script type="text/javascript" src="toolbar.js"></script>
+		<script type="text/javascript" src="gifshot.js"></script>
+		<script type="text/javascript" src="uploadGif.js"></script>
 		<script type="text/javascript" src="StereoSketcher.js"></script>
 		<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-56107665-1', 'auto');ga('send', 'pageview');
@@ -34,6 +36,15 @@
 	</head>
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
 		<div id="pickerDiv" class="bottomleft">
+			<div>
+				<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
+				<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
+				<input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
+				<br/>
+				<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
+				<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
+			</div>
+			<hr/>
 			<form>
 				<div>
 					<div id="imageDrag">
@@ -47,15 +58,6 @@
 				</div>
 					<div>or <input id="baseButton" type="file"/></div>
 			</form>
-			<hr/>
-			<div>
-				<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
-				<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
-				<input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
-				<br/>
-				<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
-				<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
-			</div>
 		</div>
 		<div id="statusDiv" class="bottomright">
 			<div>
@@ -70,14 +72,13 @@
 			</div>
 		</div>
 		<div class="topright">
-			<div class="fileButton">
-				Load project: <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/><br/>
+			<div align="right" >
+				<span>Load project: <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/></span><br/>
 				<input type="button" onclick="save()" value="Save project"/>
+				<input type="button" onclick="upload()" value="Upload to imgur"/>
+				</span><input type="button" onclick="uploadGif()" value="Upload rotating gif"/></span><br/>
+				<span id="uploadResult">&nbsp;</span>
 			</div>
-			<br/>
-			<br/>
-			<span class="fileButton"><input type="button" onclick="upload()" value="Upload to imgur"/></span><br/>
-			<span class="fileButton" id="uploadResult"></span><br/>
 		</div>
 		<div class="topmiddle">
 			<div class="innermiddle">

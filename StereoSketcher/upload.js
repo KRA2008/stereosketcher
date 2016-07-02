@@ -13,13 +13,13 @@ function upload() {
 		}
 		setTimeout(function() {
 			addWatermark();
-			saveSvgAsPng(document.getElementById("svg"), 1);
+			saveSvgAsPng(document.getElementById("svg"), 1,sendToImgur);
 			setSuccessDisplay("Uploading image...");
 		},200);
 	},200);
 }
 
-function sendToImgur() {
+function sendToImgur(imageToSend) {
 	hideWatermark();
 	showToolbar();
 	var params="image="+encodeURIComponent(imageToSend)+"&album=MciDbSPWF44zMaA";

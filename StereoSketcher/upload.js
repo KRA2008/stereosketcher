@@ -13,17 +13,23 @@ function upload() {
 		}
 		setTimeout(function() {
 			addWatermark();
-			saveSvgAsPng(document.getElementById("svg"), 1,sendToImgur);
+			saveSvgAsPng(document.getElementById("svg"), 1,standaloneUploadCallback);
 			setSuccessDisplay("Uploading image...");
 		},200);
 	},200);
 }
 
-function sendToImgur(imageToSend) {
+function standaloneUploadCallback(imageToSend) {
 	hideWatermark();
 	showToolbar();
-	var params="image="+encodeURIComponent(imageToSend)+"&album=MciDbSPWF44zMaA";
-	
+	uploadToImgur(imageToSend,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
+}
+
+function uploadToImgur(imageToSend,success,failure,album) {
+	var params="image="+encodeURIComponent(imageToSend);
+	if(album) {
+		params+="&album="+album;
+	}
 	var ajax = new XMLHttpRequest();
 	ajax.open("POST","https://api.imgur.com/3/image",true);
 	ajax.setRequestHeader("Authorization", "Client-ID aa408da70b6d569");
@@ -32,25 +38,25 @@ function sendToImgur(imageToSend) {
 		if(ajax.readyState === 4) {
 			if(ajax.status === 200) {
 				var response = JSON.parse(ajax.responseText);
-				setSuccessDisplay("Success!",response.data.id);
+				success(response.data.id)
 			} else {
-				setSuccessDisplay("Upload failed.");
+				failure();
 			}
 		}
 	}
 	ajax.onerror = function (e) {
-		setSuccessDisplay("Upload failed.");
+		failure();
 	}
 	ajax.send(params);
 }
 
-function setSuccessDisplay(text,id) {
+function setSuccessDisplay(id) {
 	var resultDisplay = document.getElementById("uploadResult");
 	if(id) {
-		resultDisplay.innerHTML = "<a target='none' href='http://imgur.com/"+id+"'>"+text+"</a>"
+		resultDisplay.innerHTML = "<a target='none' href='http://imgur.com/"+id+"'>Success!</a>"
 		hideLoading();
 	} else {
-		resultDisplay.innerHTML = text;
+		resultDisplay.innerHTML = "Upload failed.";
 	}
 }
 

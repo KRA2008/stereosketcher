@@ -1,7 +1,10 @@
 'use strict';
 
-var frames = 20;
+var frames = 40;
 var equivalence = 4;
+var gifFrames = [];
+var imagesToSend = [];
+var loopFrames = 0;
 
 function uploadGif() {
 	var axisDot = findAxisDot();
@@ -10,11 +13,50 @@ function uploadGif() {
 		return;
 	}
 	assignDistances(axisDot);
-	//viewMode();
-	//for(var ii=0;ii<frames;ii++) {
-		rotate(axisDot);
-		//saveSvgAsPng(document.getElementById("svg"), 1,sendToImgur);
-	//}
+	viewMode();
+	loopFrames = 1;
+	loopFrameUpload(axisDot);
+}
+
+function loopFrameUpload(axisDot) {
+	if(loopFrames > frames) {
+		fixPrecisionErrors();
+		uploadFrames();
+		return;
+	}
+	rotate(axisDot,loopFrames);
+	setTimeout(function() {
+		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback);
+		loopFrames++;
+		loopFrameUpload(axisDot);
+	},200);
+}
+
+function fixPrecisionErrors() {
+	var dots = getDots();
+	var dot;
+	for (var ii=0;ii<dots.length;ii++) {
+		dot = dots[ii];
+		dot.setShift(Math.trunc(dot.getShift()+0.5));
+	}
+}
+
+function gifFrameUploadCallback(imageToSend) {
+	imagesToSend.push(imageToSend);
+}
+
+function uploadFrames() {
+	for(var ii=0;ii<imagesToSend.length;ii++) {
+		uploadToImgur(imagesToSend[ii],gifFrameSuccess,gifFrameFailure,"MciDbSPWF44zMaA");
+	}
+}
+
+function gifFrameSuccess(id) {
+	gifFrames.push(id);
+}
+
+function gifFrameFailure() {
+	alert('poo.');
 }
 
 function findAxisDot() {
@@ -51,8 +93,8 @@ function assignDistances(axis) {
 	}
 }
 
-function rotate(axisDot) {
-	var rotInc = 2*Math.PI/frames;
+function rotate(axisDot,frame) {
+	var rotInc = 2*Math.PI*frame/frames;
 	var dots = getDots();
 	var dot;
 	var cx;

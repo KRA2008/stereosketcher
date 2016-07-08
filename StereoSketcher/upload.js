@@ -25,7 +25,7 @@ function standaloneUploadCallback(imageToSend) {
 	uploadToImgur(imageToSend,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
 }
 
-function uploadToImgur(imageToSend,success,failure,album) {
+function uploadToImgur(imageToSend,success,failure,album,counter) {
 	var params="image="+encodeURIComponent(imageToSend);
 	if(album) {
 		params+="&album="+album;
@@ -38,7 +38,7 @@ function uploadToImgur(imageToSend,success,failure,album) {
 		if(ajax.readyState === 4) {
 			if(ajax.status === 200) {
 				var response = JSON.parse(ajax.responseText);
-				success(response.data.id)
+				success(response.data.id,counter)
 			} else {
 				failure();
 			}

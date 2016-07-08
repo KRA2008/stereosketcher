@@ -4,7 +4,8 @@ var frames = 40;
 var equivalence = 4;
 var gifFrames = [];
 var imagesToSend = [];
-var loopFrames = 0;
+var loopFrames;
+var uploadedFrames;
 
 function uploadGif() {
 	var axisDot = findAxisDot();
@@ -14,19 +15,21 @@ function uploadGif() {
 	}
 	assignDistances(axisDot);
 	viewMode();
-	loopFrames = 1;
+	uploadedFrames = 0;
+	loopFrames = 0;
 	loopFrameUpload(axisDot);
 }
 
 function loopFrameUpload(axisDot) {
-	if(loopFrames > frames) {
+	if(loopFrames >= frames) {
 		fixPrecisionErrors();
 		uploadFrames();
 		return;
 	}
 	rotate(axisDot,loopFrames);
 	setTimeout(function() {
-		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback);
+		var innerLoop = loopFrames;
+		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback,innerLoop);
 		loopFrames++;
 		loopFrameUpload(axisDot);
 	},200);
@@ -41,18 +44,36 @@ function fixPrecisionErrors() {
 	}
 }
 
-function gifFrameUploadCallback(imageToSend) {
-	imagesToSend.push(imageToSend);
+function gifFrameUploadCallback(imageToSend,counter) {
+	imagesToSend[counter]=imageToSend;
 }
 
 function uploadFrames() {
 	for(var ii=0;ii<imagesToSend.length;ii++) {
-		uploadToImgur(imagesToSend[ii],gifFrameSuccess,gifFrameFailure,"MciDbSPWF44zMaA");
+		uploadToImgur(imagesToSend[ii],gifFrameSuccess,gifFrameFailure,null,ii);
 	}
 }
 
-function gifFrameSuccess(id) {
-	gifFrames.push(id);
+function gifFrameSuccess(id,counter) {
+	gifFrames[counter]='http://i.imgur.com/'+id;
+	uploadedFrames++;
+	if(uploadedFrames >= frames) {
+		makeGif();
+	}
+}
+
+function makeGif() {
+	gifshot.createGIF({
+	    gifWidth: window.innerWidth,
+	    gifHeight: window.innerHeight,
+	    images: gifFrames,
+	    interval: 0.025,
+	    numFrames: frames
+	}, function (obj) {
+	    if (!obj.error) {
+	        uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
+	    }
+	});
 }
 
 function gifFrameFailure() {
@@ -94,7 +115,7 @@ function assignDistances(axis) {
 }
 
 function rotate(axisDot,frame) {
-	var rotInc = 2*Math.PI*frame/frames;
+	var rotInc = (2*Math.PI*frame+1)/frames;
 	var dots = getDots();
 	var dot;
 	var cx;

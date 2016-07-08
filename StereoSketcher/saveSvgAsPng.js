@@ -96,7 +96,7 @@
     });
   }
 
-  out$.saveSvgAsPng = function(el, scaleFactor, callback) {
+  out$.saveSvgAsPng = function(el, scaleFactor, callback, counter) {
     out$.svgAsDataUri(el, scaleFactor, function(uri) {
       var image = new Image();
       image.src = uri;
@@ -106,7 +106,7 @@
         canvas.height = image.height;
         var context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
-        callback(canvas.toDataURL('image/png').slice(22))
+        callback(canvas.toDataURL('image/png').slice(22),counter)
       }
     });
   }

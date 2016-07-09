@@ -106,7 +106,7 @@
         canvas.height = image.height;
         var context = canvas.getContext('2d');
         context.drawImage(image, 0, 0);
-        callback(canvas.toDataURL('image/png').slice(22),counter)
+        callback(canvas.toDataURL('image/png'),counter)
       }
     });
   }

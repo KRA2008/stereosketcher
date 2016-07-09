@@ -6,7 +6,7 @@ function upload() {
 	setTimeout(function() {
 		deselectAll();
 		lowlightAll();
-		setSuccessDisplay("Converting SVG to PNG...");
+		setDisplay("Converting SVG to PNG...");
 		hideToolbar();
 		if(isEditMode) {
 			viewMode();
@@ -14,7 +14,7 @@ function upload() {
 		setTimeout(function() {
 			addWatermark();
 			saveSvgAsPng(document.getElementById("svg"), 1,standaloneUploadCallback);
-			setSuccessDisplay("Uploading image...");
+			setDisplay("Uploading image...");
 		},200);
 	},200);
 }
@@ -26,7 +26,7 @@ function standaloneUploadCallback(imageToSend) {
 }
 
 function uploadToImgur(imageToSend,success,failure,album,counter) {
-	var params="image="+encodeURIComponent(imageToSend);
+	var params="image="+encodeURIComponent(imageToSend.slice(22));
 	if(album) {
 		params+="&album="+album;
 	}
@@ -48,6 +48,11 @@ function uploadToImgur(imageToSend,success,failure,album,counter) {
 		failure();
 	}
 	ajax.send(params);
+}
+
+function setDisplay(text) {
+	var resultDisplay = document.getElementById("uploadResult");
+	resultDisplay.innerHTML = text;
 }
 
 function setSuccessDisplay(id) {

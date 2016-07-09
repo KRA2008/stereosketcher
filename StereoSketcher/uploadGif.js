@@ -1,11 +1,14 @@
 'use strict';
 
-var frames = 40;
+var frames = 4;
 var equivalence = 4;
-var gifFrames = [];
-var imagesToSend = [];
+var frameTime = 0.2
+var gifFrames;
+var imagesToSend;
 var loopFrames;
 var uploadedFrames;
+
+//TODO: apply circular correction
 
 function uploadGif() {
 	var axisDot = findAxisDot();
@@ -13,8 +16,12 @@ function uploadGif() {
 		alert("Please create/select one dot to indicate the position of the axis of rotation.");
 		return;
 	}
+	setDisplay("Gathering frames...");
+	hideToolbar();
 	assignDistances(axisDot);
 	viewMode();
+	gifFrames = [];
+	imagesToSend = [];
 	uploadedFrames = 0;
 	loopFrames = 0;
 	loopFrameUpload(axisDot);
@@ -22,7 +29,9 @@ function uploadGif() {
 
 function loopFrameUpload(axisDot) {
 	if(loopFrames >= frames) {
+		showToolbar();
 		fixPrecisionErrors();
+		setDisplay("Uploading frames...");
 		uploadFrames();
 		return;
 	}
@@ -55,7 +64,7 @@ function uploadFrames() {
 }
 
 function gifFrameSuccess(id,counter) {
-	gifFrames[counter]='http://i.imgur.com/'+id;
+	gifFrames[counter]='http://i.imgur.com/'+id+'.png';
 	uploadedFrames++;
 	if(uploadedFrames >= frames) {
 		makeGif();
@@ -63,17 +72,43 @@ function gifFrameSuccess(id,counter) {
 }
 
 function makeGif() {
+	setDisplay("Stitching frames...");
 	gifshot.createGIF({
-	    gifWidth: window.innerWidth,
-	    gifHeight: window.innerHeight,
-	    images: gifFrames,
-	    interval: 0.025,
-	    numFrames: frames
+		gifWidth: window.innerWidth,
+		gifHeight: window.innerHeight,
+		images: gifFrames,
+		interval: frameTime,
+		numFrames: frames
 	}, function (obj) {
-	    if (!obj.error) {
-	        uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
-	    }
+		if (!obj.error) {
+			setDisplay("Uploading gif...");
+			uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
+		}
 	});
+}
+
+function postToiBacor() {
+
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "http://ibacor.com/bcr_panels/gif/maker.php");
+
+	var bacor = {
+		
+	};
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
 }
 
 function gifFrameFailure() {

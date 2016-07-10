@@ -1,12 +1,11 @@
 'use strict';
 
-var frames = 4;
+var frames = 30;
 var equivalence = 4;
 var frameTime = 0.2
 var gifFrames;
-var imagesToSend;
 var loopFrames;
-var uploadedFrames;
+var uploadedFramesCount;
 
 //TODO: apply circular correction
 
@@ -16,23 +15,18 @@ function uploadGif() {
 		alert("Please create/select one dot to indicate the position of the axis of rotation.");
 		return;
 	}
-	setDisplay("Gathering frames...");
+	setDisplay("Gathering and uploading frames...");
 	hideToolbar();
 	assignDistances(axisDot);
 	viewMode();
 	gifFrames = [];
-	imagesToSend = [];
-	uploadedFrames = 0;
+	uploadedFramesCount = 0;
 	loopFrames = 0;
 	loopFrameUpload(axisDot);
 }
 
 function loopFrameUpload(axisDot) {
 	if(loopFrames >= frames) {
-		showToolbar();
-		fixPrecisionErrors();
-		setDisplay("Uploading frames...");
-		uploadFrames();
 		return;
 	}
 	rotate(axisDot,loopFrames);
@@ -41,7 +35,7 @@ function loopFrameUpload(axisDot) {
 		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback,innerLoop);
 		loopFrames++;
 		loopFrameUpload(axisDot);
-	},200);
+	},1000);
 }
 
 function fixPrecisionErrors() {
@@ -54,19 +48,15 @@ function fixPrecisionErrors() {
 }
 
 function gifFrameUploadCallback(imageToSend,counter) {
-	imagesToSend[counter]=imageToSend;
-}
-
-function uploadFrames() {
-	for(var ii=0;ii<imagesToSend.length;ii++) {
-		uploadToImgur(imagesToSend[ii],gifFrameSuccess,gifFrameFailure,null,ii);
-	}
+	uploadToImgur(imageToSend,gifFrameSuccess,gifFrameFailure,null,counter);
 }
 
 function gifFrameSuccess(id,counter) {
 	gifFrames[counter]='http://i.imgur.com/'+id+'.png';
-	uploadedFrames++;
-	if(uploadedFrames >= frames) {
+	uploadedFramesCount++;
+	if(uploadedFramesCount >= frames) {
+		showToolbar();
+		fixPrecisionErrors();
 		makeGif();
 	}
 }
@@ -150,7 +140,7 @@ function assignDistances(axis) {
 }
 
 function rotate(axisDot,frame) {
-	var rotInc = (2*Math.PI*frame+1)/frames;
+	var rotInc = 2*Math.PI*frame/frames;
 	var dots = getDots();
 	var dot;
 	var cx;

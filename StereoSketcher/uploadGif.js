@@ -2,7 +2,8 @@
 
 var frames = 30;
 var equivalence = 4;
-var frameTime = 0.2
+var frameTime = 0.1
+var things = [];
 var gifFrames;
 var loopFrames;
 var uploadedFramesCount;
@@ -35,7 +36,7 @@ function loopFrameUpload(axisDot) {
 		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback,innerLoop);
 		loopFrames++;
 		loopFrameUpload(axisDot);
-	},1000);
+	},500);
 }
 
 function fixPrecisionErrors() {
@@ -43,7 +44,11 @@ function fixPrecisionErrors() {
 	var dot;
 	for (var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		dot.setShift(Math.trunc(dot.getShift()+0.5));
+		if(dot.getShift() >= 0) {
+			dot.setShift(Math.trunc(dot.getShift()+0.5));
+		} else {
+			dot.setShift(Math.trunc(dot.getShift()-0.5));
+		}
 	}
 }
 
@@ -140,16 +145,14 @@ function assignDistances(axis) {
 }
 
 function rotate(axisDot,frame) {
-	var rotInc = 2*Math.PI*frame/frames;
+	var rotInc = 2*Math.PI*frame/(frames-1);
 	var dots = getDots();
 	var dot;
-	var cx;
-	var cz;
+	var cx = parseFloat(axisDot.getAttribute("cx"));
+	var cz = axisDot.getShift()*equivalence;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
 		if(dot != axisDot) {
-			cx = parseFloat(axisDot.getAttribute("cx"));
-			cz = axisDot.getShift()*equivalence;
 			dot.setAttribute("cx",cx-dot.seedDistance*Math.cos(rotInc+dot.seedAngle));
 			dot.setShift((cz+dot.seedDistance*Math.sin(rotInc+dot.seedAngle))/equivalence);
 		}

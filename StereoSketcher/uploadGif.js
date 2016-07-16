@@ -1,14 +1,12 @@
 'use strict';
 
-var frames = 30;
+var frames = 40;
 var equivalence = 4;
 var frameTime = 0.1
 var things = [];
 var gifFrames;
 var loopFrames;
 var uploadedFramesCount;
-
-//TODO: apply circular correction
 
 function uploadGif() {
 	var axisDot = findAxisDot();
@@ -28,9 +26,10 @@ function uploadGif() {
 
 function loopFrameUpload(axisDot) {
 	if(loopFrames >= frames) {
+		rotate3d(axisDot,0);
 		return;
 	}
-	rotate(axisDot,loopFrames);
+	rotate3d(axisDot,loopFrames);
 	setTimeout(function() {
 		var innerLoop = loopFrames;
 		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback,innerLoop);
@@ -144,8 +143,8 @@ function assignDistances(axis) {
 	}
 }
 
-function rotate(axisDot,frame) {
-	var rotInc = 2*Math.PI*frame/(frames-1);
+function rotate3d(axisDot,frame) {
+	var rotInc = 2*Math.PI*frame/(frames+1);
 	var dots = getDots();
 	var dot;
 	var cx = parseFloat(axisDot.getAttribute("cx"));

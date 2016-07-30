@@ -38,7 +38,7 @@ function uploadToImgur(imageToSend,success,failure,album,counter) {
 		if(ajax.readyState === 4) {
 			if(ajax.status === 200) {
 				var response = JSON.parse(ajax.responseText);
-				success(response.data.id,counter)
+				success(response.data.id,counter,response.data.deletehash);
 			} else {
 				failure();
 			}
@@ -65,7 +65,7 @@ function setSuccessDisplay(id) {
 	}
 }
 
-function addWatermark() {
+function addWatermark(non3d) {
 	var watermarkContent = "Sketch free @ StereoSketcher.com"
 	var size = 15
 	var height = 10;
@@ -99,7 +99,7 @@ function addWatermark() {
 	watermark.textContent=watermarkContent;
 	watermarkClone.textContent=watermarkContent;
 	svg.appendChild(watermark);
-	if(mode==1) {
+	if(mode==1 && !non3d) {
 		svg.appendChild(watermarkClone);
 	}
 }

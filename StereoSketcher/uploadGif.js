@@ -1,10 +1,10 @@
 'use strict';
 
-var frames = 40;
+var frames = 60;
 var equivalence = 4;
-var frameTime = 0.1
-var things = [];
+var frameTime = 0.07
 var gifFrames;
+var deletes;
 var loopFrames;
 var uploadedFramesCount;
 
@@ -16,9 +16,12 @@ function uploadGif() {
 	}
 	setDisplay("Gathering and uploading frames...");
 	hideToolbar();
+	showLoading();
+	addWatermark(true);
 	assignDistances(axisDot);
 	viewMode();
 	gifFrames = [];
+	deletes = [];
 	uploadedFramesCount = 0;
 	loopFrames = 0;
 	loopFrameUpload(axisDot);
@@ -52,14 +55,17 @@ function fixPrecisionErrors() {
 }
 
 function gifFrameUploadCallback(imageToSend,counter) {
-	uploadToImgur(imageToSend,gifFrameSuccess,gifFrameFailure,null,counter);
+	uploadToImgur(imageToSend,gifFrameSuccess,gifFrameSuccess,null,counter);
 }
 
-function gifFrameSuccess(id,counter) {
+function gifFrameSuccess(id,counter,deleteHash) {
 	gifFrames[counter]='http://i.imgur.com/'+id+'.png';
+	deletes[counter]=deleteHash;
 	uploadedFramesCount++;
 	if(uploadedFramesCount >= frames) {
 		showToolbar();
+		hideLoading();
+		hideWatermark();
 		fixPrecisionErrors();
 		makeGif();
 	}
@@ -77,36 +83,19 @@ function makeGif() {
 		if (!obj.error) {
 			setDisplay("Uploading gif...");
 			uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
+			for(var ii=0;ii<deletes.length;ii++) {
+				deleteImage(deletes[ii]);
+			}
 		}
 	});
 }
 
-function postToiBacor() {
-
-    var form = document.createElement("form");
-    form.setAttribute("method", "post");
-    form.setAttribute("action", "http://ibacor.com/bcr_panels/gif/maker.php");
-
-	var bacor = {
-		
-	};
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
-            var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", params[key]);
-
-            form.appendChild(hiddenField);
-         }
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-}
-
-function gifFrameFailure() {
-	alert('poo.');
+function deleteImage(deleteHash) {
+	var ajax = new XMLHttpRequest();
+	ajax.open("DELETE","https://api.imgur.com/3/image/"+deleteHash,true);
+	ajax.setRequestHeader("Authorization", "Client-ID aa408da70b6d569");
+	ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	ajax.send();
 }
 
 function findAxisDot() {

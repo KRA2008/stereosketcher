@@ -3,10 +3,7 @@
 var frames = 60;
 var equivalence = 4;
 var frameTime = 0.07
-var gifFrames;
-var deletes;
 var loopFrames;
-var uploadedFramesCount;
 
 function uploadGif() {
 	var axisDot = findAxisDot();
@@ -20,24 +17,29 @@ function uploadGif() {
 	addWatermark(true);
 	assignDistances(axisDot);
 	viewMode();
-	gifFrames = [];
-	deletes = [];
-	uploadedFramesCount = 0;
 	loopFrames = 0;
-	loopFrameUpload(axisDot);
+	while (gifFrames.firstChild) {
+	    gifFrames.removeChild(gifFrames.firstChild);
+	}
+	loopFrameSave(axisDot);
 }
 
-function loopFrameUpload(axisDot) {
+function loopFrameSave(axisDot) {
 	if(loopFrames >= frames) {
 		rotate3d(axisDot,0);
+		showToolbar();
+		hideLoading();
+		hideWatermark(true);
+		fixPrecisionErrors();
+		makeGif();
 		return;
 	}
 	rotate3d(axisDot,loopFrames);
 	setTimeout(function() {
 		var innerLoop = loopFrames;
-		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameUploadCallback,innerLoop);
+		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback,innerLoop);
 		loopFrames++;
-		loopFrameUpload(axisDot);
+		loopFrameSave(axisDot);
 	},500);
 }
 
@@ -54,48 +56,29 @@ function fixPrecisionErrors() {
 	}
 }
 
-function gifFrameUploadCallback(imageToSend,counter) {
-	uploadToImgur(imageToSend,gifFrameSuccess,gifFrameSuccess,null,counter);
-}
-
-function gifFrameSuccess(id,counter,deleteHash) {
-	gifFrames[counter]='http://i.imgur.com/'+id+'.png';
-	deletes[counter]=deleteHash;
-	uploadedFramesCount++;
-	if(uploadedFramesCount >= frames) {
-		showToolbar();
-		hideLoading();
-		hideWatermark();
-		fixPrecisionErrors();
-		makeGif();
-	}
+function gifFrameSaveCallback(imageToSend,counter) {
+	var image = document.createElement('img');
+	image.src = imageToSend;
+	gifFrames.appendChild(image);
 }
 
 function makeGif() {
 	setDisplay("Stitching frames...");
+	var children = Array.prototype.slice.call(gifFrames.childNodes);
 	gifshot.createGIF({
 		gifWidth: window.innerWidth,
 		gifHeight: window.innerHeight,
-		images: gifFrames,
+		images: children,
 		interval: frameTime,
 		numFrames: frames
 	}, function (obj) {
 		if (!obj.error) {
 			setDisplay("Uploading gif...");
 			uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
-			for(var ii=0;ii<deletes.length;ii++) {
-				deleteImage(deletes[ii]);
-			}
+		} else {
+			setDisplay(obj.error);
 		}
 	});
-}
-
-function deleteImage(deleteHash) {
-	var ajax = new XMLHttpRequest();
-	ajax.open("DELETE","https://api.imgur.com/3/image/"+deleteHash,true);
-	ajax.setRequestHeader("Authorization", "Client-ID aa408da70b6d569");
-	ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	ajax.send();
 }
 
 function findAxisDot() {

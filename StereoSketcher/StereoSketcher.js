@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton,gifFrames;
 var isEditMode=true;
 var pressX, pressY;
 var prevX, prevY;
@@ -21,6 +21,7 @@ window.onload=function() {
 	baseDragger = document.getElementById('baseDrag');
 	imageButton = document.getElementById('imageButton');
 	baseButton = document.getElementById('baseButton');
+	gifFrames = document.getElementById('gifFrames');
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;

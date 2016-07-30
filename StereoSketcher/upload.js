@@ -126,10 +126,10 @@ function findRightMostPosition() {
 	return parseFloat(targetDot.getAttribute("cx"));
 }
 
-function hideWatermark() {
+function hideWatermark(non3d) {
 	var watermark = document.getElementById("waterMark");
 	svg.removeChild(watermark);	
-	if(mode==1) {
+	if(mode==1 && !non3d) {
 		var watermarkClone = document.getElementById("waterMarkClone");
 		svg.removeChild(watermarkClone);
 	}

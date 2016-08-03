@@ -11,10 +11,10 @@ function uploadGif() {
 		alert("Please create/select one dot to indicate the position of the axis of rotation.");
 		return;
 	}
-	setDisplay("Gathering and uploading frames...");
+	setDisplay("Gathering frames...");
 	hideToolbar();
 	showLoading();
-	addWatermark(true);
+	addWatermark();
 	assignDistances(axisDot);
 	viewMode();
 	loopFrames = 0;
@@ -26,12 +26,14 @@ function uploadGif() {
 
 function loopFrameSave(axisDot) {
 	if(loopFrames >= frames) {
-		rotate3d(axisDot,0);
-		showToolbar();
-		hideLoading();
-		hideWatermark(true);
-		fixPrecisionErrors();
-		makeGif();
+		setTimeout(function() {
+			showToolbar();
+			hideLoading();
+			hideWatermark();
+			fixPrecisionErrors();
+			rotate3d(axisDot,0);
+			makeGif();
+		},500);
 		return;
 	}
 	rotate3d(axisDot,loopFrames);
@@ -63,7 +65,7 @@ function gifFrameSaveCallback(imageToSend,counter) {
 }
 
 function makeGif() {
-	setDisplay("Stitching frames...");
+	setDisplay("Stitching frames...(can take a minute)");
 	var children = Array.prototype.slice.call(gifFrames.childNodes);
 	gifshot.createGIF({
 		gifWidth: window.innerWidth,

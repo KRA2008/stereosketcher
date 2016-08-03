@@ -65,25 +65,39 @@ function setSuccessDisplay(id) {
 	}
 }
 
-function addWatermark(non3d) {
-	var watermarkContent = "Sketch free @ StereoSketcher.com"
-	var size = 15
+function addWatermark() {
+	var watermarkPrefixContent = "Sketch Free @";
+	var watermarkContent = "StereoSketcher.com";
+	var size = 15;
 	var height = 10;
+	var prefixHeight = 15;
 	var width = 220;
 	var rightest = findRightMostPosition();
 	var back = findBackMostShift();
 	var watermark = document.createElementNS("http://www.w3.org/2000/svg", "text");
-	watermark.setAttribute("id", "waterMark");
+	watermark.setAttribute("id", "watermark");
 	watermark.setAttribute("y", window.innerHeight-height);
 	watermark.setAttribute("x", rightest-width);
 	watermark.setAttribute("font-size",size);
 	watermark.setAttribute("font-family","Arial");
+	var watermarkPrefix = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	watermarkPrefix.setAttribute("id", "watermarkPrefix");
+	watermarkPrefix.setAttribute("y", window.innerHeight-height-prefixHeight);
+	watermarkPrefix.setAttribute("x", rightest-width);
+	watermarkPrefix.setAttribute("font-size",size);
+	watermarkPrefix.setAttribute("font-family","Arial");
 	var watermarkClone = document.createElementNS("http://www.w3.org/2000/svg", "text");
-	watermarkClone.setAttribute("id", "waterMarkClone");
+	watermarkClone.setAttribute("id", "watermarkClone");
 	watermarkClone.setAttribute("y", window.innerHeight-height);
 	watermarkClone.setAttribute("x", rightest+back*shiftSpeed+IPD-width);
 	watermarkClone.setAttribute("font-size",size);
 	watermarkClone.setAttribute("font-family","Arial");
+	var watermarkPrefixClone = document.createElementNS("http://www.w3.org/2000/svg", "text");
+	watermarkPrefixClone.setAttribute("id", "watermarkPrefixClone");
+	watermarkPrefixClone.setAttribute("y", window.innerHeight-height-prefixHeight);
+	watermarkPrefixClone.setAttribute("x", rightest+back*shiftSpeed+IPD-width);
+	watermarkPrefixClone.setAttribute("font-size",size);
+	watermarkPrefixClone.setAttribute("font-family","Arial");
 	var backgroundColor = parseInt("0x"+getBackgroundColor().substr(1,6));
 	var chunk1 = backgroundColor&0xff;
 	var chunk2 = (backgroundColor&0xff00)>>8;
@@ -91,16 +105,24 @@ function addWatermark(non3d) {
 	var backgroundSum = chunk1+chunk2+chunk3;
 	if(backgroundSum>382) {
 		watermark.setAttribute("fill", "black");
+		watermarkPrefix.setAttribute("fill", "black");
 		watermarkClone.setAttribute("fill", "black");
+		watermarkPrefixClone.setAttribute("fill", "black");
 	} else {
 		watermark.setAttribute("fill", "white");
+		watermarkPrefix.setAttribute("fill", "white");
 		watermarkClone.setAttribute("fill", "white");
+		watermarkPrefixClone.setAttribute("fill", "white");
 	}
 	watermark.textContent=watermarkContent;
+	watermarkPrefix.textContent=watermarkPrefixContent;
 	watermarkClone.textContent=watermarkContent;
+	watermarkPrefixClone.textContent=watermarkPrefixContent;
 	svg.appendChild(watermark);
-	if(mode==1 && !non3d) {
+	svg.appendChild(watermarkPrefix);
+	if(mode==1) {
 		svg.appendChild(watermarkClone);
+		svg.appendChild(watermarkPrefixClone);
 	}
 }
 
@@ -126,11 +148,15 @@ function findRightMostPosition() {
 	return parseFloat(targetDot.getAttribute("cx"));
 }
 
-function hideWatermark(non3d) {
-	var watermark = document.getElementById("waterMark");
-	svg.removeChild(watermark);	
-	if(mode==1 && !non3d) {
-		var watermarkClone = document.getElementById("waterMarkClone");
+function hideWatermark() {
+	var watermark = document.getElementById("watermark");
+	var watermarkPrefix = document.getElementById("watermarkPrefix");
+	svg.removeChild(watermark);
+	svg.removeChild(watermarkPrefix);
+	if(mode==1) {
+		var watermarkClone = document.getElementById("watermarkClone");
+		var watermarkPrefixClone = document.getElementById("watermarkPrefixClone");
 		svg.removeChild(watermarkClone);
+		svg.removeChild(watermarkPrefixClone);
 	}
 }

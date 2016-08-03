@@ -30,8 +30,8 @@ function loopFrameSave(axisDot) {
 			showToolbar();
 			hideLoading();
 			hideWatermark();
-			fixPrecisionErrors();
 			rotate3d(axisDot,0);
+			fixPrecisionErrors();
 			makeGif();
 		},500);
 		return;

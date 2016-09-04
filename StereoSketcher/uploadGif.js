@@ -1,47 +1,48 @@
 'use strict';
 
-var frames = 60;
+var frames = 10
 var equivalence = 4;
-var frameTime = 0.07
+var frameTime = 0.5
 var loopFrames;
 
 function uploadGif() {
-	var axisDot = findAxisDot();
-	if(axisDot == null) {
-		alert("Please create/select one dot to indicate the position of the axis of rotation.");
+	var axis = findAxis();
+	if(axis == null) {
+		alert("Please create/select two dots to indicate the axis of rotation.");
 		return;
 	}
-	setDisplay("Gathering frames...");
+	setDisplay("Doing some math...");
 	hideToolbar();
 	showLoading();
 	addWatermark();
-	assignDistances(axisDot);
+	assignDistances(axis);
+	setDisplay("Gathering frames...");
 	viewMode();
 	loopFrames = 0;
 	while (gifFrames.firstChild) {
 	    gifFrames.removeChild(gifFrames.firstChild);
 	}
-	loopFrameSave(axisDot);
+	loopFrameSave(axis);
 }
 
-function loopFrameSave(axisDot) {
+function loopFrameSave(axis) {
 	if(loopFrames >= frames) {
 		setTimeout(function() {
 			showToolbar();
 			hideLoading();
 			hideWatermark();
-			rotate3d(axisDot,0);
+			rotate3d(axis,0);
 			fixPrecisionErrors();
 			makeGif();
 		},500);
 		return;
 	}
-	rotate3d(axisDot,loopFrames);
+	rotate3d(axis,loopFrames);
 	setTimeout(function() {
 		var innerLoop = loopFrames;
 		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback,innerLoop);
 		loopFrames++;
-		loopFrameSave(axisDot);
+		loopFrameSave(axis);
 	},500);
 }
 
@@ -83,51 +84,115 @@ function makeGif() {
 	});
 }
 
-function findAxisDot() {
+function findAxis() {
 	var dots = getDots();
-	var axisDot;
 	var selectedDots = [];
 	for(var ii=0;ii<dots.length;ii++) {
 		if(dots[ii].isSelected()) {
 			selectedDots.push(dots[ii]);
 		}
 	}
-	if(selectedDots.length != 1) {
+	if(selectedDots.length != 2) {
 		return null;
 	}
-	return selectedDots[0];
+	return selectedDots;
 }
 
 function assignDistances(axis) {
+	var dot1 = axis[0];
+	var dot2 = axis[1];
+	var x1 = dot1.getX();
+	var y1 = dot1.getY();
+	var z1 = dot1.getZ();
+	var x2 = dot2.getX();
+	var y2 = dot2.getY();
+	var z2 = dot2.getZ();
+	
+	var spanX = x2-x1;
+	var spanY = y2-y1;
+	var spanZ = z2-z1;
+	var spanMagnitude = magnitude([spanX,spanY,spanZ]);
+	
+	var dirX = spanX/spanMagnitude;
+	var dirY = spanY/spanMagnitude;
+	var dirZ = spanZ/spanMagnitude;
+	
+	var a = x1;
+	var b = y1;
+	var c = z1;
+	
+	var u = dirX;
+	var v = dirY;
+	var w = dirZ;
+	
+	var avwSq = a*(square(v)+square(w));
+	var buwSq = b*(square(u)+square(w));
+	var cuvSq = c*(square(u)+square(v));
+	
+	var bv = b*v;
+	var cw = c*w;
+	var au = a*u;
+	
+	var cv = c*v;
+	var bw = b*w;
+	var cu = c*u;
+	var aw = a*w;
+	var bu = b*u;
+	var av = a*v;
+	
+	var uStuff;
+	var vStuff;
+	var wStuff;
+	
+	var x;
+	var y;
+	var z;
+	
+	var uxvywz;
+
 	var dots = getDots();
 	var dot;
-	var axisX = parseFloat(axis.getAttribute("cx"));
-	var axisZ = parseFloat(axis.getShift()*equivalence);
-	var a;
-	var b;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		if(dot != axis) {
-			a = axisX-parseFloat(dot.getAttribute("cx"));
-			b = parseFloat(dot.getShift()*equivalence)-axisZ;
-			dot.seedDistance = magnitude(a,b);
-			var tempAngle = Math.acos(a/dot.seedDistance);
-			dot.seedAngle = b >= 0 ? tempAngle : 2*Math.PI-tempAngle;
+		if(dot != axis[0] && dot != axis[1]) {
+			x = dot.getX();
+			y = dot.getY();
+			z = dot.getZ();
+			
+			uxvywz = u*x-v*y-w*z;
+			
+			uStuff = u*(bv+cw-uxvywz);
+			vStuff = v*(au+cw-uxvywz);
+			wStuff = w*(au+bv-uxvywz);
+			
+			dot.originalX = x;
+			dot.originalY = y;
+			dot.originalZ = z;
+			
+			dot.xMult1 = avwSq - uStuff;
+			dot.yMult1 = buwSq - vStuff;
+			dot.zMult1 = cuvSq - wStuff;
+			
+			dot.xMult2 = -1*cv+bw-w*y+v*z;
+			dot.yMult2 = cu-aw+w*x-u*z;
+			dot.zMult2 = -1*bu+av-v*x+u*y;
 		}
 	}
 }
 
-function rotate3d(axisDot,frame) {
+function rotate3d(axis,frame) {
 	var rotInc = 2*Math.PI*frame/(frames+1);
 	var dots = getDots();
 	var dot;
-	var cx = parseFloat(axisDot.getAttribute("cx"));
-	var cz = axisDot.getShift()*equivalence;
+	var cosTheta = Math.cos(rotInc);
+	var sinTheta = Math.sin(rotInc);
+	var minusCosTheta = 1-cosTheta;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		if(dot != axisDot) {
-			dot.setAttribute("cx",cx-dot.seedDistance*Math.cos(rotInc+dot.seedAngle));
-			dot.setShift((cz+dot.seedDistance*Math.sin(rotInc+dot.seedAngle))/equivalence);
+		if(dot != axis[0] && dot != axis[1]) {
+			dot.setAttribute("cx", dot.xMult1 * minusCosTheta + dot.originalX * cosTheta + dot.xMult2 * sinTheta);
+			dot.setAttribute("cy", dot.yMult1 * minusCosTheta + dot.originalY * cosTheta + dot.yMult2 * sinTheta);
+			dot.setShift((dot.zMult1 * minusCosTheta + dot.originalZ * cosTheta + dot.zMult2 * sinTheta)/equivalence);
 		}
 	}
 	snapDots(dots,false);

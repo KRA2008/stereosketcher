@@ -70,6 +70,15 @@ var shapeFactory = {
 		dot.getShift = function() {
 			return shift;
 		}
+		dot.getX = function() {
+			return parseFloat(this.getAttribute("cx"));
+		}
+		dot.getY = function() {
+			return parseFloat(this.getAttribute("cy"));
+		}
+		dot.getZ = function() {
+			return this.getShift()*equivalence;
+		}
 		dot.setShift = function(newShift) {
 			shift = newShift;
 			this.label.textContent = newShift;

@@ -224,8 +224,8 @@ function stretch(dots,event,dx,dy) {
 	if(event.ctrlKey) {
 		var ex = event.clientX-dx-anchorX;
 		var ey = event.clientY-dy-anchorY;
-		var magM = (dx*ex+dy*ey)/magnitude(ex,ey);
-		var magE = magnitude(ex,ey);
+		var magM = (dx*ex+dy*ey)/magnitude([ex,ey]);
+		var magE = magnitude([ex,ey]);
 		magRatio = magM/magE;
 	}
 	var dot;
@@ -240,7 +240,7 @@ function stretchDot(dot,event,dx,dy,magRatio) {
 	var oldX=parseFloat(dot.getAttribute("cx"));
 	var oldY=parseFloat(dot.getAttribute("cy"));
 	if(event.ctrlKey) {
-		var magDel = magnitude(oldX-anchorX,oldY-anchorY)*magRatio;
+		var magDel = magnitude([oldX-anchorX,oldY-anchorY])*magRatio;
 		var cTan = Math.atan2(oldY-anchorY,oldX-anchorX);
 		dxScaled = magDel*Math.cos(cTan);
 		dyScaled = magDel*Math.sin(cTan);
@@ -352,10 +352,10 @@ function rotate(dots,event,dx,dy) {
 	var ax = event.clientX-cx+dx;
 	var ay = event.clientY-cy+dy;
 	
-	var magA = magnitude(ax,ay);
+	var magA = magnitude([ax,ay]);
 	var arctanA = Math.atan2(ay,ax);
 	
-	var magD = magnitude(dx,dy);
+	var magD = magnitude([dx,dy]);
 	var arctanD = Math.atan2(dy,dx);
 	var magN = magD*Math.sin(arctanA-arctanD);
 	
@@ -370,7 +370,7 @@ function rotate(dots,event,dx,dy) {
 		
 		var arctanB = Math.atan2(by,bx);
 		
-		var magB = magnitude(bx,by);
+		var magB = magnitude([bx,by]);
 		var magRatio = magB/magA;
 		
 		var proportionalDx = magRatio*magN*Math.sin(Math.PI-arctanB);
@@ -379,7 +379,7 @@ function rotate(dots,event,dx,dy) {
 		var straightNewX = oldX+proportionalDx;
 		var straightNewY = oldY+proportionalDy;
 		
-		var newMagB = magnitude(straightNewX-cx,straightNewY-cy);
+		var newMagB = magnitude([straightNewX-cx,straightNewY-cy]);
 		var curveError = newMagB-magB;
 		
 		var arctanNewB = Math.atan2(straightNewX-cx,straightNewY-cy);
@@ -403,8 +403,16 @@ function rotate(dots,event,dx,dy) {
 	}
 }
 
-function magnitude(x,y) {
-	return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+function magnitude(components) {
+	var squareSum = 0;
+	for(var ii=0;ii<components.length;ii++) {
+		squareSum+=square(components[ii]);
+	}
+	return Math.sqrt(squareSum);
+}
+
+function square(x) {
+	return Math.pow(x,2);
 }
 
 function addMarker(dots) {

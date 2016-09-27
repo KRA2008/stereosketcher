@@ -1,8 +1,8 @@
 'use strict';
 
-var frames = 10
+var frames = 30
 var equivalence = 4;
-var frameTime = 0.5
+var frameTime = 0.1
 var loopFrames;
 
 function uploadGif() {
@@ -31,7 +31,7 @@ function loopFrameSave(axis) {
 			showToolbar();
 			hideLoading();
 			hideWatermark();
-			rotate3d(axis,0);
+			rotate3d(axis,loopFrames);
 			fixPrecisionErrors();
 			makeGif();
 		},500);
@@ -41,9 +41,12 @@ function loopFrameSave(axis) {
 	setTimeout(function() {
 		var innerLoop = loopFrames;
 		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback,innerLoop);
-		loopFrames++;
-		loopFrameSave(axis);
-	},500);
+		//TODO bake the below into the callback above - then no second timer needed
+		setTimeout(function() {
+			loopFrames++;
+			loopFrameSave(axis);
+		},250);
+	},250);
 }
 
 function fixPrecisionErrors() {
@@ -181,7 +184,7 @@ function assignDistances(axis) {
 }
 
 function rotate3d(axis,frame) {
-	var rotInc = 2*Math.PI*frame/(frames+1);
+	var rotInc = 2*Math.PI*frame/frames;
 	var dots = getDots();
 	var dot;
 	var cosTheta = Math.cos(rotInc);

@@ -4,9 +4,10 @@ var frames = 30
 var equivalence = 4;
 var frameTime = 0.1
 var loopFrames;
+var axis;
 
 function uploadGif() {
-	var axis = findAxis();
+	axis = findAxis();
 	if(axis == null) {
 		alert("Please create/select two dots to indicate the axis of rotation.");
 		return;
@@ -15,38 +16,27 @@ function uploadGif() {
 	hideToolbar();
 	showLoading();
 	addWatermark();
-	assignDistances(axis);
+	assignDistances();
 	setDisplay("Gathering frames...");
 	viewMode();
 	loopFrames = 0;
 	while (gifFrames.firstChild) {
 	    gifFrames.removeChild(gifFrames.firstChild);
 	}
-	loopFrameSave(axis);
+	loopFrameSave();
 }
 
-function loopFrameSave(axis) {
+function loopFrameSave() {
 	if(loopFrames >= frames) {
-		setTimeout(function() {
-			showToolbar();
-			hideLoading();
-			hideWatermark();
-			rotate3d(axis,loopFrames);
-			fixPrecisionErrors();
-			makeGif();
-		},500);
-		return;
+		showToolbar();
+		hideLoading();
+		hideWatermark();
+		rotate3d(loopFrames);
+		fixPrecisionErrors();
+		makeGif();
 	}
-	rotate3d(axis,loopFrames);
-	setTimeout(function() {
-		var innerLoop = loopFrames;
-		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback,innerLoop);
-		//TODO bake the below into the callback above - then no second timer needed
-		setTimeout(function() {
-			loopFrames++;
-			loopFrameSave(axis);
-		},250);
-	},250);
+	rotate3d(loopFrames);
+	saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback);
 }
 
 function fixPrecisionErrors() {
@@ -62,10 +52,12 @@ function fixPrecisionErrors() {
 	}
 }
 
-function gifFrameSaveCallback(imageToSend,counter) {
+function gifFrameSaveCallback(imageToSend) {
 	var image = document.createElement('img');
 	image.src = imageToSend;
 	gifFrames.appendChild(image);
+	loopFrames++;
+	loopFrameSave();
 }
 
 function makeGif() {
@@ -101,7 +93,7 @@ function findAxis() {
 	return selectedDots;
 }
 
-function assignDistances(axis) {
+function assignDistances() {
 	var dot1 = axis[0];
 	var dot2 = axis[1];
 	var x1 = dot1.getX();
@@ -183,7 +175,7 @@ function assignDistances(axis) {
 	}
 }
 
-function rotate3d(axis,frame) {
+function rotate3d(frame) {
 	var rotInc = 2*Math.PI*frame/frames;
 	var dots = getDots();
 	var dot;

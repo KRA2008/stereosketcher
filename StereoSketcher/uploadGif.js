@@ -1,8 +1,8 @@
 'use strict';
 
-var frames = 30
+var frames = 60
 var equivalence = 4;
-var frameTime = 0.1
+var frameTime = 0.08
 var loopFrames;
 var axis;
 
@@ -34,6 +34,7 @@ function loopFrameSave() {
 		rotate3d(loopFrames);
 		fixPrecisionErrors();
 		makeGif();
+		return;
 	}
 	rotate3d(loopFrames);
 	saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback);
@@ -120,9 +121,13 @@ function assignDistances() {
 	var v = dirY;
 	var w = dirZ;
 	
-	var avwSq = a*(square(v)+square(w));
-	var buwSq = b*(square(u)+square(w));
-	var cuvSq = c*(square(u)+square(v));
+	var v2 = square(v);
+	var u2 = square(u);
+	var w2 = square(w);
+	
+	var avwSq = a*(v2+w2);
+	var buwSq = b*(u2+w2);
+	var cuvSq = c*(u2+v2);
 	
 	var bv = b*v;
 	var cw = c*w;
@@ -154,11 +159,11 @@ function assignDistances() {
 			y = dot.getY();
 			z = dot.getZ();
 			
-			uxvywz = u*x-v*y-w*z;
+			uxvywz = -1*u*x-v*y-w*z;
 			
-			uStuff = u*(bv+cw-uxvywz);
-			vStuff = v*(au+cw-uxvywz);
-			wStuff = w*(au+bv-uxvywz);
+			uStuff = u*(bv+cw+uxvywz);
+			vStuff = v*(au+cw+uxvywz);
+			wStuff = w*(au+bv+uxvywz);
 			
 			dot.originalX = x;
 			dot.originalY = y;

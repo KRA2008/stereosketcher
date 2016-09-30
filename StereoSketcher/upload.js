@@ -38,7 +38,7 @@ function uploadToImgur(imageToSend,success,failure,album,counter) {
 		if(ajax.readyState === 4) {
 			if(ajax.status === 200) {
 				var response = JSON.parse(ajax.responseText);
-				success(response.data.id,counter,response.data.deletehash);
+				success(response.data.id);
 			} else {
 				failure();
 			}

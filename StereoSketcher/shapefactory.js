@@ -80,7 +80,7 @@ var shapeFactory = {
 			return this.getShift()*equivalence;
 		}
 		dot.setShift = function(newShift) {
-			shift = newShift;
+			shift = newShift; //TODO what is this line?
 			this.label.textContent = newShift;
 			return this;
 		};

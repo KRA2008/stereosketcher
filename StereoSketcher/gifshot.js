@@ -1064,6 +1064,7 @@ AnimatedGIF = function (utils, frameWorkerCode, NeuQuant, GifWriter) {
       }
     },
     'processFrame': function (position) {
+    	incrementPercentDone();
       var AnimatedGifContext = this, options = this.options, progressCallback = options.progressCallback, sampleInterval = options.sampleInterval, frames = this.frames, frame, worker, done = function (ev) {
           var data = ev.data;
           delete frame.data;

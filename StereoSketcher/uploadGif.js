@@ -5,14 +5,25 @@ var equivalence = 4;
 var frameTime = 0.08
 var loopFrames;
 var axis;
+var stitchingMessage = "Stitching frames...";
+var stitched = 0;
 
 function uploadGif() {
 	axis = findAxis();
 	if(axis == null) {
-		alert("Please create/select two dots to indicate the axis of rotation.");
+		alert("Please create/select one line to indicate the axis of rotation. The axis will not be visible in the image.");
+		return;
+	}
+	if(!validateFaces()) {
+		alert("Faces are not currently supported by rotation because the layering is merely an illusion. Please use lines only.")
+		return;
+	}
+	if(!validateColors()) {
+		alert("Please only use one color for all the lines in your drawing because the layering is merely an illusion.")
 		return;
 	}
 	setDisplay("Doing some math...");
+	hideAxis();
 	hideToolbar();
 	showLoading();
 	addWatermark();
@@ -20,10 +31,35 @@ function uploadGif() {
 	setDisplay("Gathering frames...");
 	viewMode();
 	loopFrames = 0;
+	stitched = 0;
 	while (gifFrames.firstChild) {
 	    gifFrames.removeChild(gifFrames.firstChild);
 	}
 	loopFrameSave();
+}
+
+function incrementPercentDone() {
+	stitched++;
+	setDisplay(stitchingMessage+" "+Math.trunc((stitched/frames)*100)+"%");
+}
+
+function validateFaces() {
+	var faces = getFaces();
+	if(faces.length > 0) {
+		return false;
+	}
+	return true;
+}
+
+function validateColors() {
+	var lines = getLines();
+	var color = lines[0].color;
+	for(var ii=1;ii<lines.length;ii++) {
+		if(lines[ii].color != color) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function loopFrameSave() {
@@ -32,12 +68,23 @@ function loopFrameSave() {
 		hideLoading();
 		hideWatermark();
 		rotate3d(loopFrames);
+		showAxis();
 		fixPrecisionErrors();
 		makeGif();
 		return;
 	}
 	rotate3d(loopFrames);
 	saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback);
+}
+
+function hideAxis() {
+	addClassToElement(axis,"hidden");
+	addClassToElement(axis.clone,"hidden");
+}
+
+function showAxis() {
+	removeClassFromElement(axis,"hidden");
+	removeClassFromElement(axis.clone,"hidden");
 }
 
 function fixPrecisionErrors() {
@@ -62,7 +109,7 @@ function gifFrameSaveCallback(imageToSend) {
 }
 
 function makeGif() {
-	setDisplay("Stitching frames...(can take a minute)");
+	setDisplay(stitchingMessage);
 	var children = Array.prototype.slice.call(gifFrames.childNodes);
 	gifshot.createGIF({
 		gifWidth: window.innerWidth,
@@ -81,22 +128,24 @@ function makeGif() {
 }
 
 function findAxis() {
-	var dots = getDots();
-	var selectedDots = [];
-	for(var ii=0;ii<dots.length;ii++) {
-		if(dots[ii].isSelected()) {
-			selectedDots.push(dots[ii]);
+	var lines = getLines();
+	var selectedLines = [];
+	var line;
+	for(var ii=0;ii<lines.length;ii++) {
+		line = lines[ii];
+		if(line.isSelected()) {
+			selectedLines.push(line);
 		}
 	}
-	if(selectedDots.length != 2) {
+	if(selectedLines.length != 1) {
 		return null;
 	}
-	return selectedDots;
+	return selectedLines[0];
 }
 
 function assignDistances() {
-	var dot1 = axis[0];
-	var dot2 = axis[1];
+	var dot1 = axis.dot1;
+	var dot2 = axis.dot2;
 	var x1 = dot1.getX();
 	var y1 = dot1.getY();
 	var z1 = dot1.getZ();
@@ -154,7 +203,7 @@ function assignDistances() {
 	var dot;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		if(dot != axis[0] && dot != axis[1]) {
+		if(dot != axis.dot1 && dot != axis.dot2) {
 			x = dot.getX();
 			y = dot.getY();
 			z = dot.getZ();
@@ -189,7 +238,7 @@ function rotate3d(frame) {
 	var minusCosTheta = 1-cosTheta;
 	for(var ii=0;ii<dots.length;ii++) {
 		dot = dots[ii];
-		if(dot != axis[0] && dot != axis[1]) {
+		if(dot != axis.dot1 && dot != axis.dot2) {
 			dot.setAttribute("cx", dot.xMult1 * minusCosTheta + dot.originalX * cosTheta + dot.xMult2 * sinTheta);
 			dot.setAttribute("cy", dot.yMult1 * minusCosTheta + dot.originalY * cosTheta + dot.yMult2 * sinTheta);
 			dot.setShift((dot.zMult1 * minusCosTheta + dot.originalZ * cosTheta + dot.zMult2 * sinTheta)/equivalence);

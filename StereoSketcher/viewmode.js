@@ -62,10 +62,14 @@ function setViewModeIndicator() {
 	}
 }
 
-function viewMode() {
+function viewMode(noLoading) {
 	if(mode==3) {
-		addOverlaps();
-		showClones();
+		if(noLoading) {
+			// don't waste time here, we'll do it later. go look.
+		} else {
+			addOverlaps();
+			showClones();
+		}
 	}
 	hideDots();
 	isEditMode = false;

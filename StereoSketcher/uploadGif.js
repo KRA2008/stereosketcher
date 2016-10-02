@@ -29,7 +29,7 @@ function uploadGif() {
 	addWatermark();
 	assignDistances();
 	setDisplay("Gathering frames...");
-	viewMode();
+	viewMode(true);
 	loopFrames = 0;
 	stitched = 0;
 	while (gifFrames.firstChild) {
@@ -238,6 +238,9 @@ function assignDistances() {
 }
 
 function rotate3d(frame) {
+	if(mode == 3) {
+		removeOverlapsNoLoading();
+	}
 	var rotInc = 2*Math.PI*frame/frames;
 	var dots = getDots();
 	var dot;
@@ -253,4 +256,7 @@ function rotate3d(frame) {
 		}
 	}
 	snapDots(dots,false);
+	if(mode == 3) {
+		addOverlapsNoLoading();
+	}
 }

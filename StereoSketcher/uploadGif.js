@@ -14,8 +14,8 @@ function uploadGif() {
 		alert("Please create/select one line to indicate the axis of rotation. The axis will not be visible in the image.");
 		return;
 	}
-	if(!validateFaces()) {
-		alert("Faces are not currently supported by rotation because the layering is merely an illusion. Please use lines only.")
+	if(!validateLinesOnly()) {
+		alert("Only lines are currently supported by rotation because the layering is merely an illusion. Please remove the other stuff.")
 		return;
 	}
 	if(!validateColors()) {
@@ -43,9 +43,17 @@ function incrementPercentDone() {
 	setDisplay(stitchingMessage+" "+Math.trunc((stitched/frames)*100)+"%");
 }
 
-function validateFaces() {
+function validateLinesOnly() {
 	var faces = getFaces();
 	if(faces.length > 0) {
+		return false;
+	}
+	var images = getImages();
+	if(images.length > 0) {
+		return false;
+	}
+	var bases = getBases();
+	if(bases.length > 0) {
 		return false;
 	}
 	return true;

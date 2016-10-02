@@ -32,9 +32,7 @@ function uploadGif() {
 	viewMode(true);
 	loopFrames = 0;
 	stitched = 0;
-	while (gifFrames.firstChild) {
-	    gifFrames.removeChild(gifFrames.firstChild);
-	}
+	cleanUpFrames();
 	loopFrameSave();
 }
 
@@ -119,6 +117,7 @@ function gifFrameSaveCallback(imageToSend) {
 function makeGif() {
 	setDisplay(stitchingMessage);
 	var children = Array.prototype.slice.call(gifFrames.childNodes);
+	cleanUpFrames();
 	gifshot.createGIF({
 		gifWidth: window.innerWidth,
 		gifHeight: window.innerHeight,
@@ -133,6 +132,12 @@ function makeGif() {
 			setDisplay(obj.error);
 		}
 	});
+}
+
+function cleanUpFrames() {
+	while (gifFrames.firstChild) {
+	    gifFrames.removeChild(gifFrames.firstChild);
+	}
 }
 
 function findAxis() {

@@ -88,14 +88,21 @@ html, body, svg
 	left: -50%;
 }
 
-.loading
+.loadingGray
 {
 	position: absolute;
 	bottom:50%;
 	right:50%;
-	z-index:9999;
 	background-color:#888888;
 	padding: 20px;
+}
+
+.loadingMargin
+{
+	position:absolute;
+	width:100%;
+	height:100%;
+	z-index:9999;
 }
 
 .hidden

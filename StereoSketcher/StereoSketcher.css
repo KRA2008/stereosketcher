@@ -17,10 +17,10 @@ html, body, svg
 	position: absolute;
 	top:0; 
 	right:0;
-	z-index: 9999;
-	border: 1px solid black;
-	border-top:none;
-	border-right:none;
+}
+
+span, a {
+	background-color:white;
 }
 
 .fileButton
@@ -43,13 +43,17 @@ html, body, svg
 .bottomleft
 {
 	position: absolute;
+	display: inline;
 	bottom:0;
 	left:0;
-	z-index: 9999;
-	background-color:white;
-	border: 1px solid black;
-	border-bottom:none;
-	border-left:none;
+}
+
+.noEvents {
+	pointer-events:none;
+}
+
+.noEvents input, .noEvents img, .noEvents a {
+	pointer-events:visible;
 }
 
 #statusDiv div {
@@ -78,8 +82,7 @@ html, body, svg
 {
 	position: absolute; 
 	top:0; 
-	left:37%; 
-	z-index: 9998;
+	left:38%;
 }
 
 .innermiddle

@@ -35,7 +35,7 @@
 		</script>
 	</head>
 	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
-		<div id="pickerDiv" class="bottomleft">
+		<div id="pickerDiv" class="bottomleft noEvents">
 			<div>
 				<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
 				<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
@@ -44,20 +44,26 @@
 				<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
 				<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
 			</div>
-			<hr/>
-			<form>
-				<div>
+			<div>
+				<form>
 					<div id="imageDrag">
 						<img src="tools/dragAndDropMain.png" />
 					</div>
-					<div>or <input id="imageButton" type="file"/></div>
-				</div>
-				<hr/>
-				<div id="baseDrag">
-					<img src="tools/dragAndDropBase.png" />
-				</div>
-					<div>or <input id="baseButton" type="file"/></div>
-			</form>
+					<div>
+						or <input id="imageButton" type="file"/>
+					</div>
+				</form>
+			</div>
+			<div>
+				<form>
+					<div id="baseDrag">
+						<img src="tools/dragAndDropBase.png" />
+					</div>
+					<div>
+						or <input id="baseButton" type="file"/>
+					</div>
+				</form>
+			</div>
 		</div>
 		<div id="statusDiv" class="bottomright">
 			<div>
@@ -71,16 +77,14 @@
 				Zoom: <span id="zoomLabel"></span>
 			</div>
 		</div>
-		<div class="topright">
-			<div align="right" >
-				<span>Load project: <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/></span><br/>
-				<input type="button" onclick="save()" value="Save project"/>
-				<input type="button" onclick="upload()" value="Upload to imgur"/>
-				</span><input type="button" onclick="uploadGif()" value="Upload rotating gif"/></span><br/>
-				<span id="uploadResult">&nbsp;</span>
-			</div>
+		<div class="topright noEvents" align="right" >
+			<span>Load project:</span> <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/><br/>
+			<input type="button" onclick="save()" value="Save project"/><br/>
+			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>
+			<input type="button" onclick="uploadGif()" value="Upload rotating gif"/><br/>
+			<span id="uploadResult">&nbsp;</span>
 		</div>
-		<div class="topmiddle">
+		<div class="topmiddle noEvents">
 			<div class="innermiddle">
 				<a target='none' href='help.html'>how to draw with StereoSketcher</a>
 				&nbsp;&nbsp;&nbsp;&nbsp;

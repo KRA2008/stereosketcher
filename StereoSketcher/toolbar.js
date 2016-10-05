@@ -201,10 +201,18 @@ function keyReleased() {
 
 function showToolbar() {
 	svg.appendChild(toolGroup);
+	var toShow = document.getElementsByClassName("noEvents");
+	for (var ii=0; ii<toShow.length;ii++) {
+		toShow[ii].style.display = "";
+	}
 }
 
 function hideToolbar() {
 	svg.removeChild(toolGroup);
+	var toHide = document.getElementsByClassName("noEvents");
+	for (var ii=0; ii<toHide.length;ii++) {
+		toHide[ii].style.display = "none";
+	}
 }
 
 function buildTable() {

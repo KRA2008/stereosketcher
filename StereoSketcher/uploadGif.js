@@ -126,22 +126,24 @@ function gifFrameSaveCallback(imageToSend) {
 
 function makeGif() {
 	setDisplay(stitchingMessage);
-	var children = Array.prototype.slice.call(gifFrames.childNodes);
-	cleanUpFrames();
-	gifshot.createGIF({
-		gifWidth: window.innerWidth,
-		gifHeight: window.innerHeight,
-		images: children,
-		interval: frameTime,
-		numFrames: frames
-	}, function (obj) {
-		if (!obj.error) {
-			setDisplay("Uploading gif...");
-			uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
-		} else {
-			setDisplay(obj.error);
-		}
-	});
+	setTimeout(function() {
+		var children = Array.prototype.slice.call(gifFrames.childNodes);
+		cleanUpFrames();
+		gifshot.createGIF({
+			gifWidth: window.innerWidth,
+			gifHeight: window.innerHeight,
+			images: children,
+			interval: frameTime,
+			numFrames: frames
+		}, function (obj) {
+			if (!obj.error) {
+				setDisplay("Uploading gif...");
+				uploadToImgur(obj.image,setSuccessDisplay,setSuccessDisplay,"MciDbSPWF44zMaA");
+			} else {
+				setDisplay(obj.error);
+			}
+		});
+	},1000);
 }
 
 function cleanUpFrames() {

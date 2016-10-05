@@ -1,6 +1,6 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton,gifFrames;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton,gifFrames,loadingDiv,loadingMargin;
 var isEditMode=true;
 var pressX, pressY;
 var prevX, prevY;
@@ -22,6 +22,8 @@ window.onload=function() {
 	imageButton = document.getElementById('imageButton');
 	baseButton = document.getElementById('baseButton');
 	gifFrames = document.getElementById('gifFrames');
+	loadingMargin = document.getElementById("loadingMargin");
+	loadingDiv = document.getElementById("loading");
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -88,7 +90,7 @@ window.onload=function() {
 	imageDragger.addEventListener("dragleave", dragHover, false);
 	imageDragger.addEventListener("dragover", dragHover, false);
 	imageDragger.addEventListener("mouseenter",imageHover,false);
-	imageDragger.addEventListener("mouseleave",imageLeave,false);	
+	imageDragger.addEventListener("mouseleave",imageLeave,false);
 	imageButton.addEventListener('change',imageButtonClick, false);
 	
 	baseDragger.addEventListener("change", baseDragHandler, false);
@@ -96,7 +98,7 @@ window.onload=function() {
 	baseDragger.addEventListener("dragleave", dragHover, false);
 	baseDragger.addEventListener("dragover", dragHover, false);
 	baseDragger.addEventListener("mouseenter",imageHover,false);
-	baseDragger.addEventListener("mouseleave",imageLeave,false);	
+	baseDragger.addEventListener("mouseleave",imageLeave,false);
 	baseButton.addEventListener('change',baseButtonClick,false);
 	
 	crossEyeMode();
@@ -121,16 +123,16 @@ function wasAClick(event) {
 
 function hideLoading() {
 	loading = false;
-	var loadingDiv = document.getElementById("loading");
+	loadingMargin.style.display = "none";
 	loadingDiv.style.display = "none";
-	loadingDiv.clientHeight;
 }
 
-function showLoading() {
+function showLoading(onlyMargin) {
 	loading = true;
-	var loadingDiv = document.getElementById("loading");
-	loadingDiv.style.display = "";
-	loadingDiv.clientHeight;
+	loadingMargin.style.display = "";
+	if(!onlyMargin) {
+		loadingDiv.style.display = "";
+	}
 }
 
 document.addEventListener("keydown", mapKeyPress, false);

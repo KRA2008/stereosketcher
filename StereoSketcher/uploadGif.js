@@ -8,7 +8,7 @@ var axis;
 var stitchingMessage = "Stitching frames...";
 var stitched = 0;
 
-function uploadGif() {
+function uploadGif(onlyPreview) {
 	axis = findAxis();
 	if(axis == null) {
 		alert("Please create/select one line to indicate the axis of rotation. The axis will not be visible in the image.");
@@ -22,18 +22,18 @@ function uploadGif() {
 		alert("Please only use one color for all the lines in your drawing because the layering is merely an illusion.")
 		return;
 	}
-	setDisplay("Doing some math...");
+	if(!onlyPreview) setDisplay("Doing some math...");
 	hideAxis();
 	hideToolbar();
-	showLoading();
+	showLoading(onlyPreview);
 	addWatermark();
 	assignDistances();
-	setDisplay("Gathering frames...");
+	if(!onlyPreview) setDisplay("Gathering frames...");
 	viewMode(true);
 	loopFrames = 0;
 	stitched = 0;
 	cleanUpFrames();
-	loopFrameSave();
+	loopFrameSave(onlyPreview);
 }
 
 function incrementPercentDone() {
@@ -68,7 +68,7 @@ function validateColors() {
 	return true;
 }
 
-function loopFrameSave() {
+function loopFrameSave(onlyPreview) {
 	if(loopFrames >= frames) {
 		showToolbar();
 		hideLoading();
@@ -76,11 +76,21 @@ function loopFrameSave() {
 		rotate3d(loopFrames);
 		showAxis();
 		fixPrecisionErrors();
-		makeGif();
+		if(!onlyPreview) {
+			makeGif();
+		}
 		return;
 	}
 	rotate3d(loopFrames);
-	saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback);
+	
+	if(!onlyPreview) {
+		saveSvgAsPng(document.getElementById("svg"), 1,gifFrameSaveCallback);
+	} else {
+		setTimeout(function() {
+			loopFrames++;
+			loopFrameSave(onlyPreview);
+		},frameTime*1000);
+	}
 }
 
 function hideAxis() {

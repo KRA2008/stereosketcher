@@ -80,7 +80,8 @@
 			<span>Load project:</span> <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/><br/>
 			<input type="button" onclick="save()" value="Save project"/><br/>
 			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>
-			<input type="button" onclick="uploadGif()" value="Upload rotating gif"/><br/>
+			<input type="button" onclick="uploadGif(true)" value="Preview rotating gif"/><br/>
+			<input type="button" onclick="uploadGif(false)" value="Upload rotating gif"/><br/>
 			<span id="uploadResult">&nbsp;</span>
 		</div>
 		<div class="topmiddle noEvents">
@@ -92,8 +93,8 @@
 				<a target='none' href='contact.html'>contact</a>
 			</div>
 		</div>
-		<div id="loading" class="loadingMargin">
-			<div class="loadingGray">
+		<div id="loadingMargin">
+			<div id="loading">
 				<h2>Loading...</h2>
 			</div>		
 		</div>

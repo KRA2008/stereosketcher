@@ -1,7 +1,7 @@
 'use strict';
 
-var frames = 60
-var frameTime = 0.08;
+var frames = 120
+var frameTime = 0.04;
 var shiftSpeed = 0.5;
 var axisVisible = false;
 var framesInput, frameTimeInput, shiftSpeedInput, axisVisibleInput;

@@ -1,6 +1,5 @@
 'use strict';
 
-var shiftSpeed = 0.5;
 var IPD=0;
 var buffer=30;
 var cloneSpeed = 5;

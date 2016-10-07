@@ -29,6 +29,7 @@
 		<script type="text/javascript" src="toolbar.js"></script>
 		<script type="text/javascript" src="gifshot.js"></script>
 		<script type="text/javascript" src="uploadGif.js"></script>
+		<script type="text/javascript" src="configuration.js"></script>
 		<script type="text/javascript" src="StereoSketcher.js"></script>
 		<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-56107665-1', 'auto');ga('send', 'pageview');
@@ -67,12 +68,13 @@
 		</div>
 		<div id="statusDiv" class="bottomright noEvents">
 			<div>
+				<input type="button" value="Configuration" onclick="openConfiguration()"/>
+			</div>
+			<div>
 				<span>View mode:</span><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: anaglyph</span><br/>
-			</div>
-			<div>
 				<span>Zoom: <span id="zoomLabel"></span></span>
 			</div>
 		</div>
@@ -93,10 +95,17 @@
 				<a target='none' href='contact.html'>contact</a>
 			</div>
 		</div>
-		<div id="loadingMargin">
+		<div id="blocker">
 			<div id="loading">
 				<h2>Loading...</h2>
-			</div>		
+			</div>
+			<div id="configurationPopup" style="display: none;">
+				Shift increment size: <input type="text" id="shiftSpeedInput"/><br/>
+				Axis visible in gif: <input type="checkbox" id="axisVisibleInput"/><br/>
+				Gif number of frames: <input type="text" id="framesInput"/><br/>
+				Gif seconds per frame: <input type="text" id="frameTimeInput"/><br/>
+				<input type="button" value="Done" onclick="closeConfiguration()"/>
+			</div>
 		</div>
 		<svg style="background: #ffffff;" id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noIbar">
 			<g id="shapes">

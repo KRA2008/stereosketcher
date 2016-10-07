@@ -1,6 +1,8 @@
 'use strict';
 
-var svg,dotGroup,labelGroup,shapeGroup,defs,picker,zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,imageButton,baseButton,gifFrames,loadingDiv,loadingMargin;
+var svg,dotGroup,labelGroup,shapeGroup,defs,picker,
+zoomLabel,body,toolGroup,fileInput,imageDragger,baseDragger,
+imageButton,baseButton,gifFrames,loadingDiv,blocker,configurationPopup;
 var isEditMode=true;
 var pressX, pressY;
 var prevX, prevY;
@@ -22,8 +24,13 @@ window.onload=function() {
 	imageButton = document.getElementById('imageButton');
 	baseButton = document.getElementById('baseButton');
 	gifFrames = document.getElementById('gifFrames');
-	loadingMargin = document.getElementById("loadingMargin");
+	blocker = document.getElementById("blocker");
 	loadingDiv = document.getElementById("loading");
+	configurationPopup = document.getElementById("configurationPopup");
+	framesInput = document.getElementById("framesInput");
+	frameTimeInput = document.getElementById("frameTimeInput");
+	shiftSpeedInput = document.getElementById("shiftSpeedInput");
+	axisVisibleInput = document.getElementById("axisVisibleInput");
 	
 	svg.onmousedown = function(event) {
 		pressX = event.clientX;
@@ -123,13 +130,13 @@ function wasAClick(event) {
 
 function hideLoading() {
 	loading = false;
-	loadingMargin.style.display = "none";
+	blocker.style.display = "none";
 	loadingDiv.style.display = "none";
 }
 
 function showLoading(onlyMargin) {
 	loading = true;
-	loadingMargin.style.display = "";
+	blocker.style.display = "";
 	if(!onlyMargin) {
 		loadingDiv.style.display = "";
 	}

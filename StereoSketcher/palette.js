@@ -1,4 +1,5 @@
 'use strict';
+
 var opacityStep=0.05;
 
 function sampleColor() {

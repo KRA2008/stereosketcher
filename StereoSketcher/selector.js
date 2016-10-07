@@ -1,6 +1,5 @@
 'use strict';
 
-
 function lowlightAll() {
 	var highlit = shapeGroup.getElementsByClassName("highlit");
 	for (var ii=0;ii<highlit.length;ii++) {

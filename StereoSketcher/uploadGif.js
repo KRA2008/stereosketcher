@@ -1,12 +1,11 @@
 'use strict';
 
-var frames = 60
-var equivalence = 4;
-var frameTime = 0.08
 var loopFrames;
 var axis;
 var stitchingMessage = "Stitching frames...";
 var stitched = 0;
+var equivalence = 4;
+var previewLoops = 3;
 
 function uploadGif(onlyPreview) {
 	axis = findAxis();
@@ -23,7 +22,11 @@ function uploadGif(onlyPreview) {
 		return;
 	}
 	if(!onlyPreview) setDisplay("Doing some math...");
-	hideAxis();
+	if(!axisVisible) {
+		hideAxis();
+	} else {
+		axis.setAttribute("stroke", axis.color);
+	}
 	hideToolbar();
 	showLoading(onlyPreview);
 	addWatermark();
@@ -69,12 +72,16 @@ function validateColors() {
 }
 
 function loopFrameSave(onlyPreview) {
-	if(loopFrames >= frames) {
+	if((!onlyPreview && loopFrames >= frames) || (onlyPreview && loopFrames>=frames*previewLoops)) {
 		showToolbar();
 		hideLoading();
 		hideWatermark();
 		rotate3d(loopFrames);
-		showAxis();
+		if(!axisVisible) {
+			showAxis();
+		} else {
+			axis.setAttribute("stroke", selectedColor);
+		}
 		fixPrecisionErrors();
 		if(!onlyPreview) {
 			makeGif();

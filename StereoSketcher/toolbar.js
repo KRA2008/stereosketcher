@@ -1,3 +1,5 @@
+'use strict';
+
 var toolWidth = 30;
 var barY = 300;
 var toolBorder = 2;

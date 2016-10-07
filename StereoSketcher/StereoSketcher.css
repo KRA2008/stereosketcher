@@ -88,7 +88,7 @@ span, a {
 	left: -50%;
 }
 
-#loading
+#loading, #configurationPopup
 {
 	position: absolute;
 	bottom:50%;
@@ -97,7 +97,7 @@ span, a {
 	padding: 20px;
 }
 
-#loadingMargin
+#blocker
 {
 	position:absolute;
 	width:100%;

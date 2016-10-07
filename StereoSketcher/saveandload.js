@@ -22,7 +22,10 @@ function collectDrawing() {
 		background: getBackgroundColor(),
 		buffer: buffer,
 		mode: mode,
-		zoomLevel: zoomLevel
+		zoomLevel: zoomLevel,
+		frames: frames,
+		frameTime: frameTime,
+		shiftSpeed: shiftSpeed
 	}
 	var dot;
 	var dots = getDots();
@@ -158,6 +161,18 @@ function loadSketch(sketch) {
 				clearInterval(interval);
 			}
 		},50);
+	}
+	if(sketch.frames) {
+		frames = sketch.frames;
+	}
+	if(sketch.frameTime) {
+		frameTime = sketch.frameTime;
+	}
+	if(sketch.shiftSpeed) {
+		shiftSpeed = sketch.shiftSpeed;
+	}
+	if(sketch.axisVisible) {
+		axisVisible = sketch.axisVisible;
 	}
 }
 

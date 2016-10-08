@@ -115,9 +115,15 @@ function load() {
 }
 
 function loadSketch(sketch) {
-	setMode(sketch.mode);
-	setZoomLevel(sketch.zoomLevel);
-	buffer = sketch.buffer;
+	if(sketch.mode) {
+		setMode(sketch.mode);
+	}
+	if(sketch.zoomLevel) {
+		setZoomLevel(sketch.zoomLevel);
+	}
+	if(sketch.buffer) {
+		buffer = sketch.buffer;
+	}
 	var loadedDots = sketch.dots;
 	var dot;
 	for(var ii=0;ii<loadedDots.length;ii++) {
@@ -150,8 +156,10 @@ function loadSketch(sketch) {
 			loadImage(shape,dots,loadedDots);
 		}
 	}
-	picker.color.fromString(sketch.background);
-	setBackground();
+	if(sketch.background) {
+		picker.color.fromString(sketch.background);
+		setBackground();
+	}
 	if(imagesWaitingToFinish===0) {
 		finishLoadingSketch(sketch);
 	} else {

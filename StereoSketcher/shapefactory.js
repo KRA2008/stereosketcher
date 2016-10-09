@@ -77,7 +77,7 @@ var shapeFactory = {
 			return parseFloat(this.getAttribute("cy"));
 		}
 		dot.getZ = function() {
-			return this.getShift()*equivalence;
+			return this.getShift()*equivalence*shiftSpeed;
 		}
 		dot.setShift = function(newShift) {
 			shift = newShift; //TODO what is this line?

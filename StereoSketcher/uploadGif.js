@@ -4,7 +4,7 @@ var loopFrames;
 var axis;
 var stitchingMessage = "Stitching frames...";
 var stitched = 0;
-var equivalence = 4;
+var equivalence = 8;
 var previewLoops = 3;
 
 function uploadGif(onlyPreview) {
@@ -276,7 +276,7 @@ function rotate3d(frame) {
 		if(dot != axis.dot1 && dot != axis.dot2) {
 			dot.setAttribute("cx", dot.xMult1 * minusCosTheta + dot.originalX * cosTheta + dot.xMult2 * sinTheta);
 			dot.setAttribute("cy", dot.yMult1 * minusCosTheta + dot.originalY * cosTheta + dot.yMult2 * sinTheta);
-			dot.setShift((dot.zMult1 * minusCosTheta + dot.originalZ * cosTheta + dot.zMult2 * sinTheta)/equivalence);
+			dot.setShift((dot.zMult1 * minusCosTheta + dot.originalZ * cosTheta + dot.zMult2 * sinTheta)/(equivalence*shiftSpeed));
 		}
 	}
 	snapDots(dots,false);

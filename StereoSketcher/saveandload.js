@@ -119,7 +119,7 @@ function loadSketch(sketch) {
 		setMode(sketch.mode);
 	}
 	if(sketch.zoomLevel) {
-		setZoomLevel(sketch.zoomLevel);
+		zoomLevel = sketch.zoomLevel;
 	}
 	if(sketch.buffer) {
 		buffer = sketch.buffer;

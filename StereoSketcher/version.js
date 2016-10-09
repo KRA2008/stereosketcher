@@ -1,3 +1,3 @@
 'use strict';
 
-var version = "1.15.1";
+var version = "1.15.2";

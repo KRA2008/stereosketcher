@@ -119,7 +119,15 @@ function loadSketch(sketch) {
 		setMode(sketch.mode);
 	}
 	if(sketch.zoomLevel) {
-		zoomLevel = sketch.zoomLevel;
+		if(sketch.zoomLevel < 0) {
+			for(;zoomLevel > sketch.zoomLevel;) {
+				zoomOut(0,0);
+			}
+		} else if(sketch.zoomLevel > 0) {
+			for(;zoomLevel < sketch.zoomLevel;) {
+				zoomIn(0,0);
+			}
+		}
 	}
 	if(sketch.buffer) {
 		buffer = sketch.buffer;
@@ -159,6 +167,7 @@ function loadSketch(sketch) {
 	if(sketch.background) {
 		picker.color.fromString(sketch.background);
 		setBackground();
+		picker.color.fromString("#000000");
 	}
 	if(imagesWaitingToFinish===0) {
 		finishLoadingSketch(sketch);

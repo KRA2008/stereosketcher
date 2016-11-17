@@ -24,9 +24,8 @@ function uploadGif(onlyPreview) {
 	if(!onlyPreview) setDisplay("Doing some math...");
 	if(!axisVisible) {
 		hideAxis();
-	} else {
-		axis.setAttribute("stroke", axis.color);
 	}
+	axis.deselect();
 	hideToolbar();
 	showLoading(onlyPreview);
 	addWatermark();
@@ -79,9 +78,8 @@ function loopFrameSave(onlyPreview) {
 		rotate3d(loopFrames);
 		if(!axisVisible) {
 			showAxis();
-		} else {
-			axis.setAttribute("stroke", selectedColor);
 		}
+		axis.select();
 		fixPrecisionErrors();
 		if(!onlyPreview) {
 			makeGif();

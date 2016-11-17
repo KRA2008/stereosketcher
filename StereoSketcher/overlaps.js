@@ -29,7 +29,7 @@ function addOverlapsNoLoading() {
 	
 	for(var ii=0;ii<linesAndFaces.length;ii++) {
 		shape = linesAndFaces[ii];
-		if(shape == axis) {
+		if(shape == axis && !axisVisible) {
 			continue;
 		}
 		shapeBBox = shape.getBBox();
@@ -60,7 +60,7 @@ function addOverlapsNoLoading() {
 		
 		for(var jj=0;jj<linesAndFaces.length;jj++) {
 			cloneShape = linesAndFaces[jj];
-			if(cloneShape == axis) {
+			if(cloneShape == axis && !axisVisible) {
 				continue;
 			}
 			clone = cloneShape.clone;

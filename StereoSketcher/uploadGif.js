@@ -5,12 +5,11 @@ var axis;
 var stitchingMessage = "Stitching frames...";
 var stitched = 0;
 var equivalence = 8;
-var previewLoops = 3;
 
 function uploadGif(onlyPreview) {
 	axis = findAxis();
 	if(axis == null) {
-		alert("Please create/select one line to indicate the axis of rotation. The axis will not be visible in the image.");
+		alert("Please create/select one line to indicate the axis of rotation. The axis will "+ (axisVisible ? "" : "NOT ") + "be visible in the image. This can be changed in the configuration options.");
 		return;
 	}
 	if(!validateLinesOnly()) {
@@ -71,7 +70,7 @@ function validateColors() {
 }
 
 function loopFrameSave(onlyPreview) {
-	if((!onlyPreview && loopFrames >= frames) || (onlyPreview && loopFrames>=frames*previewLoops)) {
+	if((!onlyPreview && loopFrames >= frames) || (onlyPreview && loopFrames>=frames*numberOfPreviewLoops)) {
 		showToolbar();
 		hideLoading();
 		hideWatermark();

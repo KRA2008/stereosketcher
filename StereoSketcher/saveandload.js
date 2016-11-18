@@ -25,7 +25,9 @@ function collectDrawing() {
 		zoomLevel: zoomLevel,
 		frames: frames,
 		frameTime: frameTime,
-		shiftSpeed: shiftSpeed
+		shiftSpeed: shiftSpeed,
+		numberOfPreviewLoops: numberOfPreviewLoops,
+		axisVisible: axisVisible
 	}
 	var dot;
 	var dots = getDots();
@@ -190,6 +192,9 @@ function loadSketch(sketch) {
 	}
 	if(sketch.axisVisible) {
 		axisVisible = sketch.axisVisible;
+	}
+	if(sketch.numberOfPreviewLoops) {
+		numberOfPreviewLoops = sketch.numberOfPreviewLoops;
 	}
 }
 

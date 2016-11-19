@@ -12,12 +12,12 @@ function uploadGif(onlyPreview) {
 		alert("Please create/select one line to indicate the axis of rotation. The axis will "+ (axisVisible ? "" : "NOT ") + "be visible in the image. This can be changed in the configuration options.");
 		return;
 	}
-	if(!validateLinesOnly()) {
-		alert("Only lines are currently supported by rotation because the layering is merely an illusion. Please remove the other stuff.")
+	if(!validateLinesAndFacesOnly()) {
+		alert("Only lines and faces are currently supported by rotation because the layering is merely an illusion. Please remove the other stuff.")
 		return;
 	}
 	if(!validateColors()) {
-		alert("Please only use one color for all the lines in your drawing because the layering is merely an illusion.")
+		alert("Please only use one color for all the lines and faces in your drawing because the layering is merely an illusion.")
 		return;
 	}
 	if(!onlyPreview) setDisplay("Doing some math...");
@@ -42,11 +42,7 @@ function incrementPercentDone() {
 	setDisplay(stitchingMessage+" "+Math.trunc((stitched/frames)*100)+"%");
 }
 
-function validateLinesOnly() {
-	var faces = getFaces();
-	if(faces.length > 0) {
-		return false;
-	}
+function validateLinesAndFacesOnly() {
 	var images = getImages();
 	if(images.length > 0) {
 		return false;
@@ -59,12 +55,28 @@ function validateLinesOnly() {
 }
 
 function validateColors() {
-	var lines = getLines();
-	var color = lines[0].color;
-	for(var ii=1;ii<lines.length;ii++) {
-		if(lines[ii].color != color) {
-			return false;
+	var faces = getFaces();
+	var faceColor;
+	if(faces.length>0) {
+		faceColor = faces[0].color;
+		for(var ii=1;ii<faces.length;ii++) {
+			if(faces[ii].color != faceColor) {
+				return false;
+			}
 		}
+	}
+	var lines = getLines();
+	var lineColor;
+	if(lines.length>0) {
+		lineColor = lines[0].color;
+		for(var ii=1;ii<lines.length;ii++) {
+			if(lines[ii].color != lineColor) {
+				return false;
+			}
+		}
+	}
+	if(lineColor && faceColor) {
+		return lineColor === faceColor;
 	}
 	return true;
 }

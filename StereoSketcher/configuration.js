@@ -18,7 +18,7 @@ function openConfiguration() {
 }
 
 function closeConfiguration() {
-	hideLoading(true);
+	hideLoading();
 	configurationPopup.style.display = "none";
 	frames = framesInput.value;
 	frameTime = frameTimeInput.value;

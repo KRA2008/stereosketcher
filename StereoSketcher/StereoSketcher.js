@@ -142,7 +142,17 @@ function showLoading(onlyMargin) {
 	}
 }
 
-document.addEventListener("keydown", mapKeyPress, false);
+document.addEventListener(
+	"keydown",
+	function(event)
+	{
+		if(configurationPopup.style.display == "none")
+		{
+			mapKeyPress(event);
+		}
+	},
+	false
+);
 document.addEventListener("keyup", keyReleased, false);
 document.onclick = function(e) { if(e.button == 2 || e.button == 3) { e.preventDefault(); e.stopPropagation(); return(false); } };
 

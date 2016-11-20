@@ -80,7 +80,7 @@ function changeOpacity(increase) {
 		for(var ii=0;ii<shapes.length;ii++) {
 			shape = shapes[ii];
 			if(shape.isSelected()) {
-				opacity = parseFloat(shape.getOpacity());
+				opacity = shape.getOpacity();
 				opacity = Math.round((1/opacityStep)*opacity)*opacityStep;
 				if(increase) {
 					if(opacity<1.0)

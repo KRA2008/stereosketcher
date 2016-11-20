@@ -292,11 +292,12 @@ var shapeFactory = {
 			this.clone.setAttribute("stroke",color);
 		};
 		line.getOpacity = function() {
-			return this.getAttribute("stroke-opacity");
+			return parseFloat(this.getAttribute("stroke-opacity"));
 		};
 		line.setOpacity = function(opacity) {
-			this.setAttribute("stroke-opacity",opacity);
-			this.clone.setAttribute("stroke-opacity",opacity);
+			var parsed = parseFloat(opacity); //backward compatibility for old bug
+			this.setAttribute("stroke-opacity",parsed);
+			this.clone.setAttribute("stroke-opacity",parsed);
 		};
 		
 		line.add();
@@ -332,6 +333,7 @@ var shapeFactory = {
 		face.storedOpacity = 1.0;
 		face.setAttribute("fill-opacity",1.0);
 		face.setAttribute("class", "face");
+		face.setAttribute("stroke-width", 0);
 		under.setAttribute("fill", picker.value);
 		under.setAttribute("stroke", picker.value);
 		under.setAttribute("stroke-width", faceSpaceCorrection);
@@ -400,15 +402,16 @@ var shapeFactory = {
 			this.clone.under.setAttribute("stroke",color);
 		};
 		face.getOpacity = function() {
-			return this.getAttribute("fill-opacity");
+			return parseFloat(this.getAttribute("fill-opacity"));
 		};
 		face.setOpacity = function(opacity) {
-			this.setAttribute("fill-opacity",opacity);
-			this.under.setAttribute("fill-opacity",opacity);
-			this.clone.setAttribute("fill-opacity",opacity);
-			this.clone.under.setAttribute("fill-opacity",opacity);
+			var parsed = parseFloat(opacity); // backward compatibility for old bug
+			this.setAttribute("fill-opacity",parsed);
+			this.under.setAttribute("fill-opacity",parsed);
+			this.clone.setAttribute("fill-opacity",parsed);
+			this.clone.under.setAttribute("fill-opacity",parsed);
 			
-			var mathedOpacity = 1.2*opacity*opacity-0.2*opacity;
+			var mathedOpacity = 1.2*parsed*parsed-0.2*parsed;
 			this.under.setAttribute("stroke-opacity",mathedOpacity);
 			this.clone.under.setAttribute("stroke-opacity",mathedOpacity);
 		};
@@ -537,12 +540,13 @@ var shapeFactory = {
 			selectAllContiguousShapes(this,event);
 		};
 		image.getOpacity = function() {
-			return this.getAttribute("opacity");
+			return parseFloat(this.getAttribute("opacity"));
 		};
 		image.setOpacity = function(opacity) {
-			this.setAttribute("opacity",opacity);
+			var parsed = parseFloat(opacity); //backward compatibility for old bug
+			this.setAttribute("opacity",parsed);
 			if(!doesElementHaveClass(this,"base")) {
-				this.clone.setAttribute("opacity",opacity);
+				this.clone.setAttribute("opacity",parsed);
 			}
 		};
 		this.attachCommonHandlers(image);

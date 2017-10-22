@@ -1,124 +1,124 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>StereoSketcher</title>
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="/favicon.ico" type="image/x-icon">
-		<link rel="stylesheet" type="text/css" href="StereoSketcher.css">
-		<script type="text/javascript" src="jscolor.js"></script>
-		<script type="text/javascript" src="numeric-solve.js"></script>
-		<script type="text/javascript" src="palette.js"></script>
-		<script type="text/javascript" src="saveSvgAsPng.js"></script>
-		<script type="text/javascript" src="shapefactory.js"></script>
-		<script type="text/javascript" src="shifter.js"></script>
-		<script type="text/javascript" src="classes.js"></script>
-		<script type="text/javascript" src="dragger.js"></script>
-		<script type="text/javascript" src="selectangle.js"></script>
-		<script type="text/javascript" src="overlaps.js"></script>
-		<script type="text/javascript" src="zoomer.js"></script>
-		<script type="text/javascript" src="selector.js"></script>
-		<script type="text/javascript" src="upload.js"></script>
-		<script type="text/javascript" src="linethick.js"></script>
-		<script type="text/javascript" src="viewmode.js"></script>
-		<script type="text/javascript" src="layers.js"></script>
-		<script type="text/javascript" src="copier.js"></script>
-		<script type="text/javascript" src="version.js"></script>
-		<script type="text/javascript" src="saveandload.js"></script>
-		<script type="text/javascript" src="FileSaver.min.js"></script>
-		<script type="text/javascript" src="toolbar.js"></script>
-		<script type="text/javascript" src="gifshot.js"></script>
-		<script type="text/javascript" src="uploadGif.js"></script>
-		<script type="text/javascript" src="configuration.js"></script>
-		<script type="text/javascript" src="StereoSketcher.js"></script>
-	</head>
-	<body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
-		<div id="pickerDiv" class="bottomleft noEvents">
-			<div>
-				<input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
-				<input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
-				<input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
-				<br/>
-				<input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
-				<input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
-			</div>
-			<div>
-				<form>
-					<div id="imageDrag">
-						<img src="tools/dragAndDropMain.png" />
-					</div>
-					<div>
-						<input id="imageButton" type="file"/>
-					</div>
-				</form>
-			</div>
-			<div>
-				<form>
-					<div id="baseDrag">
-						<img src="tools/dragAndDropBase.png" />
-					</div>
-					<div>
-						<input id="baseButton" type="file"/>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div id="statusDiv" class="bottomright noEvents">
-			<div>
-				<input type="button" value="Configuration" onclick="openConfiguration()"/>
-			</div>
-			<div>
-				<span>View mode:</span><br/>
-				&nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
-				&nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
-				&nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: anaglyph</span><br/>
-				<span>Zoom: <span id="zoomLabel"></span></span>
-			</div>
-		</div>
-		<div class="topright noEvents" align="right" >
-			<span>Load project:</span> <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/><br/>
-			<input type="button" onclick="save()" value="Save project"/><br/>
-			<input type="button" onclick="upload()" value="Upload to imgur"/><br/>
-			<input type="button" onclick="uploadGif(true)" value="Preview rotating gif"/><br/>
-			<input type="button" onclick="uploadGif(false)" value="Upload rotating gif"/><br/>
-			<span id="uploadResult">&nbsp;</span>
-		</div>
-		<div class="topmiddle noEvents">
-			<div class="innermiddle">
-				<a target='none' href='help.html'>how to draw with StereoSketcher</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a target='none' href='viewing.html'>how to view 3D images</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				<a target='none' href='contact.html'>contact</a>
-			</div>
-		</div>
-		<div id="blocker">
-			<div id="loading">
-				<h2>Loading...</h2>
-			</div>
-			<div id="configurationPopup" style="display: none;">
-				Shift increment size: <input type="text" id="shiftSpeedInput"/><br/>
-				Axis visible in gif: <input type="checkbox" id="axisVisibleInput"/><br/>
-				Gif number of frames: <input type="text" id="framesInput"/><br/>
-				Gif seconds per frame: <input type="text" id="frameTimeInput"/><br/>
-				Number of preview loops: <input type="text" id="numberOfPreviewLoopsInput"/><br/>
-				<input type="button" value="Done" onclick="closeConfiguration()"/>
-			</div>
-		</div>
-		<svg style="background: #ffffff;" id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noIbar">
-			<g id="shapes">
-			</g>
-			<g id="labels">
-			</g>
-			<g id="dots">
-			</g>
-			<g id="toolGroup">
-			</g>
-			<defs id="defs">
-			</defs>
-		</svg>
-		<div id="gifFrames">
-		</div>
-	</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>StereoSketcher</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="StereoSketcher.css">
+        <script type="text/javascript" src="jscolor.js"></script>
+        <script type="text/javascript" src="numeric-solve.js"></script>
+        <script type="text/javascript" src="palette.js"></script>
+        <script type="text/javascript" src="saveSvgAsPng.js"></script>
+        <script type="text/javascript" src="shapefactory.js"></script>
+        <script type="text/javascript" src="shifter.js"></script>
+        <script type="text/javascript" src="classes.js"></script>
+        <script type="text/javascript" src="dragger.js"></script>
+        <script type="text/javascript" src="selectangle.js"></script>
+        <script type="text/javascript" src="overlaps.js"></script>
+        <script type="text/javascript" src="zoomer.js"></script>
+        <script type="text/javascript" src="selector.js"></script>
+        <script type="text/javascript" src="upload.js"></script>
+        <script type="text/javascript" src="linethick.js"></script>
+        <script type="text/javascript" src="viewmode.js"></script>
+        <script type="text/javascript" src="layers.js"></script>
+        <script type="text/javascript" src="copier.js"></script>
+        <script type="text/javascript" src="version.js"></script>
+        <script type="text/javascript" src="saveandload.js"></script>
+        <script type="text/javascript" src="FileSaver.min.js"></script>
+        <script type="text/javascript" src="toolbar.js"></script>
+        <script type="text/javascript" src="gifshot.js"></script>
+        <script type="text/javascript" src="uploadGif.js"></script>
+        <script type="text/javascript" src="configuration.js"></script>
+        <script type="text/javascript" src="StereoSketcher.js"></script>
+    </head>
+    <body oncontextmenu="return false;" style="-webkit-user-select: none;-moz-user-select: none;user-select: none;">
+        <div id="pickerDiv" class="bottomleft noEvents">
+            <div>
+                <input class="color {pickerPosition:'right',hash:true,pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}" id="colorPicker"/><br/>
+                <input type="button" value="Set Color of Selected Shape" onclick="setColor()" /><br/>
+                <input type="button" value="Sample Color of Selected Shape" onclick="sampleColor()" /><br/>
+                <br/>
+                <input id="setBackground" type="button" value="Set Background Color" onclick="setBackground()" /><br/>
+                <input id="sampleBackground" type="button" value="Sample Background Color" onclick="sampleBackground()" /><br/>
+            </div>
+            <div>
+                <form>
+                    <div id="imageDrag">
+                        <img src="tools/dragAndDropMain.png" />
+                    </div>
+                    <div>
+                        <input id="imageButton" type="file"/>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <form>
+                    <div id="baseDrag">
+                        <img src="tools/dragAndDropBase.png" />
+                    </div>
+                    <div>
+                        <input id="baseButton" type="file"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="statusDiv" class="bottomright noEvents">
+            <div>
+                <input type="button" value="Configuration" onclick="openConfiguration()"/>
+            </div>
+            <div>
+                <span>View mode:</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="cross">1: cross</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="parallel">2: parallel</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="redcyan">3: anaglyph</span><br/>
+                <span>Zoom: <span id="zoomLabel"></span></span>
+            </div>
+        </div>
+        <div class="topright noEvents" align="right" >
+            <span>Load project:</span> <input type="file" id="fileInput" autocomplete="off" onclick="warning()"/><br/>
+            <input type="button" onclick="save()" value="Save project"/><br/>
+            <input type="button" onclick="upload()" value="Upload to imgur"/><br/>
+            <input type="button" onclick="uploadGif(true)" value="Preview rotating gif"/><br/>
+            <input type="button" onclick="uploadGif(false)" value="Upload rotating gif"/><br/>
+            <span id="uploadResult">&nbsp;</span>
+        </div>
+        <div class="topmiddle noEvents">
+            <div class="innermiddle">
+                <a target='none' href='help.html'>how to draw with StereoSketcher</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a target='none' href='viewing.html'>how to view 3D images</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a target='none' href='contact.html'>contact</a>
+            </div>
+        </div>
+        <div id="blocker">
+            <div id="loading">
+                <h2>Loading...</h2>
+            </div>
+            <div id="configurationPopup" style="display: none;">
+                Shift increment size: <input type="text" id="shiftSpeedInput"/><br/>
+                Axis visible in gif: <input type="checkbox" id="axisVisibleInput"/><br/>
+                Gif number of frames: <input type="text" id="framesInput"/><br/>
+                Gif seconds per frame: <input type="text" id="frameTimeInput"/><br/>
+                Number of preview loops: <input type="text" id="numberOfPreviewLoopsInput"/><br/>
+                <input type="button" value="Done" onclick="closeConfiguration()"/>
+            </div>
+        </div>
+        <svg style="background: #ffffff;" id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noIbar">
+            <g id="shapes">
+            </g>
+            <g id="labels">
+            </g>
+            <g id="dots">
+            </g>
+            <g id="toolGroup">
+            </g>
+            <defs id="defs">
+            </defs>
+        </svg>
+        <div id="gifFrames">
+        </div>
+    </body>
 </html>
 

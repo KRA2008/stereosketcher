@@ -1,135 +1,135 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>StereoSketcher Help</title>
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="/favicon.ico" type="image/x-icon">
-		<link rel="stylesheet" type="text/css" href="StereoSketcher.css">
-		<script type="text/javascript" src="palette.js"></script>
-		<script type="text/javascript" src="shapefactory.js"></script>
-		<script type="text/javascript" src="shifter.js"></script>
-		<script type="text/javascript" src="linethick.js"></script>
-		<script type="text/javascript" src="viewmode.js"></script>
-		<script type="text/javascript" src="layers.js"></script>
-		<script type="text/javascript" src="toolbar.js"></script>
-		<script type="text/javascript" src="version.js"></script>
-		<script>
-			window.onload = function() {
-				buildTable();
-				document.getElementById("version").textContent = version;
-			}
-		</script>
-	</head>
-	<body class="center">
-	<p>
-		StereoSketcher is a stereoscopic 3D drawing toy.<br/>
-		Example drawings: <a href="http://imgur.com/a/TrxA3">cross eye</a> and <a href="http://imgur.com/a/UjYZ5">red/cyan</a>.<br/>
-		<br/>
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/KsdLkdkHs1g?html5=1" frameborder="0" allowfullscreen></iframe>
-	</p>
-		<table>
-			<tr text-align="top">
-				<td>
-				<h3>KEYBOARD</h3>
-					<table id='keyTable'>
-					</table>
-				</td>
-				<td>
-					<h3>MOUSE</h3>
-					<table>
-						<tr><th>Button</th><th>Gesture</th><th>Modifier</th><th>Target</th><th>Function</th></tr>
-						<tr><td colspan="5" class="centerText">Create Dots</td></tr>
-						<tr><td>right</td><td>click</td><td></td><td>anywhere</td><td>create dot</td></tr>
-						<tr><td>right</td><td>click</td><td>shift</td><td>anywhere</td><td>create dot and select it</td></tr>
-						<tr><td>right</td><td>click</td><td>control + shift</td><td>anywhere</td><td>create dot and create a line between it and other currently selected dot</td></tr>
-						<tr><td colspan="5" class="centerText">Item Selection</td></tr>
-						<tr><td colspan="2">any selection gesture</td><td>shift</td><td>item</td><td>cumulative select</td></tr>
-						<tr><td>left</td><td>click</td><td></td><td>item</td><td>select item</td></tr>
-						<tr><td>left</td><td>click and drag</td><td></td><td>open space</td><td>select dots contained in selectangle</td></tr>
-						<tr><td>left</td><td>click and drag</td><td>control</td><td>open space</td><td>select shapes of dots contained in selectangle</td></tr>
-						<tr><td>left</td><td>click</td><td></td><td>open space</td><td>deselect all</td></tr>
-						<tr><td>left</td><td>double click</td><td></td><td>dot</td><td>select all contiguous dots</td></tr>
-						<tr><td>left</td><td>double click</td><td></td><td>line or face</td><td>select all contiguous lines and faces</td></tr>
-						<tr><td>left</td><td>click</td><td>control</td><td>dot</td><td>select all lines and faces of dot</td></tr>
-						<tr><td>left</td><td>click</td><td>control</td><td>line or face</td><td>select all dots of line or face</td></tr>
-						<tr><td colspan="5" class="centerText">Movement</td></tr>
-						<tr><td>left</td><td>click and drag</td><td></td><td>unselected dot</td><td>select dot and move selected dots</td></tr>
-						<tr><td>left</td><td>click and drag</td><td></td><td>selected dot</td><td>move selected dots</td></tr>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>StereoSketcher Help</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="StereoSketcher.css">
+        <script type="text/javascript" src="palette.js"></script>
+        <script type="text/javascript" src="shapefactory.js"></script>
+        <script type="text/javascript" src="shifter.js"></script>
+        <script type="text/javascript" src="linethick.js"></script>
+        <script type="text/javascript" src="viewmode.js"></script>
+        <script type="text/javascript" src="layers.js"></script>
+        <script type="text/javascript" src="toolbar.js"></script>
+        <script type="text/javascript" src="version.js"></script>
+        <script>
+            window.onload = function() {
+                buildTable();
+                document.getElementById("version").textContent = version;
+            }
+        </script>
+    </head>
+    <body class="center">
+    <p>
+        StereoSketcher is a stereoscopic 3D drawing toy.<br/>
+        Example drawings: <a href="http://imgur.com/a/TrxA3">cross eye</a> and <a href="http://imgur.com/a/UjYZ5">red/cyan</a>.<br/>
+        <br/>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/KsdLkdkHs1g?html5=1" frameborder="0" allowfullscreen></iframe>
+    </p>
+        <table>
+            <tr text-align="top">
+                <td>
+                <h3>KEYBOARD</h3>
+                    <table id='keyTable'>
+                    </table>
+                </td>
+                <td>
+                    <h3>MOUSE</h3>
+                    <table>
+                        <tr><th>Button</th><th>Gesture</th><th>Modifier</th><th>Target</th><th>Function</th></tr>
+                        <tr><td colspan="5" class="centerText">Create Dots</td></tr>
+                        <tr><td>right</td><td>click</td><td></td><td>anywhere</td><td>create dot</td></tr>
+                        <tr><td>right</td><td>click</td><td>shift</td><td>anywhere</td><td>create dot and select it</td></tr>
+                        <tr><td>right</td><td>click</td><td>control + shift</td><td>anywhere</td><td>create dot and create a line between it and other currently selected dot</td></tr>
+                        <tr><td colspan="5" class="centerText">Item Selection</td></tr>
+                        <tr><td colspan="2">any selection gesture</td><td>shift</td><td>item</td><td>cumulative select</td></tr>
+                        <tr><td>left</td><td>click</td><td></td><td>item</td><td>select item</td></tr>
+                        <tr><td>left</td><td>click and drag</td><td></td><td>open space</td><td>select dots contained in selectangle</td></tr>
+                        <tr><td>left</td><td>click and drag</td><td>control</td><td>open space</td><td>select shapes of dots contained in selectangle</td></tr>
+                        <tr><td>left</td><td>click</td><td></td><td>open space</td><td>deselect all</td></tr>
+                        <tr><td>left</td><td>double click</td><td></td><td>dot</td><td>select all contiguous dots</td></tr>
+                        <tr><td>left</td><td>double click</td><td></td><td>line or face</td><td>select all contiguous lines and faces</td></tr>
+                        <tr><td>left</td><td>click</td><td>control</td><td>dot</td><td>select all lines and faces of dot</td></tr>
+                        <tr><td>left</td><td>click</td><td>control</td><td>line or face</td><td>select all dots of line or face</td></tr>
+                        <tr><td colspan="5" class="centerText">Movement</td></tr>
+                        <tr><td>left</td><td>click and drag</td><td></td><td>unselected dot</td><td>select dot and move selected dots</td></tr>
+                        <tr><td>left</td><td>click and drag</td><td></td><td>selected dot</td><td>move selected dots</td></tr>
                         <tr><td>left</td><td>click and drag</td><td>control</td><td>selected dot</td><td>rotate selected dots</td></tr>
-						<tr><td>right</td><td>click and drag</td><td></td><td>outside selected dots</td><td>pan</td></tr>
+                        <tr><td>right</td><td>click and drag</td><td></td><td>outside selected dots</td><td>pan</td></tr>
                         <tr><td>right</td><td>click and drag</td><td></td><td>selected dot</td><td>stretch dots</td></tr>
                         <tr><td>right</td><td>click and drag</td><td>control</td><td>selected dot</td><td>stretch dots with fixed proportions</td></tr>
-						<tr><td>wheel</td><td>roll</td><td></td><td>anywhere</td><td>zoom</td></tr>
-						<tr><td colspan="5" class="centerText">Other</td></tr>
-						<tr><td>wheel</td><td>press</td><td></td><td>anywhere</td><td>copy and paste selected lines and faces</td></tr>
-						<tr><td>wheel</td><td>press</td><td>control</td><td>anywhere</td><td>extrude selected lines and faces</td></tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	<br/>
-	<h3>
-		Pro tips
-	</h3>
-	<ul>
-		<li>
-			To crop your image before uploading, just resize your browser window.
-		</li>
-	</ul>
-	<h3>
-		Other help
-	</h3>
-	<ul>
-		<li>
-			This was tested in Firefox during development, results in other browsers may vary.
-		</li>
-		<li>
-			Laptop screens are unkind to the red/cyan images.
-		</li>
-		<li>
-			Please note that the grayish polarized 3D glasses you get from move theaters nowadays will not work for StereoSketcher.
-		</li>
-		<li>
-			Some colors work better than others in red/cyan mode. i.e. red doesn't work well.
-		</li>
-		<li>
-			If you are getting the images to line up in parallel or cross viewing, but the image is weird or even 3D in the wrong direction, you might be using the wrong view mode - try switching view modes. Also have a look at this image:<br/>
-			<img src="https://i.imgur.com/VkXN9DC.jpg"/>
-		</li>
-	</ul>
-	<h3>
-		Acknowledgements
-	</h3>
-	<ul>
-		<li>
-			Thanks to Sunny for suggesting SVG
-		</li>
-		<li>
-			Thanks to Alex for testing
-		</li>
-		<li>
-			Thanks to Eric Shull for the <a href='https://github.com/exupero/saveSvgAsPng'>svg to png conversion</a>
-		</li>
-		<li>
-			Thanks to Jan Odvárko for the <a href='http://jscolor.com/'>color picker</a>
-		</li>
-		<li>
-			Thanks to Eli Grey for the <a href='https://github.com/eligrey/FileSaver.js/'>file saver</a>
-		</li>
-		<li>
-			Thanks to Mike Bostock for the <a href='http://bl.ocks.org/mbostock/10571478'>perspective transformation</a>
-		</li>
-		<li>
-			Thanks to Chase West, Greg Frank, and Christ Chernoff for the <a href='https://github.com/yahoo/gifshot'>gif maker</a>
-		</li>
-	</ul>
-	<a href="https://github.com/kra2008/stereosketcher">
-		<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"/>
-	</a>
-	</body>
-	<footer>
-		v<span id="version"></span>
-	</footer>
+                        <tr><td>wheel</td><td>roll</td><td></td><td>anywhere</td><td>zoom</td></tr>
+                        <tr><td colspan="5" class="centerText">Other</td></tr>
+                        <tr><td>wheel</td><td>press</td><td></td><td>anywhere</td><td>copy and paste selected lines and faces</td></tr>
+                        <tr><td>wheel</td><td>press</td><td>control</td><td>anywhere</td><td>extrude selected lines and faces</td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    <br/>
+    <h3>
+        Pro tips
+    </h3>
+    <ul>
+        <li>
+            To crop your image before uploading, just resize your browser window.
+        </li>
+    </ul>
+    <h3>
+        Other help
+    </h3>
+    <ul>
+        <li>
+            This was tested in Firefox during development, results in other browsers may vary.
+        </li>
+        <li>
+            Laptop screens are unkind to the red/cyan images.
+        </li>
+        <li>
+            Please note that the grayish polarized 3D glasses you get from move theaters nowadays will not work for StereoSketcher.
+        </li>
+        <li>
+            Some colors work better than others in red/cyan mode. i.e. red doesn't work well.
+        </li>
+        <li>
+            If you are getting the images to line up in parallel or cross viewing, but the image is weird or even 3D in the wrong direction, you might be using the wrong view mode - try switching view modes. Also have a look at this image:<br/>
+            <img src="https://i.imgur.com/VkXN9DC.jpg"/>
+        </li>
+    </ul>
+    <h3>
+        Acknowledgements
+    </h3>
+    <ul>
+        <li>
+            Thanks to Sunny for suggesting SVG
+        </li>
+        <li>
+            Thanks to Alex for testing
+        </li>
+        <li>
+            Thanks to Eric Shull for the <a href='https://github.com/exupero/saveSvgAsPng'>svg to png conversion</a>
+        </li>
+        <li>
+            Thanks to Jan Odvárko for the <a href='http://jscolor.com/'>color picker</a>
+        </li>
+        <li>
+            Thanks to Eli Grey for the <a href='https://github.com/eligrey/FileSaver.js/'>file saver</a>
+        </li>
+        <li>
+            Thanks to Mike Bostock for the <a href='http://bl.ocks.org/mbostock/10571478'>perspective transformation</a>
+        </li>
+        <li>
+            Thanks to Chase West, Greg Frank, and Christ Chernoff for the <a href='https://github.com/yahoo/gifshot'>gif maker</a>
+        </li>
+    </ul>
+    <a href="https://github.com/kra2008/stereosketcher">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"/>
+    </a>
+    </body>
+    <footer>
+        v<span id="version"></span>
+    </footer>
 </html>
 
